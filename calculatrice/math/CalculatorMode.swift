@@ -9,10 +9,16 @@ class CalculatorMode {
     enum KeypadMode {
         case Normal
         case Mod1
+        case Mod2
     }
 
-    var angle: Angle = .Deg
-    var keypadMode: KeypadMode = .Normal
+    enum NumberMode {
+        case Decimal
+        case Engineering
+    }
+
+    private(set) var angle: Angle = .Deg
+    private(set) var keypadMode: KeypadMode = .Normal
 
     func swapAngle() {
         if angle == .Deg {
@@ -23,10 +29,18 @@ class CalculatorMode {
     }
 
     func toggleMod1() {
-        if keypadMode == .Normal {
-            keypadMode = .Mod1
-        } else {
+        if keypadMode == .Mod1 {
             keypadMode = .Normal
+        } else {
+            keypadMode = .Mod1
+        }
+    }
+
+    func toggleMod2() {
+        if keypadMode == .Mod2 {
+            keypadMode = .Normal
+        } else {
+            keypadMode = .Mod2
         }
     }
 

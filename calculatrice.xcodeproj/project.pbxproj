@@ -42,6 +42,12 @@
 		4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA884927F37B3D00E95424 /* Styles.swift */; };
 		4FCA884B27F37B3D00E95424 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA884927F37B3D00E95424 /* Styles.swift */; };
 		4FCA884C27F37B3D00E95424 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA884927F37B3D00E95424 /* Styles.swift */; };
+		4FCD9FC2299E14CA001DA3DD /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD9FC1299E14CA001DA3DD /* Display.swift */; };
+		4FCD9FC3299E14CA001DA3DD /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD9FC1299E14CA001DA3DD /* Display.swift */; };
+		4FCD9FC4299E14CA001DA3DD /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD9FC1299E14CA001DA3DD /* Display.swift */; };
+		4FCD9FC6299E3279001DA3DD /* StatusRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD9FC5299E3279001DA3DD /* StatusRow.swift */; };
+		4FCD9FC7299E3279001DA3DD /* StatusRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD9FC5299E3279001DA3DD /* StatusRow.swift */; };
+		4FCD9FC8299E3279001DA3DD /* StatusRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD9FC5299E3279001DA3DD /* StatusRow.swift */; };
 		4FD352E327F0B0980073534E /* KeypadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD352E227F0B0980073534E /* KeypadModel.swift */; };
 		4FD352E427F0B0980073534E /* KeypadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD352E227F0B0980073534E /* KeypadModel.swift */; };
 		4FD352E527F0B0980073534E /* KeypadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD352E227F0B0980073534E /* KeypadModel.swift */; };
@@ -98,6 +104,8 @@
 		4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorMode.swift; sourceTree = "<group>"; };
 		4FC1C0B027F1D55A00794D9E /* MathOps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathOps.swift; sourceTree = "<group>"; };
 		4FCA884927F37B3D00E95424 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
+		4FCD9FC1299E14CA001DA3DD /* Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
+		4FCD9FC5299E3279001DA3DD /* StatusRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusRow.swift; sourceTree = "<group>"; };
 		4FD352E227F0B0980073534E /* KeypadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadModel.swift; sourceTree = "<group>"; };
 		4FD352E727F0B1C90073534E /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
 		4FD352EB27F0B5120073534E /* InputBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputBuffer.swift; sourceTree = "<group>"; };
@@ -202,6 +210,8 @@
 				4F256BC027F2113E00123DA8 /* InputDisplay.swift */,
 				4F256BC427F2214C00123DA8 /* StackDisplay.swift */,
 				4F256BC827F2238E00123DA8 /* StackRow.swift */,
+				4FCD9FC1299E14CA001DA3DD /* Display.swift */,
+				4FCD9FC5299E3279001DA3DD /* StatusRow.swift */,
 			);
 			path = display;
 			sourceTree = "<group>";
@@ -431,6 +441,7 @@
 			files = (
 				4F064C7327F0314200F33E75 /* CalculatorViewController.swift in Sources */,
 				4F37926127F0D05C007B013E /* Extensions.swift in Sources */,
+				4FCD9FC6299E3279001DA3DD /* StatusRow.swift in Sources */,
 				4F37925C27F0CEE6007B013E /* KeypadKey.swift in Sources */,
 				4FD352F027F0B7570073534E /* KeypadView.swift in Sources */,
 				4FD352E827F0B1C90073534E /* Stack.swift in Sources */,
@@ -440,6 +451,7 @@
 				4FBFC06E27F32F7600DAB444 /* CalculatorMode.swift in Sources */,
 				4F064C7127F0314200F33E75 /* SceneDelegate.swift in Sources */,
 				4F256BC127F2113E00123DA8 /* InputDisplay.swift in Sources */,
+				4FCD9FC2299E14CA001DA3DD /* Display.swift in Sources */,
 				4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */,
 				4FD352EC27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4FD352E327F0B0980073534E /* KeypadModel.swift in Sources */,
@@ -458,10 +470,12 @@
 				4FD352F127F0B7570073534E /* KeypadView.swift in Sources */,
 				4FD352E927F0B1C90073534E /* Stack.swift in Sources */,
 				4FD352ED27F0B5120073534E /* InputBuffer.swift in Sources */,
+				4FCD9FC7299E3279001DA3DD /* StatusRow.swift in Sources */,
 				4FC1C0B227F1D55A00794D9E /* MathOps.swift in Sources */,
 				4FBFC06F27F32F7600DAB444 /* CalculatorMode.swift in Sources */,
 				4F256BC227F2113E00123DA8 /* InputDisplay.swift in Sources */,
 				4FD352E427F0B0980073534E /* KeypadModel.swift in Sources */,
+				4FCD9FC3299E14CA001DA3DD /* Display.swift in Sources */,
 				4F37925D27F0CEE6007B013E /* KeypadKey.swift in Sources */,
 				4F37926227F0D05C007B013E /* Extensions.swift in Sources */,
 				4F256BBD27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */,
@@ -475,6 +489,7 @@
 			files = (
 				4FD352EE27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4F256BC727F2214C00123DA8 /* StackDisplay.swift in Sources */,
+				4FCD9FC8299E3279001DA3DD /* StatusRow.swift in Sources */,
 				4FBFC07027F32F7600DAB444 /* CalculatorMode.swift in Sources */,
 				4FD352EA27F0B1C90073534E /* Stack.swift in Sources */,
 				4F37925E27F0CEE6007B013E /* KeypadKey.swift in Sources */,
@@ -487,6 +502,7 @@
 				4F064C9227F0314300F33E75 /* calculatriceUITestsLaunchTests.swift in Sources */,
 				4FD352E527F0B0980073534E /* KeypadModel.swift in Sources */,
 				4F256BBE27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */,
+				4FCD9FC4299E14CA001DA3DD /* Display.swift in Sources */,
 				4F064C9027F0314300F33E75 /* calculatriceUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

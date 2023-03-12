@@ -49,10 +49,14 @@ class StackDisplay: UIView, UITableViewDelegate {
     }
 
     private func setupTableview() {
-        tableview.backgroundColor = UIColor(hex: "e0e0e0")
+        tableview.backgroundColor = Styles.displayBackgroundColor
         tableview.allowsSelection = true
         tableview.allowsMultipleSelection = false
-        tableview.separatorStyle = .none
+        tableview.separatorStyle = .singleLine
+        tableview.separatorColor = Styles.stackSeparatorColor
+        tableview.separatorInset = UIEdgeInsets(top: 0, left: Styles.margin,
+                                                bottom: 0, right: Styles.margin)
+        tableview.fillerRowHeight = UITableView.automaticDimension
 
         tableview.delegate = self
         tableview.register(StackRow.self, forCellReuseIdentifier: StackRow.reuseIdentifier)

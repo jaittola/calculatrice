@@ -85,7 +85,7 @@ class Stack {
     }
 
     func calculate(_ calc: Calculation,
-                   _ calculatorMode: CalculatorMode) {
+                   _ calculatorMode: CalculatorMode) throws {
         guard let inputs = getForCalc(n: calc.arity) else {
             return
         }
@@ -94,11 +94,8 @@ class Stack {
             let result = try calc.calculate(inputs,
                                             calculatorMode)
             push(result)
-        } catch CalcError.divisionByZero {
-            // TODO, undo calc if there's an error.
-            print("Division by zero")
         } catch {
-            print("Unexpected error \(error)")
+            throw error
         }
     }
 

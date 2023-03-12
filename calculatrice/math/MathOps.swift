@@ -32,7 +32,7 @@ class Div: Calculation {
     func calculate(_ inputs: [StackValue],
                    _ calculatorMode: CalculatorMode) throws -> StackValue {
         if inputs[1].doubleValue == 0 {
-            return CalculatedStackValue(Double.nan)
+            throw CalcError.divisionByZero
         }
         let result = inputs[0].doubleValue / inputs[1].doubleValue
         return CalculatedStackValue(result)
@@ -130,10 +130,27 @@ class Pow: Calculation {
     }
 }
 
+class Pow3: Calculation {
+    let arity: Int = 1
+    func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) -> StackValue {
+        let result = pow(inputs[0].doubleValue, 3)
+        return CalculatedStackValue(result)
+    }
+}
+
 class Sqrt: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) -> StackValue {
         return CalculatedStackValue(sqrt(inputs[0].doubleValue))
+    }
+}
+
+class Root3: Calculation {
+    let arity: Int = 1
+    func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) throws -> StackValue {
+        let base = inputs[0].doubleValue
+        let result = pow(base, 1.0/3.0)
+        return CalculatedStackValue(result)
     }
 }
 
@@ -163,6 +180,20 @@ class Exp: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) -> StackValue {
         return CalculatedStackValue(exp(inputs[0].doubleValue))
+    }
+}
+
+class Log10: Calculation {
+    let arity: Int = 1
+    func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) -> StackValue {
+        return CalculatedStackValue(log10(inputs[0].doubleValue))
+    }
+}
+
+class Exp10: Calculation {
+    let arity: Int = 1
+    func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) throws -> StackValue {
+        return CalculatedStackValue(powl(10, inputs[0].doubleValue))
     }
 }
 

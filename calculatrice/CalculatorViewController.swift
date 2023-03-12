@@ -6,20 +6,22 @@ class CalculatorViewController: UIViewController {
     private let keypadModel = BasicKeypadModel()
     private let calculatorMode = CalculatorMode()
     private let keypadView = KeypadView(frame: .zero)
-    private let inputDisplay = InputDisplay(frame: .zero)
-    private let stackDisplay = StackDisplay(frame: .zero)
+    private let display = Display(frame: .zero)
     private var window: UIWindow {
         SceneDelegate.window!
     }
-    private let margin = 10.0
+    private static let displayPortion = 1.0/3.8
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
 
         setupLayout()
 
-        inputDisplay.onPaste = { [weak self] text in self?.onPaste(text) }
+        display.inputDisplay.onPaste = { [weak self] text in self?.onPaste(text) }
 
         keypadView.onKeyPressed = { [weak self] key in self?.onKeyPressed(key) }
         keypadView.render(keypadModel)
@@ -27,52 +29,58 @@ class CalculatorViewController: UIViewController {
     }
 
     private func setupLayout() {
-        view.addSubview(stackDisplay)
-        view.addSubview(inputDisplay)
+        view.addSubview(display)
         view.addSubview(keypadView)
 
-        stackDisplay.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(window.safeAreaInsets.top + margin)
-            make.leading.trailing.equalToSuperview().inset(margin)
-            make.height.equalToSuperview().dividedBy(4)
-        }
-
-        inputDisplay.snp.makeConstraints { make in
-            make.top.equalTo(stackDisplay.snp.bottom).offset(margin)
-            make.leading.trailing.equalToSuperview().inset(margin)
-            make.height.lessThanOrEqualToSuperview().dividedBy(10)
+        display.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(window.safeAreaInsets.top + Styles.margin)
+            make.leading.trailing.equalToSuperview().inset(Styles.margin)
+            make.height.equalToSuperview().multipliedBy(Self.displayPortion)
         }
 
         keypadView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(margin)
-            make.top.equalTo(inputDisplay.snp.bottom).offset(margin)
-            make.bottom.equalToSuperview().inset(window.safeAreaInsets.bottom + margin)
+            make.leading.trailing.equalToSuperview().inset(Styles.margin)
+            make.top.equalTo(display.snp.bottom).offset(Styles.keypadMargin)
+            make.bottom.equalToSuperview().inset(window.safeAreaInsets.bottom + Styles.margin)
         }
     }
 
     private func onKeyPressed(_ key: Key) {
-        stack.selectedId = stackDisplay.selectedItem?.id ?? -1
-        key.activeOp(calculatorMode)(stack, calculatorMode)
-        if key.resetModAfterClick {
-            calculatorMode.resetMods()
+        stack.selectedId = display.stackDisplay.selectedItem?.id ?? -1
+        do {
+            try key.activeOp(calculatorMode, stack)
+            if key.resetModAfterClick {
+                calculatorMode.resetMods()
+            }
+        } catch {
+            showError()
         }
         updateViews()
     }
 
     private func updateViews() {
         if stack.input.isEmpty {
-            inputDisplay.text = " "
+            display.inputDisplay.text = " "
         } else {
-            inputDisplay.text = stack.input.value.stringValue
+            display.inputDisplay.text = stack.input.value.stringValue
         }
 
-        stackDisplay.setStack(stack.content)
-        inputDisplay.setMode(calculatorMode)
+        display.stackDisplay.setStack(stack.content)
+        display.statusRow.setMode(calculatorMode)
     }
 
     private func onPaste(_ text: String?) {
         guard let text = text else { return }
         stack.input.paste(text)
         updateViews()
+    }
+
+    private func showError() {
+        let alert = UIAlertController(title: "Error",
+                                      message: "Invalid calculation",
+                                      preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .default)
+        alert.addAction(ok)
+        present(alert, animated: true, completion: nil)
     }
 }

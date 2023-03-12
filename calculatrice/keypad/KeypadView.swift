@@ -4,8 +4,6 @@ import SnapKit
 class KeypadView: UIView {
     var onKeyPressed: ((Key) -> Void)?
 
-    private let keyMargin = 5
-
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -24,13 +22,13 @@ class KeypadView: UIView {
             case rows.count - 1:
                 row.snp.makeConstraints { make in
                     make.leading.trailing.bottom.equalToSuperview()
-                    make.top.equalTo(previousRow!.snp.bottom).offset(keyMargin)
+                    make.top.equalTo(previousRow!.snp.bottom).offset(Styles.keypadMargin)
                     make.height.equalTo(previousRow!.snp.height)
                 }
             default:
                 row.snp.makeConstraints { make in
                     make.leading.trailing.equalToSuperview()
-                    make.top.equalTo(previousRow!.snp.bottom).offset(keyMargin)
+                    make.top.equalTo(previousRow!.snp.bottom).offset(Styles.keypadMargin)
                     make.height.equalTo(previousRow!.snp.height)
                 }
             }
@@ -50,7 +48,7 @@ class KeypadView: UIView {
             if prevKey != nil {
                 b.snp.makeConstraints { make in
                     make.top.bottom.equalToSuperview()
-                    make.leading.equalTo(prevKey!.snp.trailing).offset(keyMargin)
+                    make.leading.equalTo(prevKey!.snp.trailing).offset(Styles.keypadMargin)
                     make.width.equalTo(prevKey!.snp.width)
                     if idx == keyCount - 1 {
                         make.trailing.equalToSuperview()

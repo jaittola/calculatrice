@@ -22,27 +22,24 @@ class StackRow: UITableViewCell {
     private let rowNum = UILabel()
     private let value = UILabel()
     private let selectedBackground = UIView()
-    private let cellBackgroundColor = UIColor(hex: "e0e0e0")
-    private let cellSelectedBackgroundColor = UIColor(hex: "ff0000")
-    private let textBackgroundColor = UIColor(hex: "f0f0f0", alpha: 0.9)
-    private let textColor = UIColor.blue
+    private let textColor = Styles.stackTextColor
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundColor = cellBackgroundColor
-        selectedBackground.backgroundColor = cellSelectedBackgroundColor
+        backgroundColor = Styles.displayBackgroundColor
+        selectedBackground.backgroundColor = Styles.selectedRowBackgroundColor
         selectedBackgroundView = selectedBackground
 
         rowNum.numberOfLines = 1
         rowNum.textColor = textColor
-        rowNum.backgroundColor = textBackgroundColor
+        rowNum.font = Styles.stackFont
         rowNum.translatesAutoresizingMaskIntoConstraints = false
         rowNum.adjustsFontForContentSizeCategory = true
 
         value.numberOfLines = 1
         value.textColor = textColor
-        value.backgroundColor = textBackgroundColor
+        value.font = Styles.stackFont
         value.translatesAutoresizingMaskIntoConstraints = false
         value.adjustsFontForContentSizeCategory = true
         value.textAlignment = .right
@@ -52,14 +49,14 @@ class StackRow: UITableViewCell {
 
         rowNum.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(2)
-            make.leading.equalToSuperview().inset(2)
+            make.leading.equalToSuperview().inset(Styles.margin)
             make.width.greaterThanOrEqualToSuperview().dividedBy(8)
         }
 
         value.snp.makeConstraints { make in
             make.top.bottom.equalTo(rowNum)
             make.leading.equalTo(rowNum.snp.trailing)
-            make.trailing.equalToSuperview().inset(2)
+            make.trailing.equalToSuperview().inset(Styles.margin)
         }
 
         addGestureRecognizer(UILongPressGestureRecognizer(
