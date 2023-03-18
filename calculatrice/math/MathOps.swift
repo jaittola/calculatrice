@@ -197,6 +197,20 @@ class Exp10: Calculation {
     }
 }
 
+class ToEng: Calculation {
+    let arity: Int = 1
+    func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) -> StackValue {
+        return CalculatedStackValue(inputs[0].doubleValue, numberFormat: .eng)
+    }
+}
+
+class ToDecimal: Calculation {
+    let arity: Int = 1
+    func calculate(_ inputs: [StackValue], _ calculatorMode: CalculatorMode) -> StackValue {
+        return CalculatedStackValue(inputs[0].doubleValue, numberFormat: .decimal)
+    }
+}
+
 class Utils {
     static func deg2Rad(_ inputs: [StackValue],
                         _ calculatorMode: CalculatorMode) -> [Double] {

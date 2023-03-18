@@ -23,11 +23,14 @@ struct Key {
     let mainTextColor: UIColor?
 
     init(symbol: String,
-         op: @escaping (_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void,
+         op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
+         calcOp: Calculation? = nil,
          symbolMod1: String? = nil,
          opMod1: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
+         calcOpMod1: Calculation? = nil,
          symbolMod2: String? = nil,
          opMod2: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
+         calcOpMod2: Calculation? = nil,
          resetModAfterClick: Bool = true,
          mainTextColor: UIColor? = nil) {
         self.symbol = symbol
@@ -36,31 +39,11 @@ struct Key {
         self.opMod1 = opMod1
         self.symbolMod2 = symbolMod2
         self.opMod2 = opMod2
-        self.calcOp = nil
-        self.calcOpMod1 = nil
-        self.calcOpMod2 = nil
-        self.resetModAfterClick = resetModAfterClick
-        self.mainTextColor = mainTextColor
-    }
-
-    init(symbol: String,
-         calcOp: Calculation,
-         symbolMod1: String? = nil,
-         calcOpMod1: Calculation? = nil,
-         symbolMod2: String? = nil,
-         calcOpMod2: Calculation? = nil
-    ) {
-        self.symbol = symbol
-        self.symbolMod1 = symbolMod1
-        self.symbolMod2 = symbolMod2
-        self.op = nil
-        self.opMod1 = nil
-        self.opMod2 = nil
         self.calcOp = calcOp
         self.calcOpMod1 = calcOpMod1
         self.calcOpMod2 = calcOpMod2
-        self.resetModAfterClick = true
-        self.mainTextColor = nil
+        self.resetModAfterClick = resetModAfterClick
+        self.mainTextColor = mainTextColor
     }
 
     func activeOp(_ calculatorMode: CalculatorMode, _ stack: Stack) throws {
@@ -131,9 +114,12 @@ struct Key {
             _ = try? stack.calculate(Neg(), calculatorMode)
         }
     }) }
-    static func E() -> Key { Key(symbol: "E", op: { stack, _ in
-        stack.input.E()
-    })}
+    static func E() -> Key { Key(symbol: "E",
+                                 op: { stack, _ in stack.input.E() },
+                                 symbolMod1: "→E",
+                                 calcOpMod1: ToEng(),
+                                 symbolMod2: "→D",
+                                 calcOpMod2: ToDecimal()) }
 
     static func plus() -> Key { Key(symbol: "+", calcOp: Plus()) }
     static func minus() -> Key { Key(symbol: "-", calcOp: Minus()) }

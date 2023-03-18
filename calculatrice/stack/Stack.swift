@@ -127,3 +127,9 @@ enum CalcError: Error {
     case divisionByZero
     case badInput
 }
+
+enum ValueNumberFormat {
+    case auto
+    case decimal
+    case eng
+}
