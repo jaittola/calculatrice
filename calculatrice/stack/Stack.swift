@@ -108,14 +108,6 @@ class Stack {
     }
 }
 
-protocol StackValue {
-    var id: Int { get }
-    var doubleValue: Double { get }
-    var stringValue: String { get }
-
-    func withId(_ newId: Int) -> StackValue
-}
-
 protocol Calculation {
     var arity: Int { get }
 

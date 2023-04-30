@@ -15,9 +15,8 @@
 		4F064C8627F0314300F33E75 /* calculatriceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C8527F0314300F33E75 /* calculatriceTests.swift */; };
 		4F064C9027F0314300F33E75 /* calculatriceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C8F27F0314300F33E75 /* calculatriceUITests.swift */; };
 		4F064C9227F0314300F33E75 /* calculatriceUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C9127F0314300F33E75 /* calculatriceUITestsLaunchTests.swift */; };
-		4F256BBC27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* CalculatedStackValue.swift */; };
-		4F256BBD27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* CalculatedStackValue.swift */; };
-		4F256BBE27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* CalculatedStackValue.swift */; };
+		4F256BBC27F20B1400123DA8 /* StackValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* StackValue.swift */; };
+		4F256BBD27F20B1400123DA8 /* StackValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* StackValue.swift */; };
 		4F256BC127F2113E00123DA8 /* InputDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC027F2113E00123DA8 /* InputDisplay.swift */; };
 		4F256BC227F2113E00123DA8 /* InputDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC027F2113E00123DA8 /* InputDisplay.swift */; };
 		4F256BC327F2113E00123DA8 /* InputDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC027F2113E00123DA8 /* InputDisplay.swift */; };
@@ -95,7 +94,7 @@
 		4F064C8B27F0314300F33E75 /* calculatriceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calculatriceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F064C8F27F0314300F33E75 /* calculatriceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calculatriceUITests.swift; sourceTree = "<group>"; };
 		4F064C9127F0314300F33E75 /* calculatriceUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calculatriceUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		4F256BBB27F20B1400123DA8 /* CalculatedStackValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatedStackValue.swift; sourceTree = "<group>"; };
+		4F256BBB27F20B1400123DA8 /* StackValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackValue.swift; sourceTree = "<group>"; };
 		4F256BC027F2113E00123DA8 /* InputDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDisplay.swift; sourceTree = "<group>"; };
 		4F256BC427F2214C00123DA8 /* StackDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackDisplay.swift; sourceTree = "<group>"; };
 		4F256BC827F2238E00123DA8 /* StackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackRow.swift; sourceTree = "<group>"; };
@@ -229,7 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				4FC1C0B027F1D55A00794D9E /* MathOps.swift */,
-				4F256BBB27F20B1400123DA8 /* CalculatedStackValue.swift */,
+				4F256BBB27F20B1400123DA8 /* StackValue.swift */,
 				4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */,
 			);
 			path = math;
@@ -447,7 +446,7 @@
 				4FD352E827F0B1C90073534E /* Stack.swift in Sources */,
 				4F064C6F27F0314200F33E75 /* AppDelegate.swift in Sources */,
 				4FC1C0B127F1D55A00794D9E /* MathOps.swift in Sources */,
-				4F256BBC27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */,
+				4F256BBC27F20B1400123DA8 /* StackValue.swift in Sources */,
 				4FBFC06E27F32F7600DAB444 /* CalculatorMode.swift in Sources */,
 				4F064C7127F0314200F33E75 /* SceneDelegate.swift in Sources */,
 				4F256BC127F2113E00123DA8 /* InputDisplay.swift in Sources */,
@@ -478,7 +477,7 @@
 				4FCD9FC3299E14CA001DA3DD /* Display.swift in Sources */,
 				4F37925D27F0CEE6007B013E /* KeypadKey.swift in Sources */,
 				4F37926227F0D05C007B013E /* Extensions.swift in Sources */,
-				4F256BBD27F20B1400123DA8 /* CalculatedStackValue.swift in Sources */,
+				4F256BBD27F20B1400123DA8 /* StackValue.swift in Sources */,
 				4F256BCA27F2238E00123DA8 /* StackRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

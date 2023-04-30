@@ -1,5 +1,34 @@
 import Foundation
 
+protocol StackValue {
+    var id: Int { get }
+    var doubleValue: Double { get }
+    var stringValue: String { get }
+
+    func withId(_ newId: Int) -> StackValue
+}
+
+class InputBufferStackValue: NSObject, StackValue {
+    let id: Int
+    let doubleValue: Double
+    let stringValue: String
+
+    init( id: Int,
+          doubleValue: Double,
+          stringValue: String) {
+        self.id = id
+        self.doubleValue = doubleValue
+        self.stringValue = stringValue
+        super.init()
+    }
+
+    func withId(_ newId: Int) -> StackValue {
+        InputBufferStackValue(id: newId,
+                              doubleValue: doubleValue,
+                              stringValue: stringValue)
+    }
+}
+
 class CalculatedStackValue: StackValue {
     let id: Int
     private(set) var doubleValue: Double

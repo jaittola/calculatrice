@@ -195,24 +195,3 @@ struct MantissaExponent {
         signum * mantissa * powl(10.0, exponent * exponentSignum)
     }
 }
-
-class InputBufferStackValue: NSObject, StackValue {
-    let id: Int
-    let doubleValue: Double
-    let stringValue: String
-
-    init( id: Int,
-          doubleValue: Double,
-          stringValue: String) {
-        self.id = id
-        self.doubleValue = doubleValue
-        self.stringValue = stringValue
-        super.init()
-    }
-
-    func withId(_ newId: Int) -> StackValue {
-        InputBufferStackValue(id: newId,
-                              doubleValue: doubleValue,
-                              stringValue: stringValue)
-    }
-}
