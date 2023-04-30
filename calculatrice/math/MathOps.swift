@@ -5,7 +5,7 @@ class Plus: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = inputs[0].doubleValue + inputs[1].doubleValue
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -14,7 +14,7 @@ class Minus: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = inputs[0].doubleValue - inputs[1].doubleValue
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -23,7 +23,7 @@ class Mult: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = inputs[0].doubleValue * inputs[1].doubleValue
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -35,7 +35,7 @@ class Div: Calculation {
             throw CalcError.divisionByZero
         }
         let result = inputs[0].doubleValue / inputs[1].doubleValue
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -44,7 +44,7 @@ class Neg: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = -inputs[0].doubleValue
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -54,7 +54,7 @@ class Sin: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
-        return CalculatedStackValue(sin(input))
+        return SingleDimensionalNumericalValue(sin(input))
     }
 }
 
@@ -64,7 +64,7 @@ class Cos: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
-        return CalculatedStackValue(cos(input))
+        return SingleDimensionalNumericalValue(cos(input))
     }
 }
 
@@ -74,7 +74,7 @@ class Tan: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
-        return CalculatedStackValue(tan(input))
+        return SingleDimensionalNumericalValue(tan(input))
     }
 }
 
@@ -107,9 +107,9 @@ class Inv: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let input = inputs[0].doubleValue
         if input == 0 {
-            return CalculatedStackValue(Double.nan)
+            return SingleDimensionalNumericalValue(Double.nan)
         } else {
-            return CalculatedStackValue(1.0 / input)
+            return SingleDimensionalNumericalValue(1.0 / input)
         }
     }
 }
@@ -118,7 +118,7 @@ class Square: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let input = inputs[0].doubleValue
-        return CalculatedStackValue(input * input)
+        return SingleDimensionalNumericalValue(input * input)
     }
 }
 
@@ -126,7 +126,7 @@ class Pow: Calculation {
     let arity: Int = 2
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = pow(inputs[0].doubleValue, inputs[1].doubleValue)
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -134,14 +134,14 @@ class Pow3: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = pow(inputs[0].doubleValue, 3)
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
 class Sqrt: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
-        return CalculatedStackValue(sqrt(inputs[0].doubleValue))
+        return SingleDimensionalNumericalValue(sqrt(inputs[0].doubleValue))
     }
 }
 
@@ -150,7 +150,7 @@ class Root3: Calculation {
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
         let base = inputs[0].doubleValue
         let result = pow(base, 1.0/3.0)
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
@@ -161,53 +161,53 @@ class NthRoot: Calculation {
         let exponent = inputs[1].doubleValue
 
         if exponent == 0 {
-            return CalculatedStackValue(Double.nan)
+            return SingleDimensionalNumericalValue(Double.nan)
         }
 
         let result = pow(base, 1.0/exponent)
-        return CalculatedStackValue(result)
+        return SingleDimensionalNumericalValue(result)
     }
 }
 
 class Log: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
-        return CalculatedStackValue(log(inputs[0].doubleValue))
+        return SingleDimensionalNumericalValue(log(inputs[0].doubleValue))
     }
 }
 
 class Exp: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
-        return CalculatedStackValue(exp(inputs[0].doubleValue))
+        return SingleDimensionalNumericalValue(exp(inputs[0].doubleValue))
     }
 }
 
 class Log10: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
-        return CalculatedStackValue(log10(inputs[0].doubleValue))
+        return SingleDimensionalNumericalValue(log10(inputs[0].doubleValue))
     }
 }
 
 class Exp10: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
-        return CalculatedStackValue(powl(10, inputs[0].doubleValue))
+        return SingleDimensionalNumericalValue(powl(10, inputs[0].doubleValue))
     }
 }
 
 class ToEng: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
-        return CalculatedStackValue(inputs[0].doubleValue, numberFormat: .eng)
+        return SingleDimensionalNumericalValue(inputs[0].doubleValue, numberFormat: .eng)
     }
 }
 
 class ToDecimal: Calculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
-        return CalculatedStackValue(inputs[0].doubleValue, numberFormat: .decimal)
+        return SingleDimensionalNumericalValue(inputs[0].doubleValue, numberFormat: .decimal)
     }
 }
 
@@ -222,12 +222,12 @@ class Utils {
     }
 
     static func radResult2Deg(_ value: Double,
-                              _ calculatorMode: CalculatorMode) -> CalculatedStackValue {
+                              _ calculatorMode: CalculatorMode) -> SingleDimensionalNumericalValue {
         if calculatorMode.angle == .Rad {
-            return CalculatedStackValue(value)
+            return SingleDimensionalNumericalValue(value)
         } else {
             let result = value * 180.0 / Double.pi
-            return CalculatedStackValue(result)
+            return SingleDimensionalNumericalValue(result)
         }
     }
 }

@@ -8,33 +8,15 @@ protocol DoublePrecisionValue {
     func withId(_ newId: Int) -> DoublePrecisionValue
 }
 
-class InputBufferStackValue: NSObject, DoublePrecisionValue {
-    let id: Int
-    let doubleValue: Double
-    let stringValue: String
-
-    init( id: Int,
-          doubleValue: Double,
-          stringValue: String) {
-        self.id = id
-        self.doubleValue = doubleValue
-        self.stringValue = stringValue
-        super.init()
-    }
-
-    func withId(_ newId: Int) -> DoublePrecisionValue {
-        InputBufferStackValue(id: newId,
-                              doubleValue: doubleValue,
-                              stringValue: stringValue)
-    }
-}
-
-class CalculatedStackValue: DoublePrecisionValue {
+class SingleDimensionalNumericalValue: DoublePrecisionValue {
     let id: Int
     private(set) var doubleValue: Double
+    private(set) var originalStringValue: String
     private (set) var numberFormat: ValueNumberFormat
     var stringValue: String {
         switch numberFormat {
+        case .fromInput:
+            return originalStringValue
         case .auto:
             if doubleValue >= 1000000 || fabs(doubleValue) < 0.001 {
                 return stringEngValue
@@ -58,6 +40,17 @@ class CalculatedStackValue: DoublePrecisionValue {
         self.id = id
         self.numberFormat = numberFormat
         self.doubleValue = doubleValue
+        self.originalStringValue = ""
+    }
+
+    init(_ doubleValue: Double,
+         _ originalStringValue: String,
+         id: Int = 0,
+         numberFormat: ValueNumberFormat = .fromInput) {
+        self.id = id
+        self.numberFormat = numberFormat
+        self.doubleValue = doubleValue
+        self.originalStringValue = originalStringValue
     }
 
     var stringDecimalValue: String {
@@ -70,6 +63,9 @@ class CalculatedStackValue: DoublePrecisionValue {
     }
 
     func withId(_ newId: Int) -> DoublePrecisionValue {
-        CalculatedStackValue(doubleValue, id: newId, numberFormat: numberFormat)
+        SingleDimensionalNumericalValue(doubleValue,
+                                        originalStringValue,
+                                        id: newId,
+                                        numberFormat: numberFormat)
     }
 }

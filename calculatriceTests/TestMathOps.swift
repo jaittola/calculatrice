@@ -58,7 +58,5 @@ struct IdContainer {
 }
 
 func num(_ value: Double) -> DoublePrecisionValue {
-    InputBufferStackValue(id: IdContainer.nextId(),
-                          doubleValue: value,
-                          stringValue: value.formatted())
+    SingleDimensionalNumericalValue(value, id: IdContainer.nextId())
 }

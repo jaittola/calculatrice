@@ -103,7 +103,7 @@ struct Key {
                                    symbolMod1: "π",
                                    opMod1: { stack, _ in
         if stack.input.isEmpty {
-            stack.push(CalculatedStackValue(Double.pi))
+            stack.push(SingleDimensionalNumericalValue(Double.pi))
         }
     }) }
     static func plusminus() -> Key { Key(symbol: "±",

@@ -67,10 +67,10 @@ class InputBuffer {
         sign < 0 ? 1.0 : -1.0
     }
 
-    private func buildValue() -> InputBufferStackValue {
-        return InputBufferStackValue(id: 0,
-                                     doubleValue: doubleValue,
-                                     stringValue: stringValue)
+    private func buildValue() -> SingleDimensionalNumericalValue {
+        SingleDimensionalNumericalValue(doubleValue,
+                                        stringValue,
+                                        id: 0)
     }
 
     private var isInputtingDecimals: Bool {

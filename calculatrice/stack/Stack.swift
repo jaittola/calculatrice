@@ -121,6 +121,7 @@ enum CalcError: Error {
 }
 
 enum ValueNumberFormat {
+    case fromInput
     case auto
     case decimal
     case eng
