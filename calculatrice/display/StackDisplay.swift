@@ -6,7 +6,7 @@ class StackDisplay: UIView, UITableViewDelegate {
     private var datasource: UITableViewDiffableDataSource<Int, StackDisplayRowItem>?
     private var data: [StackDisplayRowItem] = []
 
-    var selectedItem: StackValue? {
+    var selectedItem: DoublePrecisionValue? {
         guard let selectedIndexPath = tableview.indexPathsForSelectedRows?.first,
               selectedIndexPath.row < data.count else {
             return nil
@@ -25,7 +25,7 @@ class StackDisplay: UIView, UITableViewDelegate {
         setupTableview()
     }
 
-    func setStack(_ content: [StackValue]) {
+    func setStack(_ content: [DoublePrecisionValue]) {
         data = content
             .enumerated()
             .reversed()
@@ -75,7 +75,7 @@ class StackDisplay: UIView, UITableViewDelegate {
 
 struct StackDisplayRowItem: Hashable {
     let row: Int
-    let value: StackValue
+    let value: DoublePrecisionValue
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(row)

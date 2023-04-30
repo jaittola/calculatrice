@@ -1,14 +1,14 @@
 import Foundation
 
 class Stack {
-    private(set) var content: [StackValue] = []
+    private(set) var content: [DoublePrecisionValue] = []
     private(set) var input = InputBuffer()
 
     private var uniqueIdSeq: Int = 0
 
     var selectedId: Int = -1
 
-    func push(_ value: StackValue) {
+    func push(_ value: DoublePrecisionValue) {
         content.insert(value.withId(uniqueIdSeq), at: 0)
         uniqueIdSeq += 1
     }
@@ -57,8 +57,8 @@ class Stack {
         push(second)
     }
 
-    private func getForCalc(n: Int = 1) -> [StackValue]? {
-        var result: [StackValue] = []
+    private func getForCalc(n: Int = 1) -> [DoublePrecisionValue]? {
+        var result: [DoublePrecisionValue] = []
 
         if n <= 0 {
             return nil
@@ -111,8 +111,8 @@ class Stack {
 protocol Calculation {
     var arity: Int { get }
 
-    func calculate(_ inputs: [StackValue],
-                   _ calculatorMode: CalculatorMode) throws -> StackValue
+    func calculate(_ inputs: [DoublePrecisionValue],
+                   _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue
 }
 
 enum CalcError: Error {

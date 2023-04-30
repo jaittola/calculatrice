@@ -1,7 +1,7 @@
 import Foundation
 
 class InputBuffer {
-    var value: StackValue {
+    var value: DoublePrecisionValue {
         buildValue()
     }
 

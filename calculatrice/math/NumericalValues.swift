@@ -1,14 +1,14 @@
 import Foundation
 
-protocol StackValue {
+protocol DoublePrecisionValue {
     var id: Int { get }
     var doubleValue: Double { get }
     var stringValue: String { get }
 
-    func withId(_ newId: Int) -> StackValue
+    func withId(_ newId: Int) -> DoublePrecisionValue
 }
 
-class InputBufferStackValue: NSObject, StackValue {
+class InputBufferStackValue: NSObject, DoublePrecisionValue {
     let id: Int
     let doubleValue: Double
     let stringValue: String
@@ -22,14 +22,14 @@ class InputBufferStackValue: NSObject, StackValue {
         super.init()
     }
 
-    func withId(_ newId: Int) -> StackValue {
+    func withId(_ newId: Int) -> DoublePrecisionValue {
         InputBufferStackValue(id: newId,
                               doubleValue: doubleValue,
                               stringValue: stringValue)
     }
 }
 
-class CalculatedStackValue: StackValue {
+class CalculatedStackValue: DoublePrecisionValue {
     let id: Int
     private(set) var doubleValue: Double
     private (set) var numberFormat: ValueNumberFormat
@@ -69,7 +69,7 @@ class CalculatedStackValue: StackValue {
         return String(format: "%9E", doubleValue)
     }
 
-    func withId(_ newId: Int) -> StackValue {
+    func withId(_ newId: Int) -> DoublePrecisionValue {
         CalculatedStackValue(doubleValue, id: newId, numberFormat: numberFormat)
     }
 }
