@@ -6,13 +6,35 @@ class TestMathOps: XCTestCase {
     let twothree = [num(3), num(2)]
 
     func testPlus() {
-        let result = Plus().calculate(twothree, calculatorMode)
-        XCTAssertEqual(result.doubleValue, 5)
+        XCTAssertNoThrow {
+            let values = [complex(1.0, 2.0), complex(5, 6)]
+            let result = try Plus().calcComplex(values, self.calculatorMode)
+            XCTAssertEqual(result, complex(6, 8))
+        }
     }
 
-    func testMinus() {
-        let result = Minus().calculate(twothree, calculatorMode)
-        XCTAssertEqual(result.doubleValue, 1)
+    func testPlus2() throws {
+        XCTAssertNoThrow {
+            let values = [complex(1, 0), complex(2, 0)]
+            let result = try Plus().calcComplex(values, self.calculatorMode)
+            XCTAssertEqual(result, complex(3, 0))
+        }
+    }
+
+    func testMinus1() throws {
+        XCTAssertNoThrow {
+            let values = [complex(4, 1), complex(1, 3)]
+            let result = try Minus().calcComplex(values, self.calculatorMode)
+            XCTAssertEqual(result, complex(3, -2))
+        }
+    }
+
+    func testMinus2() {
+        XCTAssertNoThrow {
+            let values = [complex(4, 0), complex(1, 0)]
+            let result = try Minus().calcComplex(values, self.calculatorMode)
+            XCTAssertEqual(result, complex(3, 0))
+        }
     }
 
     func testMult() {
@@ -45,18 +67,22 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result.doubleValue, 1, accuracy: 0.0001)
     }
 
+    func testComplex() throws {
+        do {
+            let result = try Complex().calcToComplex([num(1), num(2)], calculatorMode)
+            XCTAssertEqual(result, complex(1, 2))
+        } catch {
+            throw error
+        }
+    }
+
     // TODO, add more of this.
 }
 
-struct IdContainer {
-    static var valueId: Int = 0
-
-    static func nextId() -> Int {
-        valueId += 1
-        return valueId
-    }
+func num(_ value: Double) -> DoublePrecisionValue {
+    DoublePrecisionValue(value)
 }
 
-func num(_ value: Double) -> DoublePrecisionValue {
-    SingleDimensionalNumericalValue(value, id: IdContainer.nextId())
+func complex(_ re: Double, _ im: Double) -> ComplexValue {
+    ComplexValue(re, im)
 }

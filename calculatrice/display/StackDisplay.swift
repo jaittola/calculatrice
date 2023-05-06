@@ -5,8 +5,9 @@ class StackDisplay: UIView, UITableViewDelegate {
     private let tableview = UITableView()
     private var datasource: UITableViewDiffableDataSource<Int, StackDisplayRowItem>?
     private var data: [StackDisplayRowItem] = []
+    private var calculatorMode: CalculatorMode?
 
-    var selectedItem: DoublePrecisionValue? {
+    var selectedItem: Value? {
         guard let selectedIndexPath = tableview.indexPathsForSelectedRows?.first,
               selectedIndexPath.row < data.count else {
             return nil
@@ -25,7 +26,9 @@ class StackDisplay: UIView, UITableViewDelegate {
         setupTableview()
     }
 
-    func setStack(_ content: [DoublePrecisionValue]) {
+    func setStack(_ content: [Value], _ calculatorMode: CalculatorMode) {
+        self.calculatorMode = calculatorMode
+
         data = content
             .enumerated()
             .reversed()
@@ -61,9 +64,15 @@ class StackDisplay: UIView, UITableViewDelegate {
         tableview.delegate = self
         tableview.register(StackRow.self, forCellReuseIdentifier: StackRow.reuseIdentifier)
 
-        datasource = UITableViewDiffableDataSource(tableView: tableview) { tableView, _, item -> UITableViewCell? in
+        datasource = UITableViewDiffableDataSource(tableView: tableview) { [weak self] tableView, _, item -> UITableViewCell? in
+            guard let self = self else {
+                return nil
+            }
+            guard let calculatorMode = self.calculatorMode else {
+                fatalError("Calculator mode not set in StackDisplay")
+            }
             let cell = tableView.dequeueReusableCell(withIdentifier: StackRow.reuseIdentifier) as! StackRow
-            cell.item = item
+            cell.setItem(item, calculatorMode)
             return cell
         }
     }
@@ -75,7 +84,7 @@ class StackDisplay: UIView, UITableViewDelegate {
 
 struct StackDisplayRowItem: Hashable {
     let row: Int
-    let value: DoublePrecisionValue
+    let value: Value
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(row)

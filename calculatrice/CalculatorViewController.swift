@@ -62,10 +62,10 @@ class CalculatorViewController: UIViewController {
         if stack.input.isEmpty {
             display.inputDisplay.text = " "
         } else {
-            display.inputDisplay.text = stack.input.value.stringValue
+            display.inputDisplay.text = stack.input.value.stringValue()
         }
 
-        display.stackDisplay.setStack(stack.content)
+        display.stackDisplay.setStack(stack.content, calculatorMode)
         display.statusRow.setMode(calculatorMode)
     }
 

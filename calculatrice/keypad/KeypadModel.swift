@@ -103,7 +103,7 @@ struct Key {
                                    symbolMod1: "π",
                                    opMod1: { stack, _ in
         if stack.input.isEmpty {
-            stack.push(SingleDimensionalNumericalValue(Double.pi))
+            stack.push(Value(DoublePrecisionValue(Double.pi)))
         }
     }) }
     static func plusminus() -> Key { Key(symbol: "±",
@@ -142,6 +142,7 @@ struct Key {
                                    symbolMod1: "eˣ", calcOpMod1: Exp()) }
     static func lg() -> Key { Key(symbol: "lg", calcOp: Log10(),
                                   symbolMod1: "10ˣ", calcOpMod1: Exp10()) }
+    static func complex() -> Key { Key(symbol: "y + xi", calcOp: Complex()) }
 
     static func numkey(_ num: Int) -> Key {
         return Key(symbol: String(num),
@@ -176,7 +177,7 @@ struct Key {
 class BasicKeypadModel: NSObject, KeypadModel {
     let keys: [[Key?]] = [
         [ Key.pow(), Key.root(), Key.log(), Key.lg(), Key.inv() ],
-        [ Key.sin(), Key.cos(), Key.tan(), nil, nil ],
+        [ Key.sin(), Key.cos(), Key.tan(), nil, Key.complex() ],
         [ Key.mod1(), Key.mod2(), Key.angleMode(), Key.swap(), Key.backspace() ],
         [ Key.seven(), Key.eight(), Key.nine(), Key.pick(), Key.pop() ],
         [ Key.four(), Key.five(), Key.six(), Key.mult(), Key.div() ],

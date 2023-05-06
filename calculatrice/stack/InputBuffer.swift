@@ -67,10 +67,9 @@ class InputBuffer {
         sign < 0 ? 1.0 : -1.0
     }
 
-    private func buildValue() -> SingleDimensionalNumericalValue {
-        SingleDimensionalNumericalValue(doubleValue,
-                                        stringValue,
-                                        id: 0)
+    private func buildValue() -> DoublePrecisionValue {
+        DoublePrecisionValue(doubleValue,
+                             stringValue)
     }
 
     private var isInputtingDecimals: Bool {

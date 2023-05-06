@@ -7,17 +7,7 @@ class StackRow: UITableViewCell {
         return true
     }
 
-    var item: StackDisplayRowItem? {
-        didSet {
-            if let item = item {
-                rowNum.text = "\(item.row): "
-                value.text = "\(item.value.stringValue)"
-            } else {
-                rowNum.text = ""
-                value.text = ""
-            }
-        }
-    }
+    private (set) var item: StackDisplayRowItem?
 
     private let rowNum = UILabel()
     private let value = UILabel()
@@ -63,6 +53,18 @@ class StackRow: UITableViewCell {
             target: self,
             action: #selector(showMenu(sender:))
         ))
+    }
+
+    func setItem(_ item: StackDisplayRowItem?, _ calculatorMode: CalculatorMode) {
+        self.item = item
+
+        if let item = item {
+            rowNum.text = "\(item.row): "
+            value.text = "\(item.value.stringValue(calculatorMode))"
+        } else {
+            rowNum.text = ""
+            value.text = ""
+        }
     }
 
     override func copy(_ sender: Any?) {

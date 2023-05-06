@@ -14,7 +14,7 @@ class TestNumberInput: XCTestCase {
 
         let v = ib.value
         XCTAssertEqual(v.doubleValue, 12.0000000001)
-        XCTAssertEqual(v.stringValue, "12.0000000001")
+        XCTAssertEqual(v.stringValue(), "12.0000000001")
     }
 
     func testPositiveEngValue() {
@@ -29,7 +29,7 @@ class TestNumberInput: XCTestCase {
 
         let v = ib.value
         XCTAssertEqual(v.doubleValue, 0.199)
-        XCTAssertEqual(v.stringValue, "1.99E-1")
+        XCTAssertEqual(v.stringValue(), "1.99E-1")
     }
 
     func testSmallEngValue() {
@@ -44,7 +44,7 @@ class TestNumberInput: XCTestCase {
 
         let v = ib.value
         XCTAssertEqual(v.doubleValue, 1.25E-9)
-        XCTAssertEqual(v.stringValue, "1.25E-9")
+        XCTAssertEqual(v.stringValue(), "1.25E-9")
     }
 
     func testNegativeEngValue() {
@@ -59,6 +59,6 @@ class TestNumberInput: XCTestCase {
 
         let v = ib.value
         XCTAssertEqual(v.doubleValue, -0.0023)
-        XCTAssertEqual(v.stringValue, "-2.3E-3")
+        XCTAssertEqual(v.stringValue(), "-2.3E-3")
     }
 }

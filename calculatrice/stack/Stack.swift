@@ -1,21 +1,21 @@
 import Foundation
 
 class Stack {
-    private(set) var content: [DoublePrecisionValue] = []
+    private(set) var content: [Value] = []
     private(set) var input = InputBuffer()
 
     private var uniqueIdSeq: Int = 0
 
     var selectedId: Int = -1
 
-    func push(_ value: DoublePrecisionValue) {
+    func push(_ value: Value) {
         content.insert(value.withId(uniqueIdSeq), at: 0)
         uniqueIdSeq += 1
     }
 
     func pushInput() {
         if !input.isEmpty {
-            push(input.value)
+            push(Value(input.value))
             clearInput()
         } else if !content.isEmpty {
             push(content[0])
@@ -57,8 +57,8 @@ class Stack {
         push(second)
     }
 
-    private func getForCalc(n: Int = 1) -> [DoublePrecisionValue]? {
-        var result: [DoublePrecisionValue] = []
+    private func getForCalc(n: Int = 1) -> [Value]? {
+        var result: [Value] = []
 
         if n <= 0 {
             return nil
@@ -66,7 +66,7 @@ class Stack {
 
         var count = n
         if !input.isEmpty {
-            result.insert(input.value, at: 0)
+            result.insert(Value(input.value), at: 0)
             count -= 1
         }
 
@@ -90,34 +90,61 @@ class Stack {
             return
         }
 
+        let inputsAsReal = inputs.compactMap { n in n.asReal }
+        let allInputsReal = inputsAsReal.count == inputs.count
+
         do {
-            let result = try calc.calculate(inputs,
-                                            calculatorMode)
-            push(result)
+            if let realCalc = calc as? RealCalculation, allInputsReal {
+                let result = try realCalc.calculate(inputsAsReal, calculatorMode)
+                push(Value(result))
+            } else if let realToComplexCalc = calc as? RealToComplexCalculation, allInputsReal {
+                let result = try realToComplexCalc.calcToComplex(inputsAsReal, calculatorMode)
+                push(Value(result))
+            } else if let complexCalc = calc as? ComplexCalculation {
+                let complexInputs = inputs.map { v in v.asComplex }
+                let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
+                push(Value(result))
+            } else {
+                throw CalcError.badCalculationOp
+            }
         } catch {
             throw error
         }
     }
 
-    func printContents() {
-        print("Input Buffer: string = \(input.value.stringValue) double = \(input.value.doubleValue)")
+    func printContents(_ calculatorMode: CalculatorMode) {
+        print("Input Buffer: string = \(input.value.stringValue(precision: 8)) double = \(input.value.doubleValue)")
         print("STACK: ")
         content.enumerated().forEach { idx, value in
-            print("  \(idx): string = \(value.stringValue) double =  \(value.doubleValue) ")
+            print("  \(idx): string = \(value.stringValue(calculatorMode))")
         }
     }
 }
 
 protocol Calculation {
     var arity: Int { get }
+}
 
+protocol RealCalculation {
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue
+}
+
+protocol ComplexCalculation {
+    func calcComplex(_ inputs: [ComplexValue],
+                     _ calculatorMode: CalculatorMode) throws -> ComplexValue
+}
+
+protocol RealToComplexCalculation {
+    func calcToComplex(_ inputs: [DoublePrecisionValue],
+                       _ calculatorMode: CalculatorMode) throws -> ComplexValue
 }
 
 enum CalcError: Error {
     case divisionByZero
     case badInput
+    case unsupportedValueType
+    case badCalculationOp
 }
 
 enum ValueNumberFormat {
