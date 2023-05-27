@@ -57,12 +57,12 @@ class StackRow: UITableViewCell {
         ))
     }
 
-    func setItem(_ item: StackDisplayRowItem?, _ calculatorMode: CalculatorMode) {
+    func setItem(_ item: StackDisplayRowItem?) {
         self.item = item
 
         if let item = item {
             rowNum.text = "\(item.row): "
-            value.text = "\(item.value.stringValue(calculatorMode))"
+            value.text = "\(item.value.stringValue(item.calculatorMode))"
         } else {
             rowNum.text = ""
             value.text = ""

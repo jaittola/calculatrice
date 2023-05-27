@@ -5,7 +5,6 @@ class StackDisplay: UIView, UITableViewDelegate {
     private let tableview = UITableView()
     private var datasource: UITableViewDiffableDataSource<Int, StackDisplayRowItem>?
     private var data: [StackDisplayRowItem] = []
-    private var calculatorMode: CalculatorMode?
 
     var selectedItem: Value? {
         guard let selectedIndexPath = tableview.indexPathsForSelectedRows?.first,
@@ -27,19 +26,19 @@ class StackDisplay: UIView, UITableViewDelegate {
     }
 
     func setStack(_ content: [Value], _ calculatorMode: CalculatorMode) {
-        self.calculatorMode = calculatorMode
-
         data = content
             .enumerated()
             .reversed()
             .map { row, value in
-                StackDisplayRowItem(row: row + 1, value: value)
+                StackDisplayRowItem(row: row + 1,
+                                    value: value,
+                                    calculatorMode: calculatorMode)
             }
 
         var snapshot = NSDiffableDataSourceSnapshot<Int, StackDisplayRowItem>()
         snapshot.appendSections([1])
         snapshot.appendItems(data)
-        datasource?.apply(snapshot, animatingDifferences: false)
+        datasource?.applySnapshotUsingReloadData(snapshot)
 
         if !data.isEmpty {
             let scrollPosition = IndexPath(item: data.count - 1, section: 0)
@@ -64,15 +63,9 @@ class StackDisplay: UIView, UITableViewDelegate {
         tableview.delegate = self
         tableview.register(StackRow.self, forCellReuseIdentifier: StackRow.reuseIdentifier)
 
-        datasource = UITableViewDiffableDataSource(tableView: tableview) { [weak self] tableView, _, item -> UITableViewCell? in
-            guard let self = self else {
-                return nil
-            }
-            guard let calculatorMode = self.calculatorMode else {
-                fatalError("Calculator mode not set in StackDisplay")
-            }
+        datasource = UITableViewDiffableDataSource(tableView: tableview) { tableView, _, item -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: StackRow.reuseIdentifier) as! StackRow
-            cell.setItem(item, calculatorMode)
+            cell.setItem(item)
             return cell
         }
     }
@@ -85,13 +78,16 @@ class StackDisplay: UIView, UITableViewDelegate {
 struct StackDisplayRowItem: Hashable {
     let row: Int
     let value: Value
+    let calculatorMode: CalculatorMode
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(row)
         hasher.combine(value.id)
+        hasher.combine(calculatorMode.angle)
     }
 
     static func == (lhs: StackDisplayRowItem, rhs: StackDisplayRowItem) -> Bool {
-        lhs.row == rhs.row && lhs.value.id == rhs.value.id
+        lhs.row == rhs.row && lhs.value.id == rhs.value.id &&
+        lhs.calculatorMode.angle == rhs.calculatorMode.angle
     }
 }
