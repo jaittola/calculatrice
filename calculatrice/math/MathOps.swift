@@ -329,7 +329,7 @@ class Log10: Calculation, RealCalculation, ComplexCalculation {
 class Exp10: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
-        return DoublePrecisionValue(powl(10, inputs[0].doubleValue))
+        return DoublePrecisionValue(pow(10.0, inputs[0].doubleValue))
     }
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {

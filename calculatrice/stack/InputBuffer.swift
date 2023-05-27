@@ -191,6 +191,6 @@ struct MantissaExponent {
     }
 
     var value: Double {
-        signum * mantissa * powl(10.0, exponent * exponentSignum)
+        signum * mantissa * pow(10.0, exponent * exponentSignum)
     }
 }
