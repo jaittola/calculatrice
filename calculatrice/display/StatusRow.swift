@@ -24,7 +24,12 @@ class StatusRow: UIView {
         degLabel.adjustsFontForContentSizeCategory = true
         radLabel.adjustsFontForContentSizeCategory = true
         mod1Label.adjustsFontForContentSizeCategory = true
-        mod1Label.adjustsFontForContentSizeCategory = true
+        mod2Label.adjustsFontForContentSizeCategory = true
+
+        degLabel.maximumContentSizeCategory = Styles.maxContentSize
+        radLabel.maximumContentSizeCategory = Styles.maxContentSize
+        mod1Label.maximumContentSizeCategory = Styles.maxContentSize
+        mod2Label.maximumContentSizeCategory = Styles.maxContentSize
 
         degLabel.text = "DEG"
         radLabel.text = "RAD"

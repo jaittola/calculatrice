@@ -4,10 +4,12 @@ class Styles {
     static let margin: CGFloat = 8.0
     static let keypadMargin: CGFloat = 2.0
 
-    static let stackFont = font(.body, size: 20, weight: .semibold)
-    static let inputDisplayLabelFont = font(.body, size: 14, weight: .semibold)
-    static let keypadMainFont = font(.body, size: 20, weight: .semibold)
-    static let keypadModFont = font(.body, size: 13, weight: .semibold)
+    static let stackFont = font(.body, size: 24, weight: .semibold)
+    static let inputDisplayLabelFont = font(.body, size: 16, weight: .semibold)
+    static let keypadMainFont = font(.body, size: 24, weight: .semibold)
+    static let keypadModFont = font(.body, size: 16, weight: .semibold)
+
+    static let maxContentSize: UIContentSizeCategory = .large
 
     static let mod1TextColor = UIColor(hex: "ffff00")
     static let mod2TextColor = UIColor(hex: "93f500")

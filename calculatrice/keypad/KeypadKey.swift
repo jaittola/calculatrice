@@ -50,18 +50,21 @@ class KeypadKey: UIControl {
         mainLabel.text = key.symbol
         mainLabel.textAlignment = .center
         mainLabel.adjustsFontForContentSizeCategory = true
+        mainLabel.maximumContentSizeCategory = Styles.maxContentSize
 
         mod1Label.textColor = Styles.mod1TextColor
         mod1Label.font = Styles.keypadModFont
         mod1Label.text = key.symbolMod1 ?? " "
         mod1Label.textAlignment = .center
         mod1Label.adjustsFontForContentSizeCategory = true
+        mod1Label.maximumContentSizeCategory = Styles.maxContentSize
 
         mod2Label.textColor = Styles.mod2TextColor
         mod2Label.font = Styles.keypadModFont
         mod2Label.text = key.symbolMod2 ?? " "
         mod2Label.textAlignment = .center
         mod2Label.adjustsFontForContentSizeCategory = true
+        mod2Label.maximumContentSizeCategory = Styles.maxContentSize
 
         addTarget(self, action: #selector(onClicked), for: .touchUpInside)
 

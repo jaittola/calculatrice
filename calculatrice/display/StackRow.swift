@@ -26,6 +26,7 @@ class StackRow: UITableViewCell {
         rowNum.font = Styles.stackFont
         rowNum.translatesAutoresizingMaskIntoConstraints = false
         rowNum.adjustsFontForContentSizeCategory = true
+        rowNum.maximumContentSizeCategory = Styles.maxContentSize
 
         value.numberOfLines = 1
         value.textColor = textColor
@@ -33,6 +34,7 @@ class StackRow: UITableViewCell {
         value.translatesAutoresizingMaskIntoConstraints = false
         value.adjustsFontForContentSizeCategory = true
         value.textAlignment = .right
+        value.maximumContentSizeCategory = Styles.maxContentSize
 
         contentView.addSubview(rowNum)
         contentView.addSubview(value)
