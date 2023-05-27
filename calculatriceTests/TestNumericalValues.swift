@@ -51,7 +51,9 @@ class TestNumericalValues: XCTestCase {
     func testComplexValueWithEngFormat() {
         let c = ComplexValue(2.1E-3, 9.4E-2)
         XCTAssertEqual(c.stringValue(), "0.0021+0.094i")
-        let ce = ComplexValue(c, numberFormat: .eng)
+        let ce = ComplexValue(c,
+                              numberFormat: .eng,
+                              presentationFormat: .cartesian)
         XCTAssertEqual(ce.stringValue(), "2.100000E-03+9.400000E-02i")
     }
 
@@ -73,5 +75,58 @@ class TestNumericalValues: XCTestCase {
     func testComplexString() {
         let c = ComplexValue(0, 3.2)
         XCTAssertEqual(c.stringValue(), "3.2i")
+    }
+
+    func testComplexZeroString() {
+        let c = ComplexValue(0, 0)
+        XCTAssertEqual(c.stringValue(), "0")
+    }
+
+    func testComplexCartesianToPolar() {
+        checkComplexToPolar(ComplexValue(2, 2), 2.828427, Double.pi / 4)
+    }
+
+    func testComplexCartesianToPolar2() {
+        checkComplexToPolar(ComplexValue(-2, 2), 2.828427, 3 * Double.pi
+         / 4)
+    }
+
+    func testComplexZeroToPolar() {
+        checkComplexToPolar(ComplexValue(0, 0), 0, Double.nan)
+    }
+
+    func testComplexNegToPolar() {
+        checkComplexToPolar(ComplexValue(-2, 0), 2, Double.pi)
+    }
+
+    func testComplexPolar() {
+        checkPolarComplexToCartesian(ComplexValue(absolute: 2, argument: Double.pi / 4), sqrt(2), sqrt(2))
+    }
+
+    func testComplexPolar2() {
+        checkPolarComplexToCartesian(ComplexValue(absolute: 2, argument: 0), 2, 0)
+    }
+
+    func testComplexPolar3() {
+        checkPolarComplexToCartesian(ComplexValue(absolute: 1, argument: Double.pi / 2), 0, 1)
+    }
+
+    func checkPolarComplexToCartesian(_ c: ComplexValue, _ real: Double, _ imaginary: Double) {
+        XCTAssertEqual(c.real.doubleValue, real, accuracy: epsilon)
+        XCTAssertEqual(c.imag.doubleValue, imaginary, accuracy: epsilon)
+    }
+
+    func checkComplexToPolar(_ c: ComplexValue, _ absolute: Double, _ argument: Double) {
+        XCTAssertEqual(c.polarAbsolute.doubleValue, absolute, accuracy: epsilon)
+
+        if argument.isNaN && c.polarArgument.doubleValue.isNaN {
+            return
+        }
+        if (argument.isNaN && !c.polarArgument.doubleValue.isNaN) ||
+            (!argument.isNaN && c.polarArgument.doubleValue.isNaN) {
+            XCTFail("Arguments not equal: \(c.polarAbsolute.doubleValue) \(argument)")
+        } else {
+            XCTAssertEqual(c.polarArgument.doubleValue, argument, accuracy: epsilon)
+        }
     }
 }

@@ -113,7 +113,11 @@ struct Key {
         } else {
             _ = try? stack.calculate(Neg(), calculatorMode)
         }
-    }) }
+    },
+                                         symbolMod1: "→ ∟",
+                                         calcOpMod1: ToCartesian(),
+                                         symbolMod2: "→ ∠",
+                                         calcOpMod2: ToPolar()) }
     static func E() -> Key { Key(symbol: "E",
                                  op: { stack, _ in stack.input.E() },
                                  symbolMod1: "→E",
@@ -142,7 +146,8 @@ struct Key {
                                    symbolMod1: "eˣ", calcOpMod1: Exp()) }
     static func lg() -> Key { Key(symbol: "lg", calcOp: Log10(),
                                   symbolMod1: "10ˣ", calcOpMod1: Exp10()) }
-    static func complex() -> Key { Key(symbol: "y + xi", calcOp: Complex()) }
+    static func complex() -> Key { Key(symbol: "y + xi", calcOp: Complex(),
+                                       symbolMod1: "y ∠ x", calcOpMod1: ComplexPolar()) }
 
     static func numkey(_ num: Int) -> Key {
         return Key(symbol: String(num),
