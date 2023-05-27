@@ -27,7 +27,7 @@ enum ContainedValue {
     func stringValue(_ calculatorMode: CalculatorMode) -> String {
         switch self {
         case .complex(let c):
-            return c.stringValue(precision: 8, angleUnit: calculatorMode.angle)
+            return c.stringValue(precision: 7, angleUnit: calculatorMode.angle)
         case .number(let n):
             return n.stringValue(precision: 12)
         }
