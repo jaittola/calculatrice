@@ -262,7 +262,7 @@ class TestMathOps: XCTestCase {
                                                         argument: Double.pi/4.0)],
                                           calculatorMode)
         }
-        XCTAssertEqual(result?.stringValue(precision: 5), "3+3i")
+        XCTAssertEqual(result?.stringValue(precision: 5), "3 + 3i")
     }
 
     // TODO, add more of this.
