@@ -1,15 +1,56 @@
 import Foundation
 
+class StackContainer {
+    private var stackHistory: [[Value]] = []
+    private var stackContent: [Value] = []
+
+    var content: [Value] {
+        stackContent
+    }
+
+    func manipulate(manipulator: (_ stackContent: [Value]) -> [Value]) {
+        pushStackHistory()
+        stackContent = manipulator(stackContent)
+    }
+
+    func revertPreviousStack() {
+        if stackHistory.isEmpty {
+            return
+        }
+
+        stackContent = stackHistory.removeLast()
+    }
+
+    func clear() {
+        manipulate { _ in [] }
+    }
+
+    private func pushStackHistory() {
+        if stackHistory.count >= 100 {
+            stackHistory.removeFirst()
+        }
+        stackHistory.append(stackContent)
+    }
+}
+
 class Stack {
-    private(set) var content: [Value] = []
+    private let stackContainer = StackContainer()
     private(set) var input = InputBuffer()
 
     private var uniqueIdSeq: Int = 0
 
     var selectedId: Int = -1
 
+    var content: [Value] {
+        stackContainer.content
+    }
+
     func push(_ value: Value) {
-        content.insert(value.withId(uniqueIdSeq), at: 0)
+        stackContainer.manipulate { content in
+            var newStack = content
+            newStack.insert(value.withId(uniqueIdSeq), at: 0)
+            return newStack
+        }
         uniqueIdSeq += 1
     }
 
@@ -27,15 +68,19 @@ class Stack {
     }
 
     func pop() {
-        if !content.isEmpty {
-            content.removeFirst()
+        stackContainer.manipulate { content in
+            if !content.isEmpty {
+                var newStack = content
+                newStack.removeFirst()
+                return newStack
+            } else {
+                return content
+            }
         }
     }
 
     func clear() {
-        if !content.isEmpty {
-            content.removeAll()
-        }
+        stackContainer.clear()
         clearInput()
     }
 
@@ -50,17 +95,28 @@ class Stack {
             return
         }
 
-        let top = content.removeFirst()
-        let second = content.removeFirst()
+        var top: Value?
+        var second: Value?
 
-        push(top)
-        push(second)
+        stackContainer.manipulate { content in
+            var newStack = content
+
+            top = newStack.removeFirst()
+            second = newStack.removeFirst()
+
+            return newStack
+        }
+
+        push(top!)
+        push(second!)
     }
 
     private func getForCalc(n: Int = 1) -> [Value]? {
         var result: [Value] = []
 
-        if n <= 0 {
+        if n <= 0 ||
+            (input.isEmpty && n > content.count) ||
+            (!input.isEmpty && n > content.count + 1) {
             return nil
         }
 
@@ -70,13 +126,15 @@ class Stack {
             count -= 1
         }
 
-        if count > content.count {
-            return nil
-        }
+        stackContainer.manipulate { content in
+            var newStack = content
 
-        while count > 0 {
-            result.insert(content.removeFirst(), at: 0)
-            count -= 1
+            while count > 0 {
+                result.insert(newStack.removeFirst(), at: 0)
+                count -= 1
+            }
+
+            return newStack
         }
 
         clearInput()
