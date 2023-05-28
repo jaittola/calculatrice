@@ -166,6 +166,7 @@ class Stack {
                 throw CalcError.badCalculationOp
             }
         } catch {
+            stackContainer.revertPreviousStack()
             throw error
         }
     }
