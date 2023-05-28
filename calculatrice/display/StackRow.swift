@@ -28,7 +28,7 @@ class StackRow: UITableViewCell {
         rowNum.adjustsFontForContentSizeCategory = true
         rowNum.maximumContentSizeCategory = Styles.maxContentSize
 
-        value.numberOfLines = 1
+        value.numberOfLines = 2
         value.textColor = textColor
         value.font = Styles.stackFont
         value.translatesAutoresizingMaskIntoConstraints = false

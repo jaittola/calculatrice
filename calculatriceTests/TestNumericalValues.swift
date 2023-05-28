@@ -32,7 +32,7 @@ class TestNumericalValues: XCTestCase {
         let v1r = v1.asReal!
         let v2r = v2.asReal!
         XCTAssertEqual(v1r.doubleValue, v2r.doubleValue)
-        XCTAssertEqual(v2r.stringValue(), "1.200000E+00")
+        XCTAssertEqual(v2r.stringValue(), "1.2000000e+00")
         XCTAssertEqual(v1r.numberFormat,
                        v2r.numberFormat)
         XCTAssertEqual(v2.id, 4)
@@ -40,21 +40,41 @@ class TestNumericalValues: XCTestCase {
 
     func testPositiveComplexNumberString() {
         let c = ComplexValue(3, 2)
-        XCTAssertEqual(c.stringValue(), "3+2i")
+        XCTAssertEqual(c.stringValue(), "3 + 2i")
+    }
+
+    func testPositiveComplexNumberString2() {
+        let c = ComplexValue(3, 1)
+        XCTAssertEqual(c.stringValue(), "3 + i")
     }
 
     func testNegativeComplexNumberString() {
         let c = ComplexValue(-2, -9.25)
-        XCTAssertEqual(c.stringValue(), "-2-9.25i")
+        XCTAssertEqual(c.stringValue(), "-2 - 9.25i")
+    }
+
+    func testNegativeComplexNumberString2() {
+        let c = ComplexValue(-2, -1)
+        XCTAssertEqual(c.stringValue(), "-2 - i")
+    }
+
+    func testRealComplexNumberString() {
+        let c = ComplexValue(-2, 0)
+        XCTAssertEqual(c.stringValue(), "-2")
+    }
+
+    func testImaginaryComplexNumberString() {
+        let c = ComplexValue(0, -2.2)
+        XCTAssertEqual(c.stringValue(), "-2.2i")
     }
 
     func testComplexValueWithEngFormat() {
         let c = ComplexValue(2.1E-3, 9.4E-2)
-        XCTAssertEqual(c.stringValue(), "0.0021+0.094i")
+        XCTAssertEqual(c.stringValue(), "0.0021 + 0.094i")
         let ce = ComplexValue(c,
                               numberFormat: .eng,
                               presentationFormat: .cartesian)
-        XCTAssertEqual(ce.stringValue(), "2.100000E-03+9.400000E-02i")
+        XCTAssertEqual(ce.stringValue(), "2.1000000e-03 + 9.4000000e-02i")
     }
 
     func testRealComplexString() {

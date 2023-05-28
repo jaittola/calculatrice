@@ -2,6 +2,8 @@ import Foundation
 
 public let epsilon = 0.0001 // Mostly for tests, where we use the equality operator.
 
+public let realDefaultPrecision = 7
+
 enum ContainedValue {
     case number(value: DoublePrecisionValue)
     case complex(value: ComplexValue)
@@ -27,9 +29,10 @@ enum ContainedValue {
     func stringValue(_ calculatorMode: CalculatorMode) -> String {
         switch self {
         case .complex(let c):
-            return c.stringValue(precision: 7, angleUnit: calculatorMode.angle)
+            return c.stringValue(precision: realDefaultPrecision,
+                                 angleUnit: calculatorMode.angle)
         case .number(let n):
-            return n.stringValue(precision: 12)
+            return n.stringValue(precision: realDefaultPrecision)
         }
     }
 }
@@ -139,7 +142,7 @@ class ComplexValue: NSObject {
         originalComponents[1].doubleValue.isNaN
     }
 
-    func stringValue(precision: Int = 5,
+    func stringValue(precision: Int = realDefaultPrecision,
                      angleUnit: CalculatorMode.Angle = .Deg) -> String {
         switch presentationFormat {
         case .cartesian:
@@ -156,19 +159,34 @@ class ComplexValue: NSObject {
             return "0"
         }
 
-        let realPart = cart[0].doubleValue != 0 ? cart[0].stringValue(precision: precision) : ""
-        let plusminus = cart[1].doubleValue > 0 && cart[0].doubleValue != 0 ? "+" : ""
+        let realPart = (cart[0].doubleValue != 0 ?
+                        cart[0].stringValue(precision: precision)
+                        : "")
+        var plusminus = ""
         var imaginaryPart = ""
 
         switch cartesian[1].doubleValue {
         case 1:
             imaginaryPart = "i"
+            plusminus = (cart[0].doubleValue != 0 ? " + " : "")
         case -1:
-            imaginaryPart = "-i"
+            imaginaryPart = "i"
+            plusminus = cart[0].doubleValue != 0 ? " - " : "-"
         case 0:
+            plusminus = ""
             imaginaryPart = ""
         default:
-            imaginaryPart = "\(cartesian[1].stringValue(precision: precision))i"
+            let withSign: Bool
+            if cart[0].doubleValue != 0 {
+                plusminus = cart[1].doubleValue > 0 ? " + " : " - "
+                withSign = false
+            } else {
+                plusminus = ""
+                withSign = true
+            }
+            let formatted = cart[1].stringValue(precision: precision,
+                                                     withSign: withSign)
+            imaginaryPart = "\(formatted)i"
         }
         return "\(realPart)\(plusminus)\(imaginaryPart)"
     }
@@ -200,7 +218,7 @@ class ComplexValue: NSObject {
     }
 
     override var description: String {
-        return "ComplexValue (\(stringValue(precision: 8))"
+        return "ComplexValue (\(stringValue(precision: realDefaultPrecision))"
     }
 
     init(_ components: [DoublePrecisionValue],
@@ -293,7 +311,7 @@ class DoublePrecisionValue: NSObject {
     }
 
     override var description: String {
-        return "SingleDimensionalNumericalValue \(stringValue())"
+        return "SingleDimensionalNumericalValue \(stringValue(precision: realDefaultPrecision))"
     }
 
     init(_ doubleValue: Double,
@@ -318,40 +336,60 @@ class DoublePrecisionValue: NSObject {
         self.originalStringValue = ""
     }
 
-    func stringValue(precision: Int = 9) -> String {
+    func stringValue(precision: Int = realDefaultPrecision,
+                     engDecimalPlaces: Int = realDefaultPrecision,
+                     maxAutoDecimalFormat: Double = 1E7,
+                     minAutoDecimalFormat: Double = 1E-4,
+                     maxDecimalFormat: Double = 1E18,
+                     minDecimalFormat: Double = 1E-4,
+                     withSign: Bool = true) -> String {
+        let absv = fabs(doubleValue)
+
         switch numberFormat {
         case .fromInput:
             return originalStringValue
         case .auto:
-            if doubleValue >= 1000000 || fabs(doubleValue) < 0.001 {
-                return stringEngValue(precision: precision)
+            if absv >= maxAutoDecimalFormat || absv < minAutoDecimalFormat {
+                return stringEngValue(precision: precision,
+                                      engDecimalPlaces: engDecimalPlaces,
+                                      withSign: withSign)
             } else {
-                return stringDecimalValue(precision: precision)
+                return stringDecimalValue(precision: precision,
+                                          withSign: withSign)
             }
         case .decimal:
-            if doubleValue >= 1E9 || fabs(doubleValue) < 1E-9 {
-                return stringEngValue(precision: precision)
+            if absv >= maxDecimalFormat || absv < minDecimalFormat {
+                return stringEngValue(precision: precision,
+                                      engDecimalPlaces: engDecimalPlaces,
+                                      withSign: withSign)
             } else {
-                return stringDecimalValue(precision: precision)
+                return stringDecimalValue(precision: precision,
+                                          withSign: withSign)
             }
         case .eng:
-            return stringEngValue(precision: precision)
+            return stringEngValue(precision: precision,
+                                  engDecimalPlaces: engDecimalPlaces,
+                                  withSign: withSign)
         }
     }
 
-    func stringDecimalValue(precision: Int) -> String {
-        let dvParts = modf(doubleValue)
+    func stringDecimalValue(precision: Int, withSign: Bool) -> String {
+        let v = withSign ? doubleValue : fabs(doubleValue)
+
+        let dvParts = modf(v)
         if dvParts.1 == 0 {
             return String(format: "%.0f", dvParts.0)
         } else {
             let format = String(format: "%%.%dg", precision)
-            return String(format: format, doubleValue)
+            return String(format: format, v)
         }
     }
 
-    func stringEngValue(precision: Int) -> String {
-        let format = String(format: "%%%dE", precision)
-        return String(format: format, doubleValue)
+    func stringEngValue(precision: Int, engDecimalPlaces: Int, withSign: Bool) -> String {
+        let v = withSign ? doubleValue : fabs(doubleValue)
+
+        let format = String(format: "%%%d.%de", precision, engDecimalPlaces)
+        return String(format: format, v)
     }
 
     override func isEqual(_ to: (Any)?) -> Bool {
