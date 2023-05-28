@@ -21,6 +21,14 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(3, 0))
     }
 
+    func testPlus3() {
+        let values = [complex(1, 2), complex(3, -4)]
+        let result = assertNoThrow {
+            try Plus().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, complex(4, -2))
+    }
+
     func testMinus1() throws {
         let values = [complex(4, 1), complex(1, 3)]
         let result = assertNoThrow {
@@ -35,6 +43,33 @@ class TestMathOps: XCTestCase {
             try Minus().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, complex(3, 0))
+    }
+
+    func testMinus3() {
+        let values = [complex(1, 2), complex(3, -4)]
+        let result = assertNoThrow {
+            try Minus().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, complex(-2, 6))
+    }
+
+    func testImaginaryNumber() {
+        let values = [DoublePrecisionValue(2).asComplex]
+        let result = assertNoThrow {
+            try ImaginaryNumber().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, complex(0, 2))
+    }
+
+    func testImaginaryNumberNotForComplexNumbers() {
+        let values = [complex(1, 2)]
+        XCTAssertThrowsError(try ImaginaryNumber().calcComplex(values, self.calculatorMode))
+    }
+
+    func testComplexNeg() {
+        let value = [complex(2, 4)]
+        let result = Neg().calcComplex(value, self.calculatorMode)
+        XCTAssertEqual(result, complex(-2, -4))
     }
 
     func testMult() {
@@ -114,6 +149,18 @@ class TestMathOps: XCTestCase {
                                             argument: Double.pi/9))
     }
 
+    func testComplex3rdRoot2() {
+        let values = [complex(2, 2)]
+        let result = Root3().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, complex(1.36603, 0.36603))
+    }
+
+    func testComplex3rdRoot3() {
+        let values = [complex(2, -2)]
+        let result = Root3().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, complex(1.36603, -0.36603))
+    }
+
     func testComplexExp() {
         let values = [complex(1, Double.pi/4)]
         let result = Exp().calcComplex(values, self.calculatorMode)
@@ -181,6 +228,14 @@ class TestMathOps: XCTestCase {
                                         self.calculatorMode)
         }
         XCTAssertEqual(result, complex(1, 2))
+    }
+
+    func testComplexCartesian2() {
+        let result = assertNoThrow {
+            try Complex().calcToComplex([num(1), num(-2)],
+                                        self.calculatorMode)
+        }
+        XCTAssertEqual(result, complex(1, -2))
     }
 
     func testComplexPolar() {

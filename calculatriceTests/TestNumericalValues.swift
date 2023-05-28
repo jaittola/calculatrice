@@ -48,6 +48,11 @@ class TestNumericalValues: XCTestCase {
         XCTAssertEqual(c.stringValue(), "3 + i")
     }
 
+    func testComplexNumberString() {
+        let c = ComplexValue(3, -2)
+        XCTAssertEqual(c.stringValue(), "3 - 2i")
+    }
+
     func testNegativeComplexNumberString() {
         let c = ComplexValue(-2, -9.25)
         XCTAssertEqual(c.stringValue(), "-2 - 9.25i")

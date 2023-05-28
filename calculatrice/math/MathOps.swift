@@ -75,12 +75,16 @@ class Div: Calculation, RealCalculation, ComplexCalculation {
     }
 }
 
-class Neg: Calculation, RealCalculation {
+class Neg: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue],
                    _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let result = -inputs[0].doubleValue
         return DoublePrecisionValue(result)
+    }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+        return Mult().calcComplex([inputs[0], ComplexValue(-1.0, 0)], calculatorMode)
     }
 }
 
@@ -159,7 +163,6 @@ class Inv: Calculation, RealCalculation, ComplexCalculation {
         return ComplexValue(absolute: absolute,
                             argument: argument)
     }
-
 }
 
 class Complex: Calculation, RealToComplexCalculation {
@@ -177,6 +180,20 @@ class ComplexPolar: Calculation, RealToComplexCalculation {
         let argument = Utils.deg2Rad([inputs[1]], calculatorMode)[0]
         return ComplexValue(absolute: inputs[0].doubleValue,
                             argument: argument)
+    }
+}
+
+class ImaginaryNumber: Calculation, ComplexCalculation {
+    let arity: Int = 1
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        let inputAsReal = inputs[0].asReal
+
+        if let inputAsReal = inputAsReal {
+            return ComplexValue(0, inputAsReal.doubleValue, presentationFormat: .cartesian)
+        } else {
+            throw CalcError.unsupportedValueType
+        }
     }
 }
 
@@ -340,17 +357,29 @@ class Exp10: Calculation, RealCalculation, ComplexCalculation {
     }
 }
 
-class ToEng: Calculation, RealCalculation {
+class ToEng: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         return DoublePrecisionValue(inputs[0].doubleValue, numberFormat: .eng)
     }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        return ComplexValue(inputs[0],
+                            numberFormat: .eng,
+                            presentationFormat: inputs[0].presentationFormat)
+    }
 }
 
-class ToDecimal: Calculation, RealCalculation {
+class ToDecimal: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         return DoublePrecisionValue(inputs[0].doubleValue, numberFormat: .decimal)
+    }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        return ComplexValue(inputs[0],
+                            numberFormat: .decimal,
+                            presentationFormat: inputs[0].presentationFormat)
     }
 }
 

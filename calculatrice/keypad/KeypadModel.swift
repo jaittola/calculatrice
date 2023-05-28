@@ -147,7 +147,8 @@ struct Key {
     static func lg() -> Key { Key(symbol: "lg", calcOp: Log10(),
                                   symbolMod1: "10ˣ", calcOpMod1: Exp10()) }
     static func complex() -> Key { Key(symbol: "y + xi", calcOp: Complex(),
-                                       symbolMod1: "y ∠ x", calcOpMod1: ComplexPolar()) }
+                                       symbolMod1: "y∠x", calcOpMod1: ComplexPolar(),
+                                       symbolMod2: "xi", calcOpMod2: ImaginaryNumber()) }
 
     static func numkey(_ num: Int) -> Key {
         return Key(symbol: String(num),
