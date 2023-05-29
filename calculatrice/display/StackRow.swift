@@ -69,7 +69,7 @@ class StackRow: UITableViewCell, UIEditMenuInteractionDelegate {
 
         if let item = item {
             rowNum.text = "\(item.row): "
-            value.text = "\(item.value.stringValue(item.calculatorMode))"
+            value.text = "\(item.value.stringValue(item.calculatorMode.angle))"
         } else {
             rowNum.text = ""
             value.text = ""

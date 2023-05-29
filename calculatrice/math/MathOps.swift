@@ -4,7 +4,7 @@ class Plus: Calculation, ComplexCalculation {
     let arity: Int = 2
 
     func calcComplex(_ inputs: [ComplexValue],
-                     _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+                     _ calculatorMode: CalculatorMode) throws -> any Valueish {
         do {
             return try Utils.calculateComplexCartesian(inputs) { v1, v2 in
                 Utils.num(v1.doubleValue + v2.doubleValue)
@@ -19,7 +19,7 @@ class Minus: Calculation, ComplexCalculation {
     let arity: Int = 2
 
     func calcComplex(_ inputs: [ComplexValue],
-                     _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+                     _ calculatorMode: CalculatorMode) throws -> any Valueish {
         do {
             return try Utils.calculateComplexCartesian(inputs) { v1, v2 in
                 Utils.num(v1.doubleValue - v2.doubleValue)
@@ -33,12 +33,12 @@ class Minus: Calculation, ComplexCalculation {
 class Mult: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 2
     func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+                   _ calculatorMode: CalculatorMode) -> any Valueish {
         let result = inputs[0].doubleValue * inputs[1].doubleValue
         return DoublePrecisionValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let r = (inputs[0].polarAbsolute.doubleValue *
                  inputs[1].polarAbsolute.doubleValue)
         let arg = Utils.clampComplexArg(inputs[0].polarArgument.doubleValue +
@@ -52,7 +52,7 @@ class Mult: Calculation, RealCalculation, ComplexCalculation {
 class Div: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 2
     func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
+                   _ calculatorMode: CalculatorMode) throws -> any Valueish {
         if inputs[1].doubleValue == 0 {
             throw CalcError.divisionByZero
         }
@@ -60,7 +60,7 @@ class Div: Calculation, RealCalculation, ComplexCalculation {
         return DoublePrecisionValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
 
         if inputs[1].polarAbsolute.doubleValue == 0 {
             throw CalcError.divisionByZero
@@ -78,12 +78,12 @@ class Div: Calculation, RealCalculation, ComplexCalculation {
 class Neg: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+                   _ calculatorMode: CalculatorMode) -> any Valueish {
         let result = -inputs[0].doubleValue
         return DoublePrecisionValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return Mult().calcComplex([inputs[0], ComplexValue(-1.0, 0)], calculatorMode)
     }
 }
@@ -92,7 +92,7 @@ class Sin: Calculation, RealCalculation {
     let arity: Int = 1
 
     func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+                   _ calculatorMode: CalculatorMode) -> any Valueish {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
         return DoublePrecisionValue(sin(input))
     }
@@ -102,7 +102,7 @@ class Cos: Calculation, RealCalculation {
     let arity: Int = 1
 
     func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+                   _ calculatorMode: CalculatorMode) -> any Valueish {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
         return DoublePrecisionValue(cos(input))
     }
@@ -112,7 +112,7 @@ class Tan: Calculation, RealCalculation {
     let arity: Int = 1
 
     func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+                   _ calculatorMode: CalculatorMode) -> any Valueish {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
         return DoublePrecisionValue(tan(input))
     }
@@ -120,7 +120,7 @@ class Tan: Calculation, RealCalculation {
 
 class ASin: Calculation, RealCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let res = asin(inputs[0].doubleValue)
         return Utils.radResult2Deg(res, calculatorMode)
     }
@@ -128,7 +128,7 @@ class ASin: Calculation, RealCalculation {
 
 class ACos: Calculation, RealCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let res = acos(inputs[0].doubleValue)
         return Utils.radResult2Deg(res, calculatorMode)
     }
@@ -136,7 +136,7 @@ class ACos: Calculation, RealCalculation {
 
 class ATan: Calculation, RealCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let res = atan(inputs[0].doubleValue)
         return Utils.radResult2Deg(res, calculatorMode)
     }
@@ -144,7 +144,7 @@ class ATan: Calculation, RealCalculation {
 
 class Inv: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let input = inputs[0].doubleValue
         if input == 0 {
             return DoublePrecisionValue(Double.nan)
@@ -153,7 +153,7 @@ class Inv: Calculation, RealCalculation, ComplexCalculation {
         }
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         if inputs[0].polarAbsolute.doubleValue == 0 {
             return ComplexValue(Double.nan, Double.nan)
         }
@@ -166,28 +166,28 @@ class Inv: Calculation, RealCalculation, ComplexCalculation {
     }
 }
 
-class Complex: Calculation, RealToComplexCalculation {
+class Complex: Calculation, RealCalculation {
     let arity: Int = 2
 
-    func calcToComplex(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
-        return ComplexValue(inputs[0].doubleValue, inputs[1].doubleValue)
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
+        return (ComplexValue(inputs[0].doubleValue, inputs[1].doubleValue))
     }
 }
 
-class ComplexPolar: Calculation, RealToComplexCalculation {
+class ComplexPolar: Calculation, RealCalculation {
     let arity: Int = 2
 
-    func calcToComplex(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let argument = Utils.deg2Rad([inputs[1]], calculatorMode)[0]
-        return ComplexValue(absolute: inputs[0].doubleValue,
-                            argument: argument)
+        return (ComplexValue(absolute: inputs[0].doubleValue,
+                                  argument: argument))
     }
 }
 
 class ImaginaryNumber: Calculation, ComplexCalculation {
     let arity: Int = 1
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         let inputAsReal = inputs[0].asReal
 
         if let inputAsReal = inputAsReal {
@@ -200,12 +200,12 @@ class ImaginaryNumber: Calculation, ComplexCalculation {
 
 class Square: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let input = inputs[0].doubleValue
         return DoublePrecisionValue(input * input)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return Pow().calcComplex([inputs[0], ComplexValue(2, 0)],
                                  calculatorMode)
     }
@@ -213,12 +213,12 @@ class Square: Calculation, RealCalculation, ComplexCalculation {
 
 class Pow: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 2
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let result = pow(inputs[0].doubleValue, inputs[1].doubleValue)
         return DoublePrecisionValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         // Calculating (re^(iw))^(x+yi) = r^x * e^(-yw) * e^(i*(xw + yln(r)));
         // the variable names below are based on this equation.
 
@@ -241,12 +241,12 @@ class Pow: Calculation, RealCalculation, ComplexCalculation {
 
 class Pow3: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let result = pow(inputs[0].doubleValue, 3)
         return DoublePrecisionValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return Pow().calcComplex([inputs[0], ComplexValue(3, 0)],
                                  calculatorMode)
     }
@@ -255,7 +255,7 @@ class Pow3: Calculation, RealCalculation, ComplexCalculation {
 class Sqrt: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
 
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return DoublePrecisionValue(sqrt(inputs[0].doubleValue))
     }
 
@@ -263,14 +263,14 @@ class Sqrt: Calculation, RealCalculation, ComplexCalculation {
         thisInput[0].doubleValue < 0
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return NthRoot().calcComplex([inputs[0], ComplexValue(2, 0)], calculatorMode)
     }
 }
 
 class Root3: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         let base = inputs[0].doubleValue
         let result = pow(base, 1.0/3.0)
         return DoublePrecisionValue(result)
@@ -280,14 +280,14 @@ class Root3: Calculation, RealCalculation, ComplexCalculation {
         thisInput[0].doubleValue < 0
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return NthRoot().calcComplex([inputs[0], ComplexValue(3, 0)], calculatorMode)
     }
 }
 
 class NthRoot: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 2
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         let base = inputs[0].doubleValue
         let exponent = inputs[1].doubleValue
 
@@ -303,23 +303,23 @@ class NthRoot: Calculation, RealCalculation, ComplexCalculation {
         thisInput[0].doubleValue < 0
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let expv = Inv().calcComplex([inputs[1]], calculatorMode)
         if expv.isNan {
             return expv
         }
 
-        return Pow().calcComplex([inputs[0], expv], calculatorMode)
+        return Pow().calcComplex([inputs[0], expv.asComplex], calculatorMode)
     }
 }
 
 class Log: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return DoublePrecisionValue(log(inputs[0].doubleValue))
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         let resultR = log(inputs[0].polarAbsolute.doubleValue)
         let resultI = Utils.clampComplexArg(inputs[0].polarArgument.doubleValue)
         return ComplexValue(resultR, resultI,
@@ -329,11 +329,11 @@ class Log: Calculation, RealCalculation, ComplexCalculation {
 
 class Exp: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return DoublePrecisionValue(exp(inputs[0].doubleValue))
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return ComplexValue(absolute: exp(inputs[0].real.doubleValue),
                             argument: Utils.clampComplexArg(inputs[0].imag.doubleValue),
                             presentationFormat: inputs[0].presentationFormat)
@@ -342,14 +342,14 @@ class Exp: Calculation, RealCalculation, ComplexCalculation {
 
 class Log10: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return DoublePrecisionValue(log10(inputs[0].doubleValue))
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         let logr = Log().calcComplex(inputs, calculatorMode)
         do {
-            return try Div().calcComplex([logr, ComplexValue(log(10), 0)],
+            return try Div().calcComplex([logr.asComplex, ComplexValue(log(10), 0)],
                                           calculatorMode)
         } catch {
             throw error
@@ -359,11 +359,11 @@ class Log10: Calculation, RealCalculation, ComplexCalculation {
 
 class Exp10: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         return DoublePrecisionValue(pow(10.0, inputs[0].doubleValue))
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return Pow().calcComplex([ComplexValue(10, 0,
                                                presentationFormat: inputs[0].presentationFormat),
                                   inputs[0]],
@@ -373,11 +373,11 @@ class Exp10: Calculation, RealCalculation, ComplexCalculation {
 
 class ToEng: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return DoublePrecisionValue(inputs[0].doubleValue, numberFormat: .eng)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         return ComplexValue(inputs[0],
                             numberFormat: .eng,
                             presentationFormat: inputs[0].presentationFormat)
@@ -386,11 +386,11 @@ class ToEng: Calculation, RealCalculation, ComplexCalculation {
 
 class ToDecimal: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
-    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
+    func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> any Valueish {
         return DoublePrecisionValue(inputs[0].doubleValue, numberFormat: .decimal)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         return ComplexValue(inputs[0],
                             numberFormat: .decimal,
                             presentationFormat: inputs[0].presentationFormat)
@@ -399,7 +399,7 @@ class ToDecimal: Calculation, RealCalculation, ComplexCalculation {
 
 class ToCartesian: Calculation, ComplexCalculation {
     let arity: Int = 1
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         return ComplexValue(inputs[0],
                             numberFormat: inputs[0].originalComponents[0].numberFormat,
                             presentationFormat: .cartesian)
@@ -408,7 +408,7 @@ class ToCartesian: Calculation, ComplexCalculation {
 
 class ToPolar: Calculation, ComplexCalculation {
     let arity: Int = 1
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> any Valueish {
         return ComplexValue(inputs[0],
                             numberFormat: inputs[0].originalComponents[0].numberFormat,
                             presentationFormat: .polar)

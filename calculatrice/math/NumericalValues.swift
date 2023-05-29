@@ -26,18 +26,25 @@ enum ContainedValue {
         }
     }
 
-    func stringValue(_ calculatorMode: CalculatorMode) -> String {
+    func stringValue(_ angleUnit: CalculatorMode.Angle) -> String {
         switch self {
         case .complex(let c):
             return c.stringValue(precision: realDefaultPrecision,
-                                 angleUnit: calculatorMode.angle)
+                                 angleUnit: angleUnit)
         case .number(let n):
             return n.stringValue(precision: realDefaultPrecision)
         }
     }
 }
 
-class Value {
+protocol Valueish {
+    var asComplex: ComplexValue { get }
+    var asReal: DoublePrecisionValue? { get }
+    var isNan: Bool { get }
+    var description: String { get }
+}
+
+class Value: NSObject {
     let containedValue: ContainedValue
     let id: Int
 
@@ -66,17 +73,28 @@ class Value {
         return Value(containedValue, id: newId)
     }
 
-    func stringValue(_ calculatorMode: CalculatorMode) -> String {
-        containedValue.stringValue(calculatorMode)
+    func stringValue(_ angleUnit: CalculatorMode.Angle = .Deg) -> String {
+        containedValue.stringValue(angleUnit)
     }
 
+    override func isEqual(_ to: (Any)?) -> Bool {
+        asComplex.isEqual(to)
+    }
+
+    static func == (lhs: Value, rhs: Value) -> Bool {
+        lhs.isEqual(rhs)
+    }
+
+    override var description: String {
+        self.stringValue()
+    }
 }
 
 enum ValueError: Error {
     case invalidDimension
 }
 
-class ComplexValue: NSObject {
+class ComplexValue: NSObject, Valueish {
     enum Format {
         case polar
         case cartesian
@@ -87,6 +105,10 @@ class ComplexValue: NSObject {
     let originalComponents: [DoublePrecisionValue]
     let originalFormat: Format
     let presentationFormat: Format
+
+    var asComplex: ComplexValue {
+        self
+    }
 
     var cartesian: [DoublePrecisionValue] {
         switch originalFormat {
@@ -304,13 +326,22 @@ class ComplexValue: NSObject {
     }
 }
 
-class DoublePrecisionValue: NSObject {
+class DoublePrecisionValue: NSObject, Valueish {
+
     private(set) var doubleValue: Double
     private(set) var originalStringValue: String
     private (set) var numberFormat: ValueNumberFormat
 
     var asComplex: ComplexValue {
         ComplexValue(realValue: self)
+    }
+
+    var asReal: DoublePrecisionValue? {
+        self
+    }
+
+    var isNan: Bool {
+        doubleValue.isNaN
     }
 
     override var description: String {
