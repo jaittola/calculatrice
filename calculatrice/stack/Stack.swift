@@ -151,14 +151,23 @@ class Stack {
         let inputsAsReal = inputs.compactMap { n in n.asReal }
         let allInputsReal = inputsAsReal.count == inputs.count
 
+        let realCalc = calc as? RealCalculation
+        let complexCalc = calc as? ComplexCalculation
+
+        let preferComplexCalc = (allInputsReal &&
+                                 (complexCalc?.preferComplexCalculationWith(thisInput: inputsAsReal) ??
+                                  false))
+
         do {
-            if let realCalc = calc as? RealCalculation, allInputsReal {
+            if let realCalc = realCalc,
+                allInputsReal,
+               !preferComplexCalc {
                 let result = try realCalc.calculate(inputsAsReal, calculatorMode)
                 push(Value(result))
             } else if let realToComplexCalc = calc as? RealToComplexCalculation, allInputsReal {
                 let result = try realToComplexCalc.calcToComplex(inputsAsReal, calculatorMode)
                 push(Value(result))
-            } else if let complexCalc = calc as? ComplexCalculation {
+            } else if let complexCalc = complexCalc {
                 let complexInputs = inputs.map { v in v.asComplex }
                 let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
                 push(Value(result))
@@ -190,8 +199,15 @@ protocol RealCalculation {
 }
 
 protocol ComplexCalculation {
+    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool
     func calcComplex(_ inputs: [ComplexValue],
                      _ calculatorMode: CalculatorMode) throws -> ComplexValue
+}
+
+extension ComplexCalculation {
+    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool {
+        false
+    }
 }
 
 protocol RealToComplexCalculation {

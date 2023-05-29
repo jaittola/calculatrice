@@ -254,8 +254,13 @@ class Pow3: Calculation, RealCalculation, ComplexCalculation {
 
 class Sqrt: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
+
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         return DoublePrecisionValue(sqrt(inputs[0].doubleValue))
+    }
+
+    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool {
+        thisInput[0].doubleValue < 0
     }
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
@@ -269,6 +274,10 @@ class Root3: Calculation, RealCalculation, ComplexCalculation {
         let base = inputs[0].doubleValue
         let result = pow(base, 1.0/3.0)
         return DoublePrecisionValue(result)
+    }
+
+    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool {
+        thisInput[0].doubleValue < 0
     }
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
@@ -288,6 +297,10 @@ class NthRoot: Calculation, RealCalculation, ComplexCalculation {
 
         let result = pow(base, 1.0/exponent)
         return DoublePrecisionValue(result)
+    }
+
+    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool {
+        thisInput[0].doubleValue < 0
     }
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
