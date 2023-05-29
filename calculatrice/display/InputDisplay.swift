@@ -1,9 +1,12 @@
 import UIKit
 import SnapKit
 
-class InputDisplay: UIView {
+class InputDisplay: UIView, UIEditMenuInteractionDelegate {
 
     private let inputTextView = UILabel()
+
+    private var editMenuInteraction: UIEditMenuInteraction?
+
     var text: String = " " {
         didSet {
             inputTextView.text = text
@@ -31,28 +34,35 @@ class InputDisplay: UIView {
         inputTextView.adjustsFontForContentSizeCategory = true
         inputTextView.font = Styles.stackFont
 
-        addGestureRecognizer(UILongPressGestureRecognizer(
+        editMenuInteraction = UIEditMenuInteraction(delegate: self)
+        self.addInteraction(editMenuInteraction!)
+
+        let longPress = UILongPressGestureRecognizer(
             target: self,
-            action: #selector(showMenu(sender:))
-        ))
+            action: #selector(showMenu(_:))
+        )
+        longPress.allowedTouchTypes = [UITouch.TouchType.direct.rawValue as NSNumber]
+        addGestureRecognizer(longPress)
     }
 
     override func copy(_ sender: Any?) {
         UIPasteboard.general.string = inputTextView.text
-        UIMenuController.shared.hideMenu()
+        editMenuInteraction?.dismissMenu()
     }
 
     override func paste(_ sender: Any?) {
         onPaste?(UIPasteboard.general.string)
-        UIMenuController.shared.hideMenu()
+        editMenuInteraction?.dismissMenu()
     }
 
-    @objc func showMenu(sender: Any?) {
+    @objc func showMenu(_ recognizer: UIGestureRecognizer) {
         becomeFirstResponder()
-        let menu = UIMenuController.shared
-        if !menu.isMenuVisible {
-            UIMenuController.shared.showMenu(from: self, rect: bounds)
-        }
+
+        let location = recognizer.location(in: self)
+        let configuration = UIEditMenuConfiguration(identifier: nil,
+                                                    sourcePoint: location)
+
+        editMenuInteraction?.presentEditMenu(with: configuration)
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {

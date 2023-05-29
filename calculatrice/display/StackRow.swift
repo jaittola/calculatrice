@@ -1,6 +1,6 @@
 import UIKit
 
-class StackRow: UITableViewCell {
+class StackRow: UITableViewCell, UIEditMenuInteractionDelegate {
     static let reuseIdentifier = "StackRowReuseIdentifier"
 
     override public var canBecomeFirstResponder: Bool {
@@ -13,6 +13,8 @@ class StackRow: UITableViewCell {
     private let value = UILabel()
     private let selectedBackground = UIView()
     private let textColor = Styles.stackTextColor
+
+    private var editMenuInteraction: UIEditMenuInteraction?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -51,10 +53,15 @@ class StackRow: UITableViewCell {
             make.trailing.equalToSuperview().inset(Styles.margin)
         }
 
-        addGestureRecognizer(UILongPressGestureRecognizer(
+        editMenuInteraction = UIEditMenuInteraction(delegate: self)
+        self.addInteraction(editMenuInteraction!)
+
+        let longPress = UILongPressGestureRecognizer(
             target: self,
-            action: #selector(showMenu(sender:))
-        ))
+            action: #selector(showMenu(_:))
+        )
+        longPress.allowedTouchTypes = [UITouch.TouchType.direct.rawValue as NSNumber]
+        addGestureRecognizer(longPress)
     }
 
     func setItem(_ item: StackDisplayRowItem?) {
@@ -71,15 +78,17 @@ class StackRow: UITableViewCell {
 
     override func copy(_ sender: Any?) {
         UIPasteboard.general.string = value.text
-        UIMenuController.shared.hideMenu()
+        editMenuInteraction?.dismissMenu()
     }
 
-    @objc func showMenu(sender: Any?) {
+    @objc func showMenu(_ recognizer: UIGestureRecognizer) {
         becomeFirstResponder()
-        let menu = UIMenuController.shared
-        if !menu.isMenuVisible {
-            UIMenuController.shared.showMenu(from: self, rect: bounds)
-        }
+
+        let location = recognizer.location(in: self)
+        let configuration = UIEditMenuConfiguration(identifier: nil,
+                                                    sourcePoint: location)
+
+        editMenuInteraction?.presentEditMenu(with: configuration)
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
