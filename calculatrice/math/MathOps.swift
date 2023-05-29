@@ -161,7 +161,8 @@ class Inv: Calculation, RealCalculation, ComplexCalculation {
         let argument = Utils.clampComplexArg(-(inputs[0].polarArgument.doubleValue))
 
         return ComplexValue(absolute: absolute,
-                            argument: argument)
+                            argument: argument,
+                            presentationFormat: inputs[0].presentationFormat)
     }
 }
 
