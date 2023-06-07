@@ -53,6 +53,30 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(-2, 6))
     }
 
+    func testComplexRe() {
+        let values = [complex(1, -2)]
+        let result = Re().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, complex(1, 0))
+    }
+
+    func testComplexIm() {
+        let values = [complex(1, -2)]
+        let result = Im().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, complex(-2, 0))
+    }
+
+    func testComplexConjugate() {
+        let values = [complex(1, -2)]
+        let result = Conjugate().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, complex(1, 2))
+    }
+
+    func testComplexConjugate2() {
+        let values = [complex(-3, -2)]
+        let result = Conjugate().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, complex(-3, 2))
+    }
+
     func testImaginaryNumber() {
         let values = [DoublePrecisionValue(2).asComplex]
         let result = assertNoThrow {

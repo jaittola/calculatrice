@@ -198,6 +198,31 @@ class ImaginaryNumber: Calculation, ComplexCalculation {
     }
 }
 
+class Re: Calculation, ComplexCalculation {
+    let arity: Int = 1
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+        return ComplexValue(inputs[0].real.doubleValue, 0)
+    }
+}
+
+class Im: Calculation, ComplexCalculation {
+    let arity: Int = 1
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+        return ComplexValue(inputs[0].imag.doubleValue, 0)
+    }
+}
+
+class Conjugate: Calculation, ComplexCalculation {
+    let arity: Int = 1
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+        return ComplexValue(inputs[0].real.doubleValue,
+                            -inputs[0].imag.doubleValue)
+    }
+}
+
 class Square: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {

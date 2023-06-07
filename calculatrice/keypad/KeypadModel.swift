@@ -125,8 +125,11 @@ struct Key {
                                  symbolMod2: "→D",
                                  calcOpMod2: ToDecimal()) }
 
-    static func plus() -> Key { Key(symbol: "+", calcOp: Plus()) }
-    static func minus() -> Key { Key(symbol: "-", calcOp: Minus()) }
+    static func plus() -> Key { Key(symbol: "+", calcOp: Plus(),
+                                    symbolMod1: "Re", calcOpMod1: Re(),
+                                    symbolMod2: "Im", calcOpMod2: Im()) }
+    static func minus() -> Key { Key(symbol: "-", calcOp: Minus(),
+                                     symbolMod1: "Conj", calcOpMod1: Conjugate()) }
     static func mult() -> Key { Key(symbol: "×", calcOp: Mult()) }
     static func div() -> Key { Key(symbol: "÷", calcOp: Div()) }
     static func sin() -> Key { Key(symbol: "sin", calcOp: Sin(),
