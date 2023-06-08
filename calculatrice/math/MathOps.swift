@@ -88,7 +88,7 @@ class Neg: Calculation, RealCalculation, ComplexCalculation {
     }
 }
 
-class Sin: Calculation, RealCalculation {
+class Sin: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
 
     func calculate(_ inputs: [DoublePrecisionValue],
@@ -96,9 +96,21 @@ class Sin: Calculation, RealCalculation {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
         return DoublePrecisionValue(sin(input))
     }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+        // sin(a + bi) = sin(a) * cosh(b) + i * cos(a) * sinh(b)
+        let a = inputs[0].real.doubleValue
+        let b = inputs[0].imag.doubleValue
+
+        let re = sin(a) * cosh(b)
+        let im = cos(a) * sinh(b)
+
+        return ComplexValue(re, im,
+                            presentationFormat: inputs[0].presentationFormat)
+    }
 }
 
-class Cos: Calculation, RealCalculation {
+class Cos: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
 
     func calculate(_ inputs: [DoublePrecisionValue],
@@ -106,9 +118,22 @@ class Cos: Calculation, RealCalculation {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
         return DoublePrecisionValue(cos(input))
     }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+        // cos(a + bi) = cos(a) * cosh(b) - i * sin(a) * sinh(b)
+
+        let a = inputs[0].real.doubleValue
+        let b = inputs[0].imag.doubleValue
+
+        let re = cos(a) * cosh(b)
+        let im = -sin(a) * sinh(b)
+
+        return ComplexValue(re, im,
+                            presentationFormat: inputs[0].presentationFormat)
+    }
 }
 
-class Tan: Calculation, RealCalculation {
+class Tan: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
 
     func calculate(_ inputs: [DoublePrecisionValue],
@@ -116,29 +141,93 @@ class Tan: Calculation, RealCalculation {
         let input = Utils.deg2Rad(inputs, calculatorMode)[0]
         return DoublePrecisionValue(tan(input))
     }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        let num = Sin().calcComplex(inputs, calculatorMode)
+        let denom = Cos().calcComplex(inputs, calculatorMode)
+
+        do {
+            return try Div().calcComplex([num, denom], calculatorMode)
+        } catch {
+            throw error
+        }
+    }
 }
 
-class ASin: Calculation, RealCalculation {
+class ASin: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let res = asin(inputs[0].doubleValue)
         return Utils.radResult2Deg(res, calculatorMode)
     }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        // Logarithmic form: arcsin(z) = i * ln(sqrt(1 - z^2) - iz)
+        // variables below refer to the formula above
+        do {
+            let z = inputs[0]
+            let i = ComplexValue(0, 1)
+            let iz = Mult().calcComplex([i, z], calculatorMode)
+            let z2 = Square().calcComplex([z], calculatorMode)
+            let oneMinusZ2 = try Minus().calcComplex([ComplexValue(1.0, 0), z2], calculatorMode)
+            let sqrtOneMinusZ2 = Sqrt().calcComplex([oneMinusZ2], calculatorMode)
+            let lnArg = try Minus().calcComplex([sqrtOneMinusZ2, iz], calculatorMode)
+            let logarithm = Log().calcComplex([lnArg], calculatorMode)
+            let result = Mult().calcComplex([i, logarithm], calculatorMode)
+
+            return result
+        } catch {
+            throw error
+        }
+    }
 }
 
-class ACos: Calculation, RealCalculation {
+class ACos: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let res = acos(inputs[0].doubleValue)
         return Utils.radResult2Deg(res, calculatorMode)
     }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        do {
+            // arccos(z) = PI/2 - arcsin(z)
+            let asine = try ASin().calcComplex(inputs, calculatorMode)
+            let halfPi = DoublePrecisionValue(Double.pi / 2.0)
+            let result = try Minus().calcComplex([halfPi.asComplex, asine], calculatorMode)
+
+            return result
+        } catch {
+            throw error
+        }
+    }
 }
 
-class ATan: Calculation, RealCalculation {
+class ATan: Calculation, RealCalculation, ComplexCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [DoublePrecisionValue], _ calculatorMode: CalculatorMode) -> DoublePrecisionValue {
         let res = atan(inputs[0].doubleValue)
         return Utils.radResult2Deg(res, calculatorMode)
+    }
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        do {
+            // arctan(z) = -i/2 * ln((i - z) / (i + z))
+            // variables below refer to the formula above
+
+            let z = inputs[0]
+            let i = ComplexValue(0, 1.0)
+            let minuxHalfI = ComplexValue(0, -0.5)
+            let iMinusZ = try Minus().calcComplex([i, z], calculatorMode)
+            let iPlusZ = try Plus().calcComplex([i, z], calculatorMode)
+            let division = try Div().calcComplex([iMinusZ, iPlusZ], calculatorMode)
+            let logarithm = Log().calcComplex([division], calculatorMode)
+            let result = Mult().calcComplex([minuxHalfI, logarithm], calculatorMode)
+
+            return result
+        } catch {
+            throw error
+        }
     }
 }
 
