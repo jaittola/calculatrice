@@ -270,13 +270,15 @@ class ComplexValue: NSObject {
     }
 
     convenience init(_ v: ComplexValue,
-                     numberFormat: ValueNumberFormat,
+                     numberFormat: ValueNumberFormat? = nil,
                      presentationFormat: Format) {
         do {
+            let nf = numberFormat ?? v.originalComponents[0].numberFormat
+
             try self.init([DoublePrecisionValue(v.originalComponents[0],
-                                                numberFormat: numberFormat),
+                                                numberFormat: nf),
                            DoublePrecisionValue(v.originalComponents[1],
-                                               numberFormat: numberFormat)],
+                                               numberFormat: nf)],
                           originalFormat: v.originalFormat,
                           presentationFormat: presentationFormat)
         } catch {

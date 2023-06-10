@@ -77,6 +77,14 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(-3, 2))
     }
 
+    func testComplexConjugate3() {
+        let values = [ComplexValue(absolute: 1, argument: Double.pi / 6)]
+        let result = Conjugate().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, ComplexValue(absolute: 1, argument: -Double.pi / 6))
+        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: .Deg),
+                       "1 ∠ -30°")
+    }
+
     func testImaginaryNumber() {
         let values = [DoublePrecisionValue(2).asComplex]
         let result = assertNoThrow {
@@ -250,6 +258,15 @@ class TestMathOps: XCTestCase {
                        "2.03272 - 3.0519i")
     }
 
+    func testComplexCos2() {
+        let values = [ComplexValue(absolute: 3, argument: Double.pi / 3)]
+        let result = Cos().calcComplex(values, self.calculatorMode)
+
+        XCTAssertEqual(result, ComplexValue(absolute: 6.68209689, argument: -1.49921))
+        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: .Rad),
+                       "6.6821 ∠ -1.49921")
+    }
+
     func testComplexTan() {
         let values = [complex(1, 2)]
         let result = assertNoThrow {
@@ -258,6 +275,17 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(0.033812826079897, 1.014793616146634))
         XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: calculatorMode.angle),
                        "0.0338128 + 1.01479i")
+    }
+
+    func testComplexTan2() {
+        let values = [ComplexValue(absolute: 3, argument: Double.pi / 3)]
+        let result = assertNoThrow {
+            try Tan().calcComplex(values, self.calculatorMode)
+        }
+        // r≈1.01102525998059 (radius), θ = 1.56923 (angle)
+        XCTAssertEqual(result, ComplexValue(absolute: 1.011025, argument: 1.56923))
+        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+                       "1.01103 ∠ 1.56923")
     }
 
     func testComplexASin() {
@@ -270,6 +298,16 @@ class TestMathOps: XCTestCase {
                        "0.427079 + 1.52857i")
     }
 
+    func testComplexASin2() {
+        let values = [ComplexValue(absolute: 1.2, argument: Double.pi / 3)]
+        let result = assertNoThrow {
+            try ASin().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, ComplexValue(absolute: 1.05427, argument: 1.17299))
+        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+                       "1.05427 ∠ 1.17299")
+    }
+
     func testComplexACos() {
         let values = [complex(1, 2)]
         let result = assertNoThrow {
@@ -280,6 +318,16 @@ class TestMathOps: XCTestCase {
                        "1.14372 - 1.52857i")
     }
 
+    func testComplexACos2() {
+        let values = [ComplexValue(absolute: 1.2, argument: Double.pi / 3)]
+        let result = assertNoThrow {
+            try ACos().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, ComplexValue(absolute: 1.51518, argument: -0.696414))
+        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+                       "1.51519 ∠ -0.696413")
+    }
+
     func testComplexATan() {
         let values = [complex(1, 2)]
         let result = assertNoThrow {
@@ -288,6 +336,16 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(1.33897252, 0.40235947))
         XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: calculatorMode.angle),
                        "1.33897 + 0.402359i")
+    }
+
+    func testComplexATan2() {
+        let values = [ComplexValue(absolute: 1.2, argument: Double.pi / 3)]
+        let result = assertNoThrow {
+            try ATan().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, ComplexValue(absolute: 1.14996, argument: 0.581232))
+        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+                       "1.14996 ∠ 0.581232")
     }
 
     func testNeg() {

@@ -175,7 +175,8 @@ class ASin: Calculation, RealCalculation, ComplexCalculation {
             let logarithm = Log().calcComplex([lnArg], calculatorMode)
             let result = Mult().calcComplex([i, logarithm], calculatorMode)
 
-            return result
+            return ComplexValue(result,
+                                presentationFormat: inputs[0].presentationFormat)
         } catch {
             throw error
         }
@@ -196,7 +197,8 @@ class ACos: Calculation, RealCalculation, ComplexCalculation {
             let halfPi = DoublePrecisionValue(Double.pi / 2.0)
             let result = try Minus().calcComplex([halfPi.asComplex, asine], calculatorMode)
 
-            return result
+            return ComplexValue(result,
+                                presentationFormat: inputs[0].presentationFormat)
         } catch {
             throw error
         }
@@ -224,7 +226,8 @@ class ATan: Calculation, RealCalculation, ComplexCalculation {
             let logarithm = Log().calcComplex([division], calculatorMode)
             let result = Mult().calcComplex([minuxHalfI, logarithm], calculatorMode)
 
-            return result
+            return ComplexValue(result,
+                                presentationFormat: inputs[0].presentationFormat)
         } catch {
             throw error
         }
@@ -308,7 +311,8 @@ class Conjugate: Calculation, ComplexCalculation {
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
         return ComplexValue(inputs[0].real.doubleValue,
-                            -inputs[0].imag.doubleValue)
+                            -inputs[0].imag.doubleValue,
+                            presentationFormat: inputs[0].presentationFormat)
     }
 }
 
