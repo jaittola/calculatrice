@@ -37,7 +37,7 @@ enum ContainedValue {
     }
 }
 
-class Value {
+struct Value: Identifiable, Equatable {
     let containedValue: ContainedValue
     let id: Int
 
@@ -54,11 +54,11 @@ class Value {
         self.id = id
     }
 
-    convenience init(_ value: DoublePrecisionValue, id: Int = 0) {
+    init(_ value: DoublePrecisionValue, id: Int = 0) {
         self.init(ContainedValue.number(value: value), id: id)
     }
 
-    convenience init(_ value: ComplexValue, id: Int = 0) {
+    init(_ value: ComplexValue, id: Int = 0) {
         self.init(ContainedValue.complex(value: value), id: id)
     }
 
@@ -70,6 +70,9 @@ class Value {
         containedValue.stringValue(calculatorMode)
     }
 
+    static func == (lhs: Value, rhs: Value) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 enum ValueError: Error {

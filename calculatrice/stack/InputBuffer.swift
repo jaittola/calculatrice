@@ -1,6 +1,6 @@
 import Foundation
 
-class InputBuffer {
+class InputBuffer: ObservableObject {
     var value: DoublePrecisionValue {
         buildValue()
     }
@@ -13,8 +13,13 @@ class InputBuffer {
         inputs.count >= 24
     }
 
-    private var inputs: [InputElement] = []
+    @Published
+    var inputs: [InputElement] = []
+
+    @Published
     private var signum: Double = 1.0
+
+    @Published
     private var exponentSignum: Double = 1.0
 
     func addNum(_ number: Int) {
@@ -61,6 +66,13 @@ class InputBuffer {
                 exponentSignum = 1.0
             }
         }
+    }
+
+    // TODO, do this more nicely
+    func clear() {
+        inputs = []
+        signum = 1.0
+        exponentSignum = 1.0
     }
 
     private func swapSignum(_ sign: Double) -> Double {
@@ -162,7 +174,7 @@ class InputBuffer {
         }
     }
 
-    private enum InputElement {
+    enum InputElement {
         case Number(_ number: Int)
         case Dot
         case E

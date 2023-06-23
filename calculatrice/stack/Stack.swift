@@ -1,16 +1,14 @@
 import Foundation
 
-class StackContainer {
+class StackContainer: ObservableObject {
     private var stackHistory: [[Value]] = []
-    private var stackContent: [Value] = []
 
-    var content: [Value] {
-        stackContent
-    }
+    @Published
+    var content: [Value] = []
 
     func manipulate(manipulator: (_ stackContent: [Value]) -> [Value]) {
         pushStackHistory()
-        stackContent = manipulator(stackContent)
+        content = manipulator(content)
     }
 
     func revertPreviousStack() {
@@ -18,7 +16,7 @@ class StackContainer {
             return
         }
 
-        stackContent = stackHistory.removeLast()
+        content = stackHistory.removeLast()
     }
 
     func clear() {
@@ -29,16 +27,25 @@ class StackContainer {
         if stackHistory.count >= 100 {
             stackHistory.removeFirst()
         }
-        stackHistory.append(stackContent)
+        stackHistory.append(content)
+    }
+
+    private func printStackContent() {
+        print("Stack content")
+        content.forEach { item in
+            print("\(item.id): \(item.stringValue(CalculatorMode()))")
+        }
+        print("End of stack content\n")
     }
 }
 
-class Stack {
-    private let stackContainer = StackContainer()
-    private(set) var input = InputBuffer()
+class Stack: ObservableObject {
+    let stackContainer = StackContainer()
+    let input = InputBuffer()
 
     private var uniqueIdSeq: Int = 0
 
+    @Published
     var selectedId: Int = -1
 
     var content: [Value] {
@@ -64,7 +71,7 @@ class Stack {
     }
 
     func clearInput() {
-        input = InputBuffer()
+        input.clear()
     }
 
     func pop() {

@@ -12,6 +12,10 @@
 		4F064C7327F0314200F33E75 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C7227F0314200F33E75 /* CalculatorViewController.swift */; };
 		4F064C7827F0314300F33E75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F064C7727F0314300F33E75 /* Assets.xcassets */; };
 		4F064C7B27F0314300F33E75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F064C7927F0314300F33E75 /* LaunchScreen.storyboard */; };
+		4F0AC50F2A41A3DF00BA68D0 /* StatusRow2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC50E2A41A3DF00BA68D0 /* StatusRow2.swift */; };
+		4F0AC5112A41A40600BA68D0 /* StackDisplay2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5102A41A40600BA68D0 /* StackDisplay2.swift */; };
+		4F0AC5132A41A42100BA68D0 /* InputDisplay2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5122A41A42100BA68D0 /* InputDisplay2.swift */; };
+		4F0AC5152A41A42B00BA68D0 /* KeypadView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5142A41A42B00BA68D0 /* KeypadView2.swift */; };
 		4F256BBC27F20B1400123DA8 /* NumericalValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* NumericalValues.swift */; };
 		4F256BBD27F20B1400123DA8 /* NumericalValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* NumericalValues.swift */; };
 		4F256BC127F2113E00123DA8 /* InputDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC027F2113E00123DA8 /* InputDisplay.swift */; };
@@ -20,6 +24,9 @@
 		4F256BC627F2214C00123DA8 /* StackDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC427F2214C00123DA8 /* StackDisplay.swift */; };
 		4F256BC927F2238E00123DA8 /* StackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC827F2238E00123DA8 /* StackRow.swift */; };
 		4F256BCA27F2238E00123DA8 /* StackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BC827F2238E00123DA8 /* StackRow.swift */; };
+		4F337DC82A4188EC0021CAE0 /* CalculatorMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */; };
+		4F337DCB2A4189210021CAE0 /* CalculatorViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F337DCA2A4189210021CAE0 /* CalculatorViewController2.swift */; };
+		4F337DCC2A4189210021CAE0 /* CalculatorViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F337DCA2A4189210021CAE0 /* CalculatorViewController2.swift */; };
 		4F37925C27F0CEE6007B013E /* KeypadKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F37925B27F0CEE6007B013E /* KeypadKey.swift */; };
 		4F37925D27F0CEE6007B013E /* KeypadKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F37925B27F0CEE6007B013E /* KeypadKey.swift */; };
 		4F37926127F0D05C007B013E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F37926027F0D05C007B013E /* Extensions.swift */; };
@@ -30,6 +37,11 @@
 		4F975F5429FE47B900BF57A8 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C7227F0314200F33E75 /* CalculatorViewController.swift */; };
 		4F975F5529FE48A300BF57A8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C7027F0314200F33E75 /* SceneDelegate.swift */; };
 		4F975F5629FE48A600BF57A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C6E27F0314200F33E75 /* AppDelegate.swift */; };
+		4FBE9E232A44783F00E3BA7F /* CalculatorMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */; };
+		4FBE9E242A44784200E3BA7F /* StackDisplay2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5102A41A40600BA68D0 /* StackDisplay2.swift */; };
+		4FBE9E252A44785600E3BA7F /* StatusRow2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC50E2A41A3DF00BA68D0 /* StatusRow2.swift */; };
+		4FBE9E262A44785A00E3BA7F /* InputDisplay2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5122A41A42100BA68D0 /* InputDisplay2.swift */; };
+		4FBE9E272A44785D00E3BA7F /* KeypadView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5142A41A42B00BA68D0 /* KeypadView2.swift */; };
 		4FBFC06E27F32F7600DAB444 /* CalculatorMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */; };
 		4FBFC06F27F32F7600DAB444 /* CalculatorMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */; };
 		4FC1C0B127F1D55A00794D9E /* MathOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1C0B027F1D55A00794D9E /* MathOps.swift */; };
@@ -75,10 +87,16 @@
 		4F064C7A27F0314300F33E75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F064C7C27F0314300F33E75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F064C8127F0314300F33E75 /* calculatriceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = calculatriceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F0AC50E2A41A3DF00BA68D0 /* StatusRow2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusRow2.swift; sourceTree = "<group>"; };
+		4F0AC5102A41A40600BA68D0 /* StackDisplay2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackDisplay2.swift; sourceTree = "<group>"; };
+		4F0AC5122A41A42100BA68D0 /* InputDisplay2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDisplay2.swift; sourceTree = "<group>"; };
+		4F0AC5142A41A42B00BA68D0 /* KeypadView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadView2.swift; sourceTree = "<group>"; };
 		4F256BBB27F20B1400123DA8 /* NumericalValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericalValues.swift; sourceTree = "<group>"; };
 		4F256BC027F2113E00123DA8 /* InputDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDisplay.swift; sourceTree = "<group>"; };
 		4F256BC427F2214C00123DA8 /* StackDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackDisplay.swift; sourceTree = "<group>"; };
 		4F256BC827F2238E00123DA8 /* StackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackRow.swift; sourceTree = "<group>"; };
+		4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorMain.swift; sourceTree = "<group>"; };
+		4F337DCA2A4189210021CAE0 /* CalculatorViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewController2.swift; sourceTree = "<group>"; };
 		4F37925B27F0CEE6007B013E /* KeypadKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadKey.swift; sourceTree = "<group>"; };
 		4F37926027F0D05C007B013E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F483DCF29FE6E0F00A34E28 /* TestNumberInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestNumberInput.swift; sourceTree = "<group>"; };
@@ -152,6 +170,7 @@
 		4F064C6D27F0314200F33E75 /* calculatrice */ = {
 			isa = PBXGroup;
 			children = (
+				4F337DC62A4188AF0021CAE0 /* swiftuiDisplay */,
 				4F256BBF27F2112600123DA8 /* display */,
 				4FC1C0AF27F1D52B00794D9E /* math */,
 				4F37925F27F0D04D007B013E /* utils */,
@@ -163,6 +182,7 @@
 				4F064C7727F0314300F33E75 /* Assets.xcassets */,
 				4F064C7927F0314300F33E75 /* LaunchScreen.storyboard */,
 				4F064C7C27F0314300F33E75 /* Info.plist */,
+				4F337DCA2A4189210021CAE0 /* CalculatorViewController2.swift */,
 			);
 			path = calculatrice;
 			sourceTree = "<group>";
@@ -187,6 +207,7 @@
 		4F256BBF27F2112600123DA8 /* display */ = {
 			isa = PBXGroup;
 			children = (
+				4FD352EF27F0B7570073534E /* KeypadView.swift */,
 				4F256BC027F2113E00123DA8 /* InputDisplay.swift */,
 				4F256BC427F2214C00123DA8 /* StackDisplay.swift */,
 				4F256BC827F2238E00123DA8 /* StackRow.swift */,
@@ -194,6 +215,18 @@
 				4FCD9FC5299E3279001DA3DD /* StatusRow.swift */,
 			);
 			path = display;
+			sourceTree = "<group>";
+		};
+		4F337DC62A4188AF0021CAE0 /* swiftuiDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */,
+				4F0AC50E2A41A3DF00BA68D0 /* StatusRow2.swift */,
+				4F0AC5102A41A40600BA68D0 /* StackDisplay2.swift */,
+				4F0AC5122A41A42100BA68D0 /* InputDisplay2.swift */,
+				4F0AC5142A41A42B00BA68D0 /* KeypadView2.swift */,
+			);
+			path = swiftuiDisplay;
 			sourceTree = "<group>";
 		};
 		4F37925F27F0D04D007B013E /* utils */ = {
@@ -219,7 +252,6 @@
 			isa = PBXGroup;
 			children = (
 				4FD352E227F0B0980073534E /* KeypadModel.swift */,
-				4FD352EF27F0B7570073534E /* KeypadView.swift */,
 				4F37925B27F0CEE6007B013E /* KeypadKey.swift */,
 			);
 			path = keypad;
@@ -419,13 +451,19 @@
 				4FCD9FC6299E3279001DA3DD /* StatusRow.swift in Sources */,
 				4F37925C27F0CEE6007B013E /* KeypadKey.swift in Sources */,
 				4FD352F027F0B7570073534E /* KeypadView.swift in Sources */,
+				4F337DCB2A4189210021CAE0 /* CalculatorViewController2.swift in Sources */,
 				4FD352E827F0B1C90073534E /* Stack.swift in Sources */,
+				4F0AC5132A41A42100BA68D0 /* InputDisplay2.swift in Sources */,
 				4F064C6F27F0314200F33E75 /* AppDelegate.swift in Sources */,
 				4FC1C0B127F1D55A00794D9E /* MathOps.swift in Sources */,
 				4F256BBC27F20B1400123DA8 /* NumericalValues.swift in Sources */,
+				4F0AC5112A41A40600BA68D0 /* StackDisplay2.swift in Sources */,
 				4FBFC06E27F32F7600DAB444 /* CalculatorMode.swift in Sources */,
 				4F064C7127F0314200F33E75 /* SceneDelegate.swift in Sources */,
 				4F256BC127F2113E00123DA8 /* InputDisplay.swift in Sources */,
+				4F0AC5152A41A42B00BA68D0 /* KeypadView2.swift in Sources */,
+				4F0AC50F2A41A3DF00BA68D0 /* StatusRow2.swift in Sources */,
+				4F337DC82A4188EC0021CAE0 /* CalculatorMain.swift in Sources */,
 				4FCD9FC2299E14CA001DA3DD /* Display.swift in Sources */,
 				4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */,
 				4FD352EC27F0B5120073534E /* InputBuffer.swift in Sources */,
@@ -445,18 +483,24 @@
 				4F975F5429FE47B900BF57A8 /* CalculatorViewController.swift in Sources */,
 				4F256BC627F2214C00123DA8 /* StackDisplay.swift in Sources */,
 				4FCA884B27F37B3D00E95424 /* Styles.swift in Sources */,
+				4FBE9E262A44785A00E3BA7F /* InputDisplay2.swift in Sources */,
+				4FBE9E252A44785600E3BA7F /* StatusRow2.swift in Sources */,
 				4FD352F127F0B7570073534E /* KeypadView.swift in Sources */,
 				4FD352E927F0B1C90073534E /* Stack.swift in Sources */,
 				4FD352ED27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4FCD9FC7299E3279001DA3DD /* StatusRow.swift in Sources */,
 				4FC1C0B227F1D55A00794D9E /* MathOps.swift in Sources */,
 				4F483DD129FE6E0F00A34E28 /* TestNumberInput.swift in Sources */,
+				4FBE9E242A44784200E3BA7F /* StackDisplay2.swift in Sources */,
+				4FBE9E272A44785D00E3BA7F /* KeypadView2.swift in Sources */,
 				4FBFC06F27F32F7600DAB444 /* CalculatorMode.swift in Sources */,
 				4F256BC227F2113E00123DA8 /* InputDisplay.swift in Sources */,
 				4FD352E427F0B0980073534E /* KeypadModel.swift in Sources */,
 				4F483DD429FE6F0800A34E28 /* TestNumericalValues.swift in Sources */,
 				4FCD9FC3299E14CA001DA3DD /* Display.swift in Sources */,
 				4F37925D27F0CEE6007B013E /* KeypadKey.swift in Sources */,
+				4F337DCC2A4189210021CAE0 /* CalculatorViewController2.swift in Sources */,
+				4FBE9E232A44783F00E3BA7F /* CalculatorMain.swift in Sources */,
 				4F37926227F0D05C007B013E /* Extensions.swift in Sources */,
 				4F256BBD27F20B1400123DA8 /* NumericalValues.swift in Sources */,
 				4F256BCA27F2238E00123DA8 /* StackRow.swift in Sources */,

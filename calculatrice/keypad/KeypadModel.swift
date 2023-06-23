@@ -1,11 +1,7 @@
 import Foundation
 import UIKit
 
-protocol KeypadModel {
-    var keys: [[Key?]] { get }
-}
-
-struct Key {
+struct Key: Identifiable {
     let symbol: String
     let symbolMod1: String?
     let symbolMod2: String?
@@ -21,6 +17,10 @@ struct Key {
     let resetModAfterClick: Bool
 
     let mainTextColor: UIColor?
+
+    var id: String {
+        "\(symbol)_\(symbolMod1 ?? "")_\(symbolMod2 ?? "")"
+    }
 
     init(symbol: String,
          op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
@@ -61,7 +61,6 @@ struct Key {
             case .Mod2:
                 stackOp = opMod2
                 calculationOp = calcOpMod2
-
             }
 
             if let stackOp = stackOp {
@@ -73,6 +72,8 @@ struct Key {
             throw error
         }
     }
+
+    static func empty() -> Key { Key(symbol: "") }
 
     static func enter() -> Key { Key(symbol: "Enter",
                                      op: { stack, _ in stack.pushInput() })}
@@ -183,7 +184,22 @@ struct Key {
     }
 }
 
-class BasicKeypadModel: NSObject, KeypadModel {
+struct KeyRow: Identifiable {
+    let keys: [Key]
+    var id: String {
+        "row_\(keys[0].id)"
+    }
+}
+
+protocol KeypadModel {
+    var keys: [[Key?]] { get }
+    var keyRows: [KeyRow] { get }
+
+    var rowCount: Int { get }
+    var columnCount: Int { get }
+}
+
+struct BasicKeypadModel: KeypadModel {
     let keys: [[Key?]] = [
         [ Key.pow(), Key.root(), Key.log(), Key.lg(), Key.inv() ],
         [ Key.sin(), Key.cos(), Key.tan(), nil, Key.complex() ],
@@ -193,4 +209,31 @@ class BasicKeypadModel: NSObject, KeypadModel {
         [ Key.one(), Key.two(), Key.three(), Key.plus(), Key.minus() ],
         [ Key.zero(), Key.dot(), Key.E(), Key.plusminus(), Key.enter() ]
     ]
+
+    let keyRows: [KeyRow] = [
+        KeyRow(keys: [ Key.pow(), Key.root(), Key.log(),
+                       Key.lg(), Key.inv() ]),
+        KeyRow(keys: [ Key.sin(), Key.cos(), Key.tan(),
+                       Key.empty(), Key.complex() ]),
+        KeyRow(keys: [ Key.mod1(), Key.mod2(), Key.angleMode(),
+                       Key.swap(), Key.backspace() ]),
+        KeyRow(keys: [ Key.seven(), Key.eight(), Key.nine(),
+                       Key.pick(), Key.pop() ]),
+        KeyRow(keys: [ Key.four(), Key.five(), Key.six(),
+                       Key.mult(), Key.div() ]),
+        KeyRow(keys: [ Key.one(), Key.two(), Key.three(),
+                       Key.plus(), Key.minus() ]),
+        KeyRow(keys: [ Key.zero(), Key.dot(), Key.E(),
+                       Key.plusminus(), Key.enter() ])
+    ]
+
+    var rowCount: Int {
+        keyRows.count
+    }
+
+    var columnCount: Int {
+        keyRows
+            .map { row in row.keys.count }
+            .reduce(0) { (res, count) in max(res, count) }
+    }
 }

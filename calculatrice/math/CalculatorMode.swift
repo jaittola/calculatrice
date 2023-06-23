@@ -1,6 +1,6 @@
 import Foundation
 
-class CalculatorMode {
+class CalculatorMode: ObservableObject {
     enum Angle {
         case Deg
         case Rad
@@ -17,8 +17,11 @@ class CalculatorMode {
         case Engineering
     }
 
-    private(set) var angle: Angle = .Deg
-    private(set) var keypadMode: KeypadMode = .Normal
+    @Published
+    var angle: Angle = .Deg
+
+    @Published
+    var keypadMode: KeypadMode = .Normal
 
     func swapAngle() {
         if angle == .Deg {

@@ -3,7 +3,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private(set) static var window: UIWindow?
-    private var rootViewController: CalculatorViewController?
+    private var rootViewController: CalculatorViewController2?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -49,8 +49,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-    private func reuseMainViewController() -> CalculatorViewController {
-        let rvc = rootViewController ?? CalculatorViewController()
+    private func reuseMainViewController() -> CalculatorViewController2 {
+        let rvc = rootViewController ?? CalculatorViewController2()
         rootViewController = rvc
         return rvc
     }
