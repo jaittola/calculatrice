@@ -1,51 +1,20 @@
 import Foundation
 
-class StackContainer: ObservableObject {
+class Stack: ObservableObject {
     private var stackHistory: [[Value]] = []
+
+    private var uniqueIdSeq: Int = 0
+
+    let input = InputBuffer()
 
     @Published
     var content: [Value] = []
 
-    func manipulate(manipulator: (_ stackContent: [Value]) -> [Value]) {
-        pushStackHistory()
-        content = manipulator(content)
-    }
-
-    func revertPreviousStack() {
-        if stackHistory.isEmpty {
-            return
-        }
-
-        content = stackHistory.removeLast()
-    }
-
-    func clear() {
-        manipulate { _ in [] }
-    }
-
-    private func pushStackHistory() {
-        if stackHistory.count >= 100 {
-            stackHistory.removeFirst()
-        }
-        stackHistory.append(content)
-    }
-}
-
-class Stack: ObservableObject {
-    let stackContainer = StackContainer()
-    let input = InputBuffer()
-
-    private var uniqueIdSeq: Int = 0
-
     @Published
     var selectedId: Int = -1
 
-    var content: [Value] {
-        stackContainer.content
-    }
-
     func push(_ value: Value) {
-        stackContainer.manipulate { content in
+        manipulateStack { content in
             var newStack = content
             newStack.insert(value.withId(uniqueIdSeq), at: 0)
             return newStack
@@ -67,7 +36,7 @@ class Stack: ObservableObject {
     }
 
     func pop() {
-        stackContainer.manipulate { content in
+        manipulateStack { content in
             if !content.isEmpty {
                 var newStack = content
                 newStack.removeFirst()
@@ -79,7 +48,7 @@ class Stack: ObservableObject {
     }
 
     func clear() {
-        stackContainer.clear()
+        manipulateStack { _ in [] }
         clearInput()
     }
 
@@ -97,7 +66,7 @@ class Stack: ObservableObject {
         var top: Value?
         var second: Value?
 
-        stackContainer.manipulate { content in
+        manipulateStack { content in
             var newStack = content
 
             top = newStack.removeFirst()
@@ -108,6 +77,26 @@ class Stack: ObservableObject {
 
         push(top!)
         push(second!)
+    }
+
+    private func manipulateStack(manipulator: (_ stackContent: [Value]) -> [Value]) {
+        pushStackHistory()
+        content = manipulator(content)
+    }
+
+    private func revertPreviousStack() {
+        if stackHistory.isEmpty {
+            return
+        }
+
+        content = stackHistory.removeLast()
+    }
+
+    private func pushStackHistory() {
+        if stackHistory.count >= 100 {
+            stackHistory.removeFirst()
+        }
+        stackHistory.append(content)
     }
 
     private func getForCalc(n: Int = 1) -> [Value]? {
@@ -125,7 +114,7 @@ class Stack: ObservableObject {
             count -= 1
         }
 
-        stackContainer.manipulate { content in
+        manipulateStack { content in
             var newStack = content
 
             while count > 0 {
@@ -174,7 +163,7 @@ class Stack: ObservableObject {
                 throw CalcError.badCalculationOp
             }
         } catch {
-            stackContainer.revertPreviousStack()
+            revertPreviousStack()
             throw error
         }
     }
