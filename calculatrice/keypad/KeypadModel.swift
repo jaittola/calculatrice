@@ -85,7 +85,11 @@ struct Key: Identifiable {
     static func backspace() -> Key { Key(symbol: "←",
                                          op: { stack, _ in stack.input.backspace() })}
     static func pick() -> Key { Key(symbol: "Pick",
-                                    op: { stack, _ in stack.pickSelected() })}
+                                    op: { stack, _ in stack.pickSelected() },
+                                    symbolMod1: "↺",
+                                    opMod1: { stack, _ in stack.undo() },
+                                    symbolMod2: "↻",
+                                    opMod2: { stack, _ in stack.redo() })}
 
     static func swap() -> Key { Key(symbol: "x⇄y", op: { stack, _ in stack.swapTop2() }) }
 

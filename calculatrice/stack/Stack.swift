@@ -1,9 +1,17 @@
 import Foundation
 
 class Stack: ObservableObject {
-    private var stackHistory: [[Value]] = []
+    private var stackHistory: [[Value]] = [[]]
+
+    private var stackHistoryPointer: Int =  0
 
     private var uniqueIdSeq: Int = 0
+
+    private var nextId: Int {
+        let current = uniqueIdSeq
+        uniqueIdSeq += 1
+        return current
+    }
 
     let input = InputBuffer()
 
@@ -16,10 +24,9 @@ class Stack: ObservableObject {
     func push(_ value: Value) {
         manipulateStack { content in
             var newStack = content
-            newStack.insert(value.withId(uniqueIdSeq), at: 0)
+            newStack.insert(value.withId(nextId), at: 0)
             return newStack
         }
-        uniqueIdSeq += 1
     }
 
     func pushInput() {
@@ -79,9 +86,24 @@ class Stack: ObservableObject {
         push(second!)
     }
 
-    private func manipulateStack(manipulator: (_ stackContent: [Value]) -> [Value]) {
-        pushStackHistory()
-        content = manipulator(content)
+    func undo() {
+        if stackHistoryPointer > 0 {
+            stackHistoryPointer -= 1
+        }
+
+        content = stackHistory[stackHistoryPointer]
+    }
+
+    func redo() {
+        stackHistoryPointer = min(stackHistoryPointer + 1, stackHistory.count - 1)
+        content = stackHistory[stackHistoryPointer]
+    }
+
+    private func manipulateStack(manipulator: (_ stackContent: [Value]) -> [Value]?) {
+        if let newContent = manipulator(content) {
+            content = newContent
+            pushStackHistory()
+        }
     }
 
     private func revertPreviousStack() {
@@ -90,6 +112,7 @@ class Stack: ObservableObject {
         }
 
         content = stackHistory.removeLast()
+        stackHistoryPointer = stackHistory.count - 1
     }
 
     private func pushStackHistory() {
@@ -97,10 +120,10 @@ class Stack: ObservableObject {
             stackHistory.removeFirst()
         }
         stackHistory.append(content)
+        stackHistoryPointer = stackHistory.count - 1
     }
 
-    private func getForCalc(n: Int = 1) -> [Value]? {
-        var result: [Value] = []
+    private func getForCalc(n: Int = 1) -> (calcInputs: [Value], nextStack: [Value])? {
 
         if n <= 0 ||
             (input.isEmpty && n > content.count) ||
@@ -108,34 +131,35 @@ class Stack: ObservableObject {
             return nil
         }
 
+        var calcInputs: [Value] = []
+
         var count = n
         if !input.isEmpty {
-            result.insert(Value(input.value), at: 0)
+            calcInputs.insert(Value(input.value), at: 0)
             count -= 1
         }
 
-        manipulateStack { content in
-            var newStack = content
+        var nextStack = content
 
-            while count > 0 {
-                result.insert(newStack.removeFirst(), at: 0)
-                count -= 1
-            }
-
-            return newStack
+        while count > 0 {
+            calcInputs.insert(nextStack.removeFirst(), at: 0)
+            count -= 1
         }
 
         clearInput()
 
-        return result
+        return (calcInputs: calcInputs, nextStack: nextStack)
     }
 
     func calculate(_ calc: Calculation,
                    _ calculatorMode: CalculatorMode) throws {
-        guard let inputs = getForCalc(n: calc.arity) else {
+        guard let calcParams = getForCalc(n: calc.arity) else {
             return
         }
 
+        let inputs = calcParams.calcInputs
+
+        let complexInputs = inputs.map { v in v.asComplex }
         let inputsAsReal = inputs.compactMap { n in n.asReal }
         let allInputsReal = inputsAsReal.count == inputs.count
 
@@ -147,23 +171,29 @@ class Stack: ObservableObject {
                                   false))
 
         do {
+            let resultValue: Value
+
             if let realCalc = realCalc,
                 allInputsReal,
                !preferComplexCalc {
                 let result = try realCalc.calculate(inputsAsReal, calculatorMode)
-                push(Value(result))
+                resultValue = Value(result)
             } else if let realToComplexCalc = calc as? RealToComplexCalculation, allInputsReal {
                 let result = try realToComplexCalc.calcToComplex(inputsAsReal, calculatorMode)
-                push(Value(result))
+                resultValue = Value(result)
             } else if let complexCalc = complexCalc {
-                let complexInputs = inputs.map { v in v.asComplex }
                 let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
-                push(Value(result))
+                resultValue = Value(result)
             } else {
                 throw CalcError.badCalculationOp
             }
+
+            manipulateStack { _ in
+                var nextStack = calcParams.nextStack
+                nextStack.insert(resultValue.withId(nextId), at: 0)
+                return nextStack
+            }
         } catch {
-            revertPreviousStack()
             throw error
         }
     }
@@ -175,6 +205,16 @@ class Stack: ObservableObject {
             print("  \(idx): string = \(value.stringValue(calculatorMode))")
         }
     }
+
+    var testValues: StackTestValues {
+        StackTestValues(stackHistory: stackHistory,
+                        stackHistoryPointer: stackHistoryPointer)
+    }
+}
+
+struct StackTestValues {
+    var stackHistory: [[Value]]
+    var stackHistoryPointer: Int
 }
 
 protocol Calculation {

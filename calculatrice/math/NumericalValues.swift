@@ -4,7 +4,7 @@ public let epsilon = 0.0001 // Mostly for tests, where we use the equality opera
 
 public let realDefaultPrecision = 7
 
-enum ContainedValue {
+enum ContainedValue: Equatable {
     case number(value: DoublePrecisionValue)
     case complex(value: ComplexValue)
 
