@@ -29,14 +29,6 @@ class StackContainer: ObservableObject {
         }
         stackHistory.append(content)
     }
-
-    private func printStackContent() {
-        print("Stack content")
-        content.forEach { item in
-            print("\(item.id): \(item.stringValue(CalculatorMode()))")
-        }
-        print("End of stack content\n")
-    }
 }
 
 class Stack: ObservableObject {
