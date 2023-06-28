@@ -5,7 +5,7 @@ public let epsilon = 0.0001 // Mostly for tests, where we use the equality opera
 public let realDefaultPrecision = 7
 
 enum ContainedValue: Equatable {
-    case number(value: DoublePrecisionValue)
+    case number(value: NumericalValue)
     case complex(value: ComplexValue)
 
     var asComplex: ComplexValue {
@@ -17,7 +17,7 @@ enum ContainedValue: Equatable {
         }
     }
 
-    var asReal: DoublePrecisionValue? {
+    var asReal: NumericalValue? {
         switch self {
         case .complex(let c):
             return c.asReal
@@ -45,7 +45,7 @@ struct Value: Identifiable, Equatable {
         containedValue.asComplex
     }
 
-    var asReal: DoublePrecisionValue? {
+    var asNum: NumericalValue? {
         containedValue.asReal
     }
 
@@ -54,7 +54,7 @@ struct Value: Identifiable, Equatable {
         self.id = id
     }
 
-    init(_ value: DoublePrecisionValue, id: Int = 0) {
+    init(_ value: NumericalValue, id: Int = 0) {
         self.init(ContainedValue.number(value: value), id: id)
     }
 
@@ -87,35 +87,35 @@ class ComplexValue: NSObject {
 
     let dimensions = [2]
 
-    let originalComponents: [DoublePrecisionValue]
+    let originalComponents: [NumericalValue]
     let originalFormat: Format
     let presentationFormat: Format
 
-    var cartesian: [DoublePrecisionValue] {
+    var cartesian: [NumericalValue] {
         switch originalFormat {
         case .cartesian:
             return originalComponents
         case .polar:
             let re = polarAbsolute.doubleValue * cos(polarArgument.doubleValue)
             let imag = polarAbsolute.doubleValue * sin(polarArgument.doubleValue)
-            return [DoublePrecisionValue(re), DoublePrecisionValue(imag)]
+            return [NumericalValue(re), NumericalValue(imag)]
         }
     }
 
-    var real: DoublePrecisionValue { cartesian[0] }
-    var imag: DoublePrecisionValue { cartesian[1] }
+    var real: NumericalValue { cartesian[0] }
+    var imag: NumericalValue { cartesian[1] }
 
-    var polarAbsolute: DoublePrecisionValue {
+    var polarAbsolute: NumericalValue {
         switch originalFormat {
         case .cartesian:
             let r = sqrt(pow(real.doubleValue, 2) + pow(imag.doubleValue, 2))
-            return DoublePrecisionValue(r)
+            return NumericalValue(r)
         case .polar:
             return originalComponents[0]
         }
     }
 
-    var polarArgument: DoublePrecisionValue {
+    var polarArgument: NumericalValue {
         switch originalFormat {
         case .cartesian:
             let x = real.doubleValue
@@ -124,19 +124,19 @@ class ComplexValue: NSObject {
             // Based on https://en.wikipedia.org/wiki/Complex_number#Modulus_and_argument,
             // referred on May 1st 2023.
             if y == 0 && x == 0 {
-                return DoublePrecisionValue(Double.nan)
+                return NumericalValue(Double.nan)
             } else if x < 0 && y == 0 {
-                return DoublePrecisionValue(Double.pi)
+                return NumericalValue(Double.pi)
             } else { // y != 0 || x > 0 {
                 let arg = 2 * atan(imag.doubleValue / (polarAbsolute.doubleValue + real.doubleValue))
-                return DoublePrecisionValue(arg)
+                return NumericalValue(arg)
             }
         case .polar:
             return originalComponents[1]
         }
     }
 
-    var asReal: DoublePrecisionValue? {
+    var asReal: NumericalValue? {
         cartesian[1].doubleValue == 0 ? cartesian[0] : nil
     }
 
@@ -209,7 +209,7 @@ class ComplexValue: NSObject {
 
         switch angleUnit {
         case .Deg:
-            let argDeg = DoublePrecisionValue(polarArg.doubleValue * 180.0 / Double.pi)
+            let argDeg = NumericalValue(polarArg.doubleValue * 180.0 / Double.pi)
             argPart = argDeg.stringValue(precision: precision)
             angleUnitS = "°"
         case .Rad:
@@ -224,7 +224,7 @@ class ComplexValue: NSObject {
         return "ComplexValue (\(stringValue(precision: realDefaultPrecision))"
     }
 
-    init(_ components: [DoublePrecisionValue],
+    init(_ components: [NumericalValue],
          originalFormat: Format,
          presentationFormat: Format) throws {
         if components.count != 2 {
@@ -236,10 +236,10 @@ class ComplexValue: NSObject {
         self.presentationFormat = presentationFormat
     }
 
-    convenience init(realValue: DoublePrecisionValue) {
+    convenience init(realValue: NumericalValue) {
         do {
             try self.init([realValue,
-                           DoublePrecisionValue(0)],
+                           NumericalValue(0)],
                           originalFormat: .cartesian,
                           presentationFormat: .cartesian)
         } catch {
@@ -250,8 +250,8 @@ class ComplexValue: NSObject {
     convenience init(_ real: Double, _ imaginary: Double,
                      presentationFormat: Format = .cartesian) {
         do {
-            try self.init([DoublePrecisionValue(real),
-                           DoublePrecisionValue(imaginary)],
+            try self.init([NumericalValue(real),
+                           NumericalValue(imaginary)],
                           originalFormat: .cartesian,
                           presentationFormat: presentationFormat)
         } catch {
@@ -262,8 +262,8 @@ class ComplexValue: NSObject {
     convenience init(absolute: Double, argument: Double,
                      presentationFormat: Format = .polar) {
         do {
-            try self.init([DoublePrecisionValue(absolute),
-                           DoublePrecisionValue(argument)],
+            try self.init([NumericalValue(absolute),
+                           NumericalValue(argument)],
                           originalFormat: .polar,
                           presentationFormat: presentationFormat)
         } catch {
@@ -278,9 +278,9 @@ class ComplexValue: NSObject {
         do {
             let nf = numberFormat ?? v.originalComponents[0].numberFormat
 
-            try self.init([DoublePrecisionValue(v.originalComponents[0],
+            try self.init([NumericalValue(v.originalComponents[0],
                                                 numberFormat: nf),
-                           DoublePrecisionValue(v.originalComponents[1],
+                           NumericalValue(v.originalComponents[1],
                                                numberFormat: nf)],
                           originalFormat: v.originalFormat,
                           presentationFormat: presentationFormat)
@@ -306,7 +306,7 @@ class ComplexValue: NSObject {
     }
 }
 
-class DoublePrecisionValue: NSObject {
+class NumericalValue: NSObject {
     private(set) var doubleValue: Double
     private(set) var originalStringValue: String
     private (set) var numberFormat: ValueNumberFormat
@@ -334,7 +334,7 @@ class DoublePrecisionValue: NSObject {
         self.originalStringValue = originalStringValue
     }
 
-    init(_ v: DoublePrecisionValue,
+    init(_ v: NumericalValue,
          numberFormat: ValueNumberFormat) {
         self.numberFormat = numberFormat
         self.doubleValue = v.doubleValue
@@ -398,7 +398,7 @@ class DoublePrecisionValue: NSObject {
     }
 
     override func isEqual(_ to: (Any)?) -> Bool {
-        guard let other = to as? DoublePrecisionValue else {
+        guard let other = to as? NumericalValue else {
             return false
         }
         return abs(doubleValue.distance(to: other.doubleValue)) < epsilon

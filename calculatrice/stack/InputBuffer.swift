@@ -1,7 +1,7 @@
 import Foundation
 
 class InputBuffer: ObservableObject {
-    var value: DoublePrecisionValue {
+    var value: NumericalValue {
         buildValue()
     }
 
@@ -79,8 +79,8 @@ class InputBuffer: ObservableObject {
         sign < 0 ? 1.0 : -1.0
     }
 
-    private func buildValue() -> DoublePrecisionValue {
-        DoublePrecisionValue(doubleValue,
+    private func buildValue() -> NumericalValue {
+        NumericalValue(doubleValue,
                              stringValue)
     }
 

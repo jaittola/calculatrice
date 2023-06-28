@@ -142,7 +142,7 @@ struct Key: Identifiable {
         Key(op: .stackOp(".", { stack, _ in stack.input.dot() }),
             opMod1: .stackOp("π", { stack, _ in
             if stack.input.isEmpty {
-                stack.push(Value(DoublePrecisionValue(Double.pi)))
+                stack.push(Value(NumericalValue(Double.pi)))
             }
         })) }
 

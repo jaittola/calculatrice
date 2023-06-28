@@ -86,7 +86,7 @@ class TestMathOps: XCTestCase {
     }
 
     func testImaginaryNumber() {
-        let values = [DoublePrecisionValue(2).asComplex]
+        let values = [NumericalValue(2).asComplex]
         let result = assertNoThrow {
             try ImaginaryNumber().calcComplex(values, self.calculatorMode)
         }
@@ -469,8 +469,8 @@ class TestMathOps: XCTestCase {
     // TODO, add more of this.
 }
 
-func num(_ value: Double) -> DoublePrecisionValue {
-    DoublePrecisionValue(value)
+func num(_ value: Double) -> NumericalValue {
+    NumericalValue(value)
 }
 
 func complex(_ re: Double, _ im: Double) -> ComplexValue {
@@ -479,7 +479,7 @@ func complex(_ re: Double, _ im: Double) -> ComplexValue {
 
 func complexPolar(_ absolute: Double, _ argumentDegrees: Double) -> ComplexValue {
     return ComplexValue(absolute: absolute,
-                        argument: Utils.deg2Rad([DoublePrecisionValue(argumentDegrees)],
+                        argument: Utils.deg2Rad([NumericalValue(argumentDegrees)],
                                                 CalculatorMode())[0])
 }
 
