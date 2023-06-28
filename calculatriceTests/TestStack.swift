@@ -188,7 +188,7 @@ class TestStack: XCTestCase {
         XCTAssertEqual(s.testValues.stackHistory.count, 3)
         XCTAssertEqual(s.testValues.stackHistoryPointer, 2)
         let expectedValues = [ContainedValue.complex(value: ComplexValue(2, 3)),
-                              ContainedValue.number(value: DoublePrecisionValue(3))]
+                              ContainedValue.number(value: NumericalValue(3))]
         XCTAssertEqual(expectedValues,
                        s.content.map { v in v.containedValue })
     }
@@ -273,11 +273,11 @@ class TestStack: XCTestCase {
     }
 
     private func v(_ value: Double) -> Value {
-        Value(DoublePrecisionValue(value))
+        Value(NumericalValue(value))
     }
 
     private func stackToDoubles(_ values: [Value]) -> [Double?] {
-        values.map { v in v.asReal?.doubleValue }
+        values.map { v in v.asNum?.doubleValue }
     }
 
     private func stackToIds(_ values: [Value]) -> [Int] {
@@ -285,7 +285,7 @@ class TestStack: XCTestCase {
     }
 
     private func stackToDoubleIdTuples(_ values: [Value]) -> [(doubleValue: Double?, id: Int)] {
-        values.map { v in (doubleValue: v.asReal?.doubleValue,
+        values.map { v in (doubleValue: v.asNum?.doubleValue,
                            id: v.id) }
     }
 }

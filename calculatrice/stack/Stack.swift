@@ -163,7 +163,8 @@ class Stack: ObservableObject {
         let inputs = calcParams.calcInputs
 
         let complexInputs = inputs.map { v in v.asComplex }
-        let inputsAsReal = inputs.compactMap { n in n.asReal }
+        let inputsAsReal = inputs.compactMap { n in n.asNum }
+
         let allInputsReal = inputsAsReal.count == inputs.count
 
         let realCalc = calc as? RealCalculation
@@ -225,24 +226,24 @@ protocol Calculation {
 }
 
 protocol RealCalculation {
-    func calculate(_ inputs: [DoublePrecisionValue],
-                   _ calculatorMode: CalculatorMode) throws -> DoublePrecisionValue
+    func calculate(_ inputs: [NumericalValue],
+                   _ calculatorMode: CalculatorMode) throws -> NumericalValue
 }
 
 protocol ComplexCalculation {
-    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool
+    func preferComplexCalculationWith(thisInput: [NumericalValue]) -> Bool
     func calcComplex(_ inputs: [ComplexValue],
                      _ calculatorMode: CalculatorMode) throws -> ComplexValue
 }
 
 extension ComplexCalculation {
-    func preferComplexCalculationWith(thisInput: [DoublePrecisionValue]) -> Bool {
+    func preferComplexCalculationWith(thisInput: [NumericalValue]) -> Bool {
         false
     }
 }
 
 protocol RealToComplexCalculation {
-    func calcToComplex(_ inputs: [DoublePrecisionValue],
+    func calcToComplex(_ inputs: [NumericalValue],
                        _ calculatorMode: CalculatorMode) throws -> ComplexValue
 }
 

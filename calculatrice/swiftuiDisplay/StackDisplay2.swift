@@ -80,7 +80,7 @@ struct StackDisplay2_Previews: PreviewProvider {
 
     static func createPreviewStack() -> Stack {
         let stack = Stack()
-        stack.push(Value(DoublePrecisionValue(2.25)))
+        stack.push(Value(NumericalValue(2.25)))
         stack.push(Value(ComplexValue(1.2256, 0.362)))
         return stack
     }
