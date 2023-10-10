@@ -116,9 +116,12 @@ class Stack: ObservableObject {
     }
 
     private func pushStackHistory() {
-        if stackHistory.count >= 100 {
+        if !stackHistory.isEmpty && stackHistoryPointer != stackHistory.count - 1 {
+            stackHistory = Array(stackHistory[...stackHistoryPointer])
+        } else if stackHistory.count >= 100 {
             stackHistory.removeFirst()
         }
+
         stackHistory.append(content)
         stackHistoryPointer = stackHistory.count - 1
     }

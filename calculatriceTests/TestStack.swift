@@ -193,6 +193,48 @@ class TestStack: XCTestCase {
                        s.content.map { v in v.containedValue })
     }
 
+    func testInputAfterUndo() {
+        let s = threeValueStack()
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 4)
+        XCTAssertEqual(s.testValues.stackHistoryPointer, 3)
+
+        s.undo()
+        s.undo()
+        s.redo()
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 4)
+        XCTAssertEqual(s.testValues.stackHistory.map { stack in stackToDoubles(stack) },
+                       [[], [3], [2, 3], [5, 2, 3]])
+        XCTAssertEqual(s.testValues.stackHistoryPointer, 2)
+
+        s.input.addNum(9)
+        s.pushInput()
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 4)
+        XCTAssertEqual(s.testValues.stackHistory.map { stack in stackToDoubles(stack) },
+                       [[], [3], [2, 3], [9, 2, 3]])
+        XCTAssertEqual(s.testValues.stackHistoryPointer, 3)
+
+        XCTAssertEqual(stackToIds(s.content),
+                       [3, 1, 0])
+        XCTAssertEqual(stackToDoubles(s.content),
+                       [9, 2, 3])
+    }
+
+    func testMoreThan100StackHistory() {
+        let s = Stack()
+        for n in 0...105 {
+            s.input.addNum(n + 1)
+            s.pushInput()
+        }
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 100)
+        let s2 = stackToDoubles(s.content)
+        XCTAssertEqual(s2.count, 106)
+        XCTAssertEqual(s2[0], 106)
+    }
+
     private func threeValueStack() -> Stack {
         let s = Stack()
 
