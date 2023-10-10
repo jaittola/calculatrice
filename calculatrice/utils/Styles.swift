@@ -6,9 +6,9 @@ class Styles {
     static let keypadMargin: CGFloat = 2.0
 
     static let stackFont = font(.body, size: 24, weight: .semibold)
-    static let inputDisplayLabelFont = font(.body, size: 16, weight: .semibold)
+    static let inputDisplayLabelFont = font(.body, size: 18, weight: .semibold)
     static let keypadMainFont = font(.body, size: 24, weight: .semibold)
-    static let keypadModFont = font(.body, size: 16, weight: .semibold)
+    static let keypadModFont = font(.body, size: 18, weight: .semibold)
 
     static let maxContentSize: UIContentSizeCategory = .large
 

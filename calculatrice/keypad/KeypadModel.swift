@@ -119,9 +119,9 @@ struct Key: Identifiable {
             _ = try? stack.calculate(Neg(), calculatorMode)
         }
     },
-                                         symbolMod1: "→ ∟",
+                                         symbolMod1: "→∟",
                                          calcOpMod1: ToCartesian(),
-                                         symbolMod2: "→ ∠",
+                                         symbolMod2: "→∠",
                                          calcOpMod2: ToPolar()) }
     static func E() -> Key { Key(symbol: "E",
                                  op: { stack, _ in stack.input.E() },
