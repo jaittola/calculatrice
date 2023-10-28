@@ -109,7 +109,8 @@ struct Key: Identifiable {
     static func empty() -> Key { Key() }
 
     static func enter() -> Key {
-        Key(op: .stackOp("Enter", { stack, _ in stack.pushInput() }, "Enter")) }
+        Key(op: .stackOp("Enter", { stack, _ in stack.pushInput() }, "StackEnter"),
+            opMod1: .uiOp("Help", .showHelp, "Help")) }
 
     static func pop() -> Key {
         Key(op: .stackOp("Pop", { stack, _ in stack.pop() }, "PopStack"),
@@ -158,7 +159,7 @@ struct Key: Identifiable {
 
     static func E() -> Key {
         Key(op: .stackOp("E", { stack, _ in stack.input.E() }, "InputExponent"),
-            opMod1: .calcOp("→E", ToEng(), "EngineeringFormat"),
+            opMod1: .calcOp("→E", ToEng(), "ScientificFormat"),
             opMod2: .calcOp("→D", ToDecimal(), "DecimalFormat")) }
 
     static func plus() -> Key {
@@ -184,7 +185,7 @@ struct Key: Identifiable {
 
     static func tan() -> Key {
         Key(op: .calcOp("tan", Tan(), "CalcTan"),
-            opMod1: .calcOp("tan⁻¹", ATan(), "CalcATan")) }
+            opMod1: .calcOp("tan⁻¹", ATan(), "CalcArcTan")) }
 
     static func inv() -> Key {
         Key(op: .calcOp("¹/ₓ", Inv(), "CalcInv")) }

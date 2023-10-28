@@ -11,6 +11,8 @@ struct CalculatorMain: View {
 
     @State private var selection: StackDisplayValueId?
 
+    @State private var showingHelp = false
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
@@ -20,7 +22,7 @@ struct CalculatorMain: View {
                           selection: $selection)
             InputDisplay2(inputBuffer: stack.input)
             KeypadView2(model: keypadModel,
-                        onKeyPressed: { key in onKeyPressed(key)    })
+                        onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the keyboard to the safe area
         }
         .preferredColorScheme(.light)
@@ -34,12 +36,15 @@ struct CalculatorMain: View {
         } message: { details in
             Text(errorMessage(for: details))
         }
+        .sheet(isPresented: $showingHelp) {
+            HelpView(keypadModel: keypadModel)
+        }
     }
 
     private func onKeyPressed(_ key: Key) {
         stack.selectedId = selection?.valueId ?? -1 // This is a kind of a hack, maybe clean up.
         do {
-            try key.activeOp(calculatorMode, stack) {_ in }
+            try key.activeOp(calculatorMode, stack, { op in self.handleUIKeyboardOp(op) })
             if key.resetModAfterClick == .reset {
                 calculatorMode.resetMods()
             }
@@ -58,6 +63,13 @@ struct CalculatorMain: View {
             return "This calculation cannot be performed with the provided input values."
         default:
             return "Bad calculation"
+        }
+    }
+
+    private func handleUIKeyboardOp(_ op: Key.UICallbackOp) {
+        switch op {
+        case .showHelp:
+            showingHelp = true
         }
     }
 }
