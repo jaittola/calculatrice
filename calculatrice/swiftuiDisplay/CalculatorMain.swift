@@ -39,8 +39,8 @@ struct CalculatorMain: View {
     private func onKeyPressed(_ key: Key) {
         stack.selectedId = selection?.valueId ?? -1 // This is a kind of a hack, maybe clean up.
         do {
-            try key.activeOp(calculatorMode, stack)
-            if key.resetModAfterClick {
+            try key.activeOp(calculatorMode, stack) {_ in }
+            if key.resetModAfterClick == .reset {
                 calculatorMode.resetMods()
             }
         } catch {

@@ -38,14 +38,14 @@ struct KeyView2: View {
             }) {
                 VStack {
                     HStack {
-                        Mod1Label(label: key?.symbolMod1)
+                        Mod1Label(label: key?.opMod1?.symbol)
                         Spacer()
-                        Mod2Label(label: key?.symbolMod2)
+                        Mod2Label(label: key?.opMod2?.symbol)
                     }
                     .padding([.horizontal], 4)
                     .padding([.bottom], 4)
                     Spacer()
-                    MainLabel(label: key?.symbol,
+                    MainLabel(label: key?.op?.symbol,
                               labelColor: key?.mainTextColor)
                 }
                 .padding([.vertical], 4)

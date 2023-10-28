@@ -2,96 +2,129 @@ import Foundation
 import UIKit
 
 struct Key: Identifiable {
-    let symbol: String
-    let symbolMod1: String?
-    let symbolMod2: String?
+    enum UICallbackOp {
+        case showHelp
+    }
 
-    let op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)?
-    let opMod1: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)?
-    let opMod2: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)?
+    enum ResetModAfterClick {
+        case keep
+        case reset
+    }
 
-    let calcOp: Calculation?
-    let calcOpMod1: Calculation?
-    let calcOpMod2: Calculation?
+    enum CalcOp {
+        case stackOp(_ symbol: String,
+                     _ op: (_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void,
+                     _ helpTextKey: String? = nil)
+        case calcOp(_ symbol: String,
+                    _ calc: Calculation,
+                    _ helpTextKey: String? = nil)
+        case uiOp(_ symbol: String,
+                  _ uiCallback: UICallbackOp,
+                  _ helpTextKey: String? = nil)
 
-    let resetModAfterClick: Bool
+        var helpTextKey: String? {
+            switch self {
+            case .stackOp(_, _, let helpTextKey): helpTextKey
+            case .calcOp(_, _, let helpTextKey): helpTextKey
+            case .uiOp(_, _, let helpTextKey): helpTextKey
+            }
+        }
+
+        var symbol: String? {
+            switch self {
+            case .stackOp(let symbol, _, _): symbol
+            case .calcOp(let symbol, _, _): symbol
+            case .uiOp(let symbol, _, _): symbol
+            }
+        }
+    }
+
+    let op: CalcOp?
+    let opMod1: CalcOp?
+    let opMod2: CalcOp?
+
+    let resetModAfterClick: ResetModAfterClick
 
     let mainTextColor: UIColor?
 
     var id: String {
-        "\(symbol)_\(symbolMod1 ?? "")_\(symbolMod2 ?? "")"
+        "\(op?.symbol ?? "")_\(opMod1?.symbol ?? "")_\(opMod2?.symbol ?? "")"
     }
 
-    init(symbol: String,
-         op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
-         calcOp: Calculation? = nil,
-         symbolMod1: String? = nil,
-         opMod1: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
-         calcOpMod1: Calculation? = nil,
-         symbolMod2: String? = nil,
-         opMod2: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)? = nil,
-         calcOpMod2: Calculation? = nil,
-         resetModAfterClick: Bool = true,
-         mainTextColor: UIColor? = nil) {
-        self.symbol = symbol
+    init (op: CalcOp? = nil,
+          opMod1: CalcOp? = nil,
+          opMod2: CalcOp? = nil,
+          resetModAfterClick: ResetModAfterClick = .reset,
+          mainTextColor: UIColor? = nil) {
         self.op = op
-        self.symbolMod1 = symbolMod1
         self.opMod1 = opMod1
-        self.symbolMod2 = symbolMod2
         self.opMod2 = opMod2
-        self.calcOp = calcOp
-        self.calcOpMod1 = calcOpMod1
-        self.calcOpMod2 = calcOpMod2
         self.resetModAfterClick = resetModAfterClick
         self.mainTextColor = mainTextColor
     }
 
-    func activeOp(_ calculatorMode: CalculatorMode, _ stack: Stack) throws {
+    func activeOp(_ calculatorMode: CalculatorMode,
+                  _ stack: Stack,
+                  _ handleUICallbackOp: (_ cb: UICallbackOp) -> Void) throws {
         do {
-            var stackOp: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)?
-            var calculationOp: Calculation?
-
-            switch calculatorMode.keypadMode {
+            let op = switch calculatorMode.keypadMode {
             case .Normal:
-                stackOp = op
-                calculationOp = calcOp
+                op
             case .Mod1:
-                stackOp = opMod1
-                calculationOp = calcOpMod1
+                opMod1
             case .Mod2:
-                stackOp = opMod2
-                calculationOp = calcOpMod2
+                opMod2
             }
 
-            if let stackOp = stackOp {
-                stackOp(stack, calculatorMode)
-            } else if let calculationOp = calculationOp {
-                try stack.calculate(calculationOp, calculatorMode)
+            switch op {
+            case .stackOp(_, let stackOp, _): stackOp(stack, calculatorMode)
+            case .calcOp(_, let calcOp, _): try stack.calculate(calcOp, calculatorMode)
+            case .uiOp(_, let uiOp, _): handleUICallbackOp(uiOp)
+            case nil: break
             }
         } catch {
             throw error
         }
     }
 
-    static func empty() -> Key { Key(symbol: "") }
+    static func makeOp (_ symbol: String?,
+                        _ op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)?,
+                        _ calcOp: Calculation?,
+                        _ uiOp: UICallbackOp?) -> CalcOp? {
+        guard let symbol = symbol else {
+            return nil
+        }
 
-    static func enter() -> Key { Key(symbol: "Enter",
-                                     op: { stack, _ in stack.pushInput() })}
-    static func pop() -> Key { Key(symbol: "Pop",
-                                   op: { stack, _ in stack.pop() },
-                                   symbolMod1: "Clear",
-                                   opMod1: { stack, _ in stack.clear() })}
+        return if let uiOp = uiOp {
+            .uiOp(symbol, uiOp)
+        } else if let op = op {
+            .stackOp(symbol, op)
+        } else if let calcOP = calcOp {
+            .calcOp(symbol, calcOP)
+        } else {
+            nil
+        }
+    }
 
-    static func backspace() -> Key { Key(symbol: "←",
-                                         op: { stack, _ in stack.input.backspace() })}
-    static func pick() -> Key { Key(symbol: "Pick",
-                                    op: { stack, _ in stack.pickSelected() },
-                                    symbolMod1: "↺",
-                                    opMod1: { stack, _ in stack.undo() },
-                                    symbolMod2: "↻",
-                                    opMod2: { stack, _ in stack.redo() })}
+    static func empty() -> Key { Key() }
 
-    static func swap() -> Key { Key(symbol: "x⇄y", op: { stack, _ in stack.swapTop2() }) }
+    static func enter() -> Key {
+        Key(op: .stackOp("Enter", { stack, _ in stack.pushInput() }, "Enter")) }
+
+    static func pop() -> Key {
+        Key(op: .stackOp("Pop", { stack, _ in stack.pop() }, "PopStack"),
+            opMod1: .stackOp("Clear", { stack, _ in stack.clear() }, "ClearStack"))}
+
+    static func backspace() -> Key {
+        Key(op: .stackOp("←", { stack, _ in stack.input.backspace() }, "Backspace")) }
+
+    static func pick() -> Key {
+        Key(op: .stackOp("Pick", { stack, _ in stack.pickSelected() }, "PickSelected"),
+            opMod1: .stackOp("↺", { stack, _ in stack.undo() }, "Undo"),
+            opMod2: .stackOp("↻", { stack, _ in stack.redo() }, "Redo")) }
+
+    static func swap() -> Key {
+        Key(op: .stackOp("x⇄y", { stack, _ in stack.swapTop2() }, "SwapTop2")) }
 
     static func zero() -> Key { numkey(0) }
     static func one() -> Key { numkey(1) }
@@ -103,87 +136,104 @@ struct Key: Identifiable {
     static func seven() -> Key { numkey(7) }
     static func eight() -> Key { numkey(8) }
     static func nine() -> Key { numkey(9) }
-    static func dot() -> Key { Key(symbol: ".",
-                                   op: { stack, _ in stack.input.dot() },
-                                   symbolMod1: "π",
-                                   opMod1: { stack, _ in
-        if stack.input.isEmpty {
-            stack.push(Value(DoublePrecisionValue(Double.pi)))
-        }
-    }) }
-    static func plusminus() -> Key { Key(symbol: "±",
-                                         op: { stack, calculatorMode in
-        if !stack.input.isEmpty {
-            stack.input.plusminus()
-        } else {
-            _ = try? stack.calculate(Neg(), calculatorMode)
-        }
-    },
-                                         symbolMod1: "→∟",
-                                         calcOpMod1: ToCartesian(),
-                                         symbolMod2: "→∠",
-                                         calcOpMod2: ToPolar()) }
-    static func E() -> Key { Key(symbol: "E",
-                                 op: { stack, _ in stack.input.E() },
-                                 symbolMod1: "→E",
-                                 calcOpMod1: ToEng(),
-                                 symbolMod2: "→D",
-                                 calcOpMod2: ToDecimal()) }
 
-    static func plus() -> Key { Key(symbol: "+", calcOp: Plus(),
-                                    symbolMod1: "Re", calcOpMod1: Re(),
-                                    symbolMod2: "Im", calcOpMod2: Im()) }
-    static func minus() -> Key { Key(symbol: "-", calcOp: Minus(),
-                                     symbolMod1: "Conj", calcOpMod1: Conjugate()) }
-    static func mult() -> Key { Key(symbol: "×", calcOp: Mult()) }
-    static func div() -> Key { Key(symbol: "÷", calcOp: Div()) }
-    static func sin() -> Key { Key(symbol: "sin", calcOp: Sin(),
-                                   symbolMod1: "sin⁻¹", calcOpMod1: ASin()) }
-    static func cos() -> Key { Key(symbol: "cos", calcOp: Cos(),
-                                   symbolMod1: "cos⁻¹", calcOpMod1: ACos()) }
-    static func tan() -> Key { Key(symbol: "tan", calcOp: Tan(),
-                                   symbolMod1: "tan⁻¹", calcOpMod1: ATan()) }
-    static func inv() -> Key { Key(symbol: "¹/ₓ", calcOp: Inv()) }
-    static func pow() -> Key { Key(symbol: "x²", calcOp: Square(),
-                                   symbolMod1: "y³", calcOpMod1: Pow3(),
-                                   symbolMod2: "yˣ", calcOpMod2: Pow()) }
-    static func root() -> Key { Key(symbol: "√x", calcOp: Sqrt(),
-                                    symbolMod1: "³√y", calcOpMod1: Root3(),
-                                    symbolMod2: "ˣ√y", calcOpMod2: NthRoot()) }
-    static func log() -> Key { Key(symbol: "ln", calcOp: Log(),
-                                   symbolMod1: "eˣ", calcOpMod1: Exp()) }
-    static func lg() -> Key { Key(symbol: "lg", calcOp: Log10(),
-                                  symbolMod1: "10ˣ", calcOpMod1: Exp10()) }
-    static func complex() -> Key { Key(symbol: "y + xi", calcOp: Complex(),
-                                       symbolMod1: "y∠x", calcOpMod1: ComplexPolar(),
-                                       symbolMod2: "xi", calcOpMod2: ImaginaryNumber()) }
+    static func dot() -> Key {
+        Key(op: .stackOp(".", { stack, _ in stack.input.dot() }),
+            opMod1: .stackOp("π", { stack, _ in
+            if stack.input.isEmpty {
+                stack.push(Value(DoublePrecisionValue(Double.pi)))
+            }
+        })) }
+
+    static func plusminus() -> Key {
+        Key(op: .stackOp("±", { stack, calculatorMode in
+            if !stack.input.isEmpty {
+                stack.input.plusminus()
+            } else {
+                _ = try? stack.calculate(Neg(), calculatorMode)
+            }
+        }),
+            opMod1: .calcOp("→∟", ToCartesian()),
+            opMod2: .calcOp("→∠", ToPolar())) }
+
+    static func E() -> Key {
+        Key(op: .stackOp("E", { stack, _ in stack.input.E() }, "InputExponent"),
+            opMod1: .calcOp("→E", ToEng(), "EngineeringFormat"),
+            opMod2: .calcOp("→D", ToDecimal(), "DecimalFormat")) }
+
+    static func plus() -> Key {
+        Key(op: .calcOp("+", Plus(), "CalcPlus"),
+            opMod1: .calcOp("Re", Re(), "RealPart"),
+            opMod2: .calcOp("Im", Im(), "ImaginaryPart")) }
+
+    static func minus() -> Key {
+        Key(op: .calcOp("-", Minus(), "CalcMinus"),
+            opMod1: .calcOp("Conj", Conjugate(), "ComplexConjugate")) }
+
+    static func mult() -> Key { Key(op: .calcOp("×", Mult(), "CalcMultiply")) }
+
+    static func div() -> Key { Key(op: .calcOp("÷", Div(), "CalcDivision")) }
+
+    static func sin() -> Key {
+        Key(op: .calcOp("sin", Sin(), "CalcSin"),
+            opMod1: .calcOp("sin⁻¹", ASin(), "CalcArcSin")) }
+
+    static func cos() -> Key {
+        Key(op: .calcOp("cos", Cos(), "CalcCos"),
+            opMod1: .calcOp("cos⁻¹", ACos(), "CalcArcCos")) }
+
+    static func tan() -> Key {
+        Key(op: .calcOp("tan", Tan(), "CalcTan"),
+            opMod1: .calcOp("tan⁻¹", ATan(), "CalcATan")) }
+
+    static func inv() -> Key {
+        Key(op: .calcOp("¹/ₓ", Inv(), "CalcInv")) }
+
+    static func pow() -> Key {
+        Key(op: .calcOp("x²", Square(), "CalcSquare"),
+            opMod1: .calcOp("y³", Pow3(), "CalcCube"),
+            opMod2: .calcOp("yˣ", Pow(), "CalcPow")) }
+
+    static func root() -> Key {
+        Key(op: .calcOp("√x", Sqrt(), "CalcSqrt"),
+            opMod1: .calcOp("³√y", Root3(), "Calc3rdRoot"),
+            opMod2: .calcOp("ˣ√y", NthRoot(), "CalcNthRoot")) }
+
+    static func log() -> Key {
+        Key(op: .calcOp("ln", Log(), "CalcLn"),
+            opMod1: .calcOp("eˣ", Exp(), "CalcExp")) }
+
+    static func lg() -> Key { Key(op: .calcOp("lg", Log10(), "CalcLog10"),
+                                  opMod1: .calcOp("10ˣ", Exp10(), "CalcExp10")) }
+
+    static func complex() -> Key {
+        Key(op: .calcOp("y + xi", Complex(), "MakeComplex"),
+            opMod1: .calcOp("y∠x", ComplexPolar(), "MakePolarComplex"),
+            opMod2: .calcOp("xi", ImaginaryNumber(), "MakeImaginary")) }
 
     static func numkey(_ num: Int) -> Key {
-        return Key(symbol: String(num),
-                   op: { stack, _ in stack.input.addNum(num) },
-                   resetModAfterClick: true)
+        return Key(op: .stackOp(String(num), { stack, _ in stack.input.addNum(num) }))
     }
 
-    static func angleMode() -> Key { Key(symbol: "⦠",
-                                         op: { _, calculatorMode in calculatorMode.swapAngle() })}
+    static func angleMode() -> Key {
+        Key(op: .stackOp("⦠", { _, calculatorMode in calculatorMode.swapAngle() },
+                         "SwapAngleMode"))}
+
     static func mod1() -> Key {
         let op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void) = { _, calculatorMode in calculatorMode.toggleMod1() }
-        return Key(symbol: "Alt 1",
-                   op: op,
-                   opMod1: op,
-                   opMod2: op,
-                   resetModAfterClick: false,
+        return Key(op: .stackOp("Alt 1", op, "Alt1"),
+                   opMod1: .stackOp("", op),
+                   opMod2: .stackOp("", op),
+                   resetModAfterClick: .keep,
                    mainTextColor: Styles.mod1TextColor)
-
     }
 
     static func mod2() -> Key {
         let op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void) = { _, calculatorMode in calculatorMode.toggleMod2() }
-        return Key(symbol: "Alt 2",
-                   op: op,
-                   opMod1: op,
-                   opMod2: op,
-                   resetModAfterClick: false,
+        return Key(op: .stackOp("Alt 2", op, "Alt2"),
+                   opMod1: .stackOp("", op),
+                   opMod2: .stackOp("", op),
+                   resetModAfterClick: .keep,
                    mainTextColor: Styles.mod2TextColor)
     }
 }
@@ -196,7 +246,6 @@ struct KeyRow: Identifiable {
 }
 
 protocol KeypadModel {
-    var keys: [[Key?]] { get }
     var keyRows: [KeyRow] { get }
 
     var rowCount: Int { get }
@@ -204,16 +253,6 @@ protocol KeypadModel {
 }
 
 struct BasicKeypadModel: KeypadModel {
-    let keys: [[Key?]] = [
-        [ Key.pow(), Key.root(), Key.log(), Key.lg(), Key.inv() ],
-        [ Key.sin(), Key.cos(), Key.tan(), nil, Key.complex() ],
-        [ Key.mod1(), Key.mod2(), Key.angleMode(), Key.swap(), Key.backspace() ],
-        [ Key.seven(), Key.eight(), Key.nine(), Key.pick(), Key.pop() ],
-        [ Key.four(), Key.five(), Key.six(), Key.mult(), Key.div() ],
-        [ Key.one(), Key.two(), Key.three(), Key.plus(), Key.minus() ],
-        [ Key.zero(), Key.dot(), Key.E(), Key.plusminus(), Key.enter() ]
-    ]
-
     let keyRows: [KeyRow] = [
         KeyRow(keys: [ Key.pow(), Key.root(), Key.log(),
                        Key.lg(), Key.inv() ]),
