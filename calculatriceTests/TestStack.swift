@@ -235,6 +235,22 @@ class TestStack: XCTestCase {
         XCTAssertEqual(s2[0], 106)
     }
 
+    func testSwap2() {
+        let s = threeValueStack()
+
+        s.swapTop2()
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 5)
+        XCTAssertEqual(s.testValues.stackHistory.map { stack in stackToDoubles(stack) },
+                       [[], [3], [2, 3], [5, 2, 3], [2, 5, 3]])
+
+        s.swapTop2()
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 6)
+        XCTAssertEqual(s.testValues.stackHistory.map { stack in stackToDoubles(stack) },
+                       [[], [3], [2, 3], [5, 2, 3], [2, 5, 3], [5, 2, 3]])
+    }
+
     private func threeValueStack() -> Stack {
         let s = Stack()
 

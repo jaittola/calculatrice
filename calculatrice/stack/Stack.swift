@@ -79,11 +79,11 @@ class Stack: ObservableObject {
             top = newStack.removeFirst()
             second = newStack.removeFirst()
 
+            newStack.insert(top!.withId(nextId), at: 0)
+            newStack.insert(second!.withId(nextId), at: 0)
+
             return newStack
         }
-
-        push(top!)
-        push(second!)
     }
 
     func undo() {
