@@ -66,7 +66,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Tyhjennä pino"
           }
         }
@@ -741,7 +741,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Palauta aiemmin peruutettu toiminto"
           }
         }
@@ -815,6 +815,40 @@
         }
       }
     },
+    "ToCartesian" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convert a complex number to cartesian representation"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Muunna kompleksiluku reaali- ja imaginaarimuotoon"
+          }
+        }
+      }
+    },
+    "ToPolar" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convert a complex number to polar coordinate representation"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Muunna kompleksiluku napakoordinaatistoesitykseen"
+          }
+        }
+      }
+    },
     "Undo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -826,7 +860,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Peruuta edellinen toiminto"
           }
         }

@@ -154,8 +154,8 @@ struct Key: Identifiable {
                 _ = try? stack.calculate(Neg(), calculatorMode)
             }
         }),
-            opMod1: .calcOp("→∟", ToCartesian()),
-            opMod2: .calcOp("→∠", ToPolar())) }
+            opMod1: .calcOp("→∟", ToCartesian(), "ToCartesian"),
+            opMod2: .calcOp("→∠", ToPolar(), "ToPolar")) }
 
     static func E() -> Key {
         Key(op: .stackOp("E", { stack, _ in stack.input.E() }, "InputExponent"),
