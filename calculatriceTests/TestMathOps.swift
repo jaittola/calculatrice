@@ -86,7 +86,7 @@ class TestMathOps: XCTestCase {
     }
 
     func testImaginaryNumber() {
-        let values = [NumericalValue(2).asComplex]
+        let values = [NumericalValue(Double(2)).asComplex]
         let result = assertNoThrow {
             try ImaginaryNumber().calcComplex(values, self.calculatorMode)
         }
@@ -160,8 +160,8 @@ class TestMathOps: XCTestCase {
     }
 
     func testComplexRoot() {
-        let values = [ComplexValue(absolute: 4, argument: Double.pi/4),
-                      ComplexValue(absolute: 2, argument: 0)]
+        let values = [ComplexValue(absolute: 4.0, argument: Double.pi/4),
+                      ComplexValue(absolute: 2.0, argument: 0.0)]
         let result = NthRoot().calcComplex(values, self.calculatorMode)
         XCTAssertEqual(result, ComplexValue(absolute: 2,
                                             argument: Double.pi/8))
@@ -204,9 +204,9 @@ class TestMathOps: XCTestCase {
         let values = [complex(1, 4 * Double.pi + Double.pi/4)]
         let result = Exp().calcComplex(values, self.calculatorMode)
         XCTAssertEqual(result.polarAbsolute.doubleValue, 2.71828,
-                       accuracy: epsilon)
+                       accuracy: NumericalValue.epsilond)
         XCTAssertEqual(result.polarArgument.doubleValue, Double.pi/4,
-                       accuracy: epsilon)
+                       accuracy: NumericalValue.epsilond)
     }
 
     func testComplexExp10() {
@@ -214,7 +214,7 @@ class TestMathOps: XCTestCase {
         let result = Exp10().calcComplex(values, self.calculatorMode)
         XCTAssertEqual(result.polarAbsolute.doubleValue, 10)
         XCTAssertEqual(result.polarArgument.doubleValue, -1.6780151,
-                       accuracy: epsilon)
+                       accuracy: NumericalValue.epsilond)
     }
 
     func testComplexLog() {
@@ -427,14 +427,15 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(Utils.clampCyclical(1.5, -1, 1), -0.5)
 
         XCTAssertEqual(Utils.clampCyclical(0.5, 0, 1), 0.5)
-        XCTAssertEqual(Utils.clampCyclical(-0.2, 0, 1), 0.8)
+        XCTAssertEqual(Utils.clampCyclical(-0.2, 0, 1), 0.8,
+                       accuracy: NumericalValue.epsilon)
 
         XCTAssertEqual(Utils.clampComplexArg(-3 * Double.pi / 2.0),
                        Double.pi / 2.0,
-                       accuracy: epsilon)
+                       accuracy: NumericalValue.epsilond)
         XCTAssertEqual(Utils.clampComplexArg(3 * Double.pi / 2.0),
                        -Double.pi / 2.0,
-                       accuracy: epsilon)
+                       accuracy: NumericalValue.epsilond)
     }
 
     func testToPolar() {
@@ -480,7 +481,7 @@ func complex(_ re: Double, _ im: Double) -> ComplexValue {
 func complexPolar(_ absolute: Double, _ argumentDegrees: Double) -> ComplexValue {
     return ComplexValue(absolute: absolute,
                         argument: Utils.deg2Rad([NumericalValue(argumentDegrees)],
-                                                CalculatorMode())[0])
+                                                CalculatorMode())[0].asDouble)
 }
 
 func assertNoThrow<T>(f: () throws -> T) -> T? {
