@@ -171,7 +171,7 @@ class TestStack: XCTestCase {
     func testStackCalcWithThrowingCalculation() {
         let s = Stack()
         s.push(v(3))
-        s.push(Value(ComplexValue(2, 3)))
+        s.push(Value(ComplexValue(2.0, 3.0)))
 
         XCTAssertEqual(s.testValues.stackHistory.count, 3)
         XCTAssertEqual(s.testValues.stackHistoryPointer, 2)
@@ -187,8 +187,8 @@ class TestStack: XCTestCase {
 
         XCTAssertEqual(s.testValues.stackHistory.count, 3)
         XCTAssertEqual(s.testValues.stackHistoryPointer, 2)
-        let expectedValues = [ContainedValue.complex(value: ComplexValue(2, 3)),
-                              ContainedValue.number(value: NumericalValue(3))]
+        let expectedValues = [ContainedValue.complex(value: ComplexValue(2.0, 3.0)),
+                              ContainedValue.number(value: NumericalValue(3.0))]
         XCTAssertEqual(expectedValues,
                        s.content.map { v in v.containedValue })
     }
