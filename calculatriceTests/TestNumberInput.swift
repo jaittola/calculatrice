@@ -10,11 +10,11 @@ class TestNumberInput: XCTestCase {
         for _ in 0..<9 {
             ib.addNum(0)
         }
-        ib.addNum(1)
+        ib.addNum(2)
 
         let v = ib.value
-        XCTAssertEqual(v.doubleValue, 12.0000000001)
-        XCTAssertEqual(v.stringValue(), "12.0000000001")
+        XCTAssertEqual(v.doubleValue, 12.0000000002)
+        XCTAssertEqual(v.stringValue(), "12.0000000002")
     }
 
     func testPositiveEngValue() {
