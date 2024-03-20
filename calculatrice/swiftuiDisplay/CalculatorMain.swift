@@ -47,6 +47,7 @@ struct CalculatorMain: View {
             try key.activeOp(calculatorMode, stack, { op in self.handleUIKeyboardOp(op) })
             if key.resetModAfterClick == .reset {
                 calculatorMode.resetMods()
+                selection = nil
             }
         } catch {
             calcError = error
