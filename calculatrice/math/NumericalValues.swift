@@ -381,13 +381,14 @@ class NumericalValue: NSObject {
     func stringDecimalValue(precision: Int, withSign: Bool) -> String {
         let v = withSign ? doubleValue : fabs(doubleValue)
 
-        let dvParts = modf(v)
-        if dvParts.1 == 0 {
-            return String(format: "%.0f", dvParts.0)
-        } else {
-            let format = String(format: "%%.%dg", precision)
-            return String(format: format, v)
-        }
+        let rounding = NSDecimalNumberHandler(roundingMode: .plain,
+                                              scale: Int16(precision),
+                                              raiseOnExactness: false,
+                                              raiseOnOverflow: false,
+                                              raiseOnUnderflow: false,
+                                              raiseOnDivideByZero: true)
+        let rounded = NSDecimalNumber(value: v).rounding(accordingToBehavior: rounding)
+        return rounded.stringValue
     }
 
     func stringEngValue(precision: Int, engDecimalPlaces: Int, withSign: Bool) -> String {
