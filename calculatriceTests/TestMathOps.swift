@@ -481,7 +481,7 @@ func complex(_ re: Double, _ im: Double) -> ComplexValue {
 func complexPolar(_ absolute: Double, _ argumentDegrees: Double) -> ComplexValue {
     return ComplexValue(absolute: absolute,
                         argument: Utils.deg2Rad([NumericalValue(argumentDegrees)],
-                                                CalculatorMode())[0].asDouble)
+                                                CalculatorMode())[0])
 }
 
 func assertNoThrow<T>(f: () throws -> T) -> T? {

@@ -1,73 +1,10 @@
 import XCTest
-import BigNum
 @testable import calculatrice
 
 class TestNumericalValues: XCTestCase {
     func testBasicWithAutoFormat() {
-        let v1 = Value(NumericalValue(BigFloat(1.2), numberFormat: .auto), id: 3)
+        let v1 = Value(NumericalValue(1.2, numberFormat: .auto), id: 3)
         XCTAssertEqual("1.2", v1.stringValue(CalculatorMode()))
-    }
-
-    func testVeryLargeNumber() {
-        let v1 = Value(NumericalValue(BigFloat(sign: .plus,
-                                               exponent: 2128,
-                                               significand: 2),
-                                      numberFormat: .decimal))
-        XCTAssertEqual(v1.stringValue(CalculatorMode()),
-                       "39068863052250606675316075180094805854729238916271509523201597573290614178776258196125946187086384038426399410211596209825641006735815039349133571830814078426466367365756921815889043251782568216079937145581248380435562394709016860832903218461544174770465394800625479339537757537335553249850158191505318133510572607431520276555674875416599120317498059301881116979310243887366538357942833724193611196800156498222854457190574387431417252777540878783889717888098291728829027659361469209990779876001125013459865368124059563063357660165138062933843690520698442037155866153558918340961688671910520761972614713950055844461518093082929232185923731456")
-    }
-
-    func testVeryLargeNumberWithDecimalPart() {
-        let bf1 = BigFloat(sign: .plus,
-                           exponent: 2128,
-                           significand: 2)
-        let bf2 = BigFloat(0.25)
-        let sum = bf1 + bf2
-
-        let v = Value(NumericalValue(sum, numberFormat: .decimal))
-
-        XCTAssertEqual(v.stringValue(CalculatorMode()),
-                       "39068863052250606675316075180094805854729238916271509523201597573290614178776258196125946187086384038426399410211596209825641006735815039349133571830814078426466367365756921815889043251782568216079937145581248380435562394709016860832903218461544174770465394800625479339537757537335553249850158191505318133510572607431520276555674875416599120317498059301881116979310243887366538357942833724193611196800156498222854457190574387431417252777540878783889717888098291728829027659361469209990779876001125013459865368124059563063357660165138062933843690520698442037155866153558918340961688671910520761972614713950055844461518093082929232185923731456.25")
-    }
-
-    func testVeryLargeNegativeNumber() {
-        let v1 = Value(NumericalValue(BigFloat(sign: .minus,
-                                               exponent: 2128,
-                                               significand: 2),
-                                      numberFormat: .decimal))
-        XCTAssertEqual(v1.stringValue(CalculatorMode()),
-                       "-39068863052250606675316075180094805854729238916271509523201597573290614178776258196125946187086384038426399410211596209825641006735815039349133571830814078426466367365756921815889043251782568216079937145581248380435562394709016860832903218461544174770465394800625479339537757537335553249850158191505318133510572607431520276555674875416599120317498059301881116979310243887366538357942833724193611196800156498222854457190574387431417252777540878783889717888098291728829027659361469209990779876001125013459865368124059563063357660165138062933843690520698442037155866153558918340961688671910520761972614713950055844461518093082929232185923731456")
-    }
-
-    func testVeryLargeNegativeNumberWithDecimalPart() {
-        let bf1 = BigFloat(sign: .minus,
-                           exponent: 2128,
-                           significand: 2)
-        let bf2 = BigFloat(0.25)
-        let sum = bf1 - bf2
-
-        let v = Value(NumericalValue(sum, numberFormat: .decimal))
-
-        XCTAssertEqual(v.stringValue(CalculatorMode()),
-                       "-39068863052250606675316075180094805854729238916271509523201597573290614178776258196125946187086384038426399410211596209825641006735815039349133571830814078426466367365756921815889043251782568216079937145581248380435562394709016860832903218461544174770465394800625479339537757537335553249850158191505318133510572607431520276555674875416599120317498059301881116979310243887366538357942833724193611196800156498222854457190574387431417252777540878783889717888098291728829027659361469209990779876001125013459865368124059563063357660165138062933843690520698442037155866153558918340961688671910520761972614713950055844461518093082929232185923731456.25")
-    }
-
-    func testVeryLargeNumberEngFormat() {
-        let v1 = Value(NumericalValue(BigFloat(sign: .plus,
-                                               exponent: 2128,
-                                               significand: 2),
-                                      numberFormat: .eng))
-        XCTAssertEqual(v1.stringValue(CalculatorMode()),
-                       "3.9068863e640")
-    }
-
-    func testVeryLargeNegativeNumberEngFormat() {
-        let v1 = Value(NumericalValue(BigFloat(sign: .minus,
-                                               exponent: 2128,
-                                               significand: 2),
-                                      numberFormat: .eng))
-        XCTAssertEqual(v1.stringValue(CalculatorMode()),
-                       "-3.9068863e640")
     }
 
     func testWithId() {
@@ -83,8 +20,9 @@ class TestNumericalValues: XCTestCase {
     }
 
     func testWithIdAndInputNumberFormat() {
-        let v1 = Value(NumericalValue(BigFloat(1.2),
-                                      originalStringValue: "My weird number format"), id: 3)
+        let v1 = Value(NumericalValue(1.2,
+                                      originalStringValue: "My weird number format"),
+                       id: 3)
         let v2 = v1.withId(4)
         let v1r = v1.asNum!
         let v2r = v2.asNum!
@@ -96,7 +34,7 @@ class TestNumericalValues: XCTestCase {
     }
 
     func testWithIdAndEngNumberFormat() {
-        let v1 = Value(NumericalValue(BigFloat(1.2), numberFormat: .eng), id: 99)
+        let v1 = Value(NumericalValue(1.2, numberFormat: .eng), id: 99)
         let v2 = v1.withId(4)
         let v1r = v1.asNum!
         let v2r = v2.asNum!
@@ -194,7 +132,7 @@ class TestNumericalValues: XCTestCase {
     }
 
     func testComplexPolar() {
-        checkPolarComplexToCartesian(ComplexValue(absolute: 2, argument: BigFloat.pi / 4), sqrt(2), sqrt(2))
+        checkPolarComplexToCartesian(ComplexValue(absolute: 2, argument: Double.pi / 4), sqrt(2), sqrt(2))
     }
 
     func testComplexPolar2() {
@@ -202,7 +140,7 @@ class TestNumericalValues: XCTestCase {
     }
 
     func testComplexPolar3() {
-        checkPolarComplexToCartesian(ComplexValue(absolute: 1, argument: BigFloat.pi / 2), 0, 1)
+        checkPolarComplexToCartesian(ComplexValue(absolute: 1, argument: Double.pi / 2), 0, 1)
     }
 
     func checkPolarComplexToCartesian(_ c: ComplexValue, _ real: Double, _ imaginary: Double) {

@@ -1,5 +1,4 @@
 import Foundation
-import BigNum
 
 class InputBuffer: ObservableObject {
     var value: NumericalValue {
@@ -18,10 +17,10 @@ class InputBuffer: ObservableObject {
     var inputs: [InputElement] = []
 
     @Published
-    private var signum: BigFloat = 1.0
+    private var signum: Double = 1.0
 
     @Published
-    private var exponentSignum: BigFloat = 1.0
+    private var exponentSignum: Double = 1.0
 
     func addNum(_ number: Int) {
         let v = mantissaExpValue
@@ -75,7 +74,7 @@ class InputBuffer: ObservableObject {
         exponentSignum = 1.0
     }
 
-    private func swapSignum(_ sign: BigFloat) -> BigFloat {
+    private func swapSignum(_ sign: Double) -> Double {
         sign < 0 ? 1.0 : -1.0
     }
 
@@ -126,12 +125,12 @@ class InputBuffer: ObservableObject {
             case .Number(let num):
                 switch inputState {
                 case .Whole(let coeff):
-                    return MantissaExponent(mant: coeff * acc.mantissa + BigFloat(num),
+                    return MantissaExponent(mant: coeff * acc.mantissa + Double(num),
                                             expo: acc.exponent,
                                             sign: acc.signum,
                                             expoSign: acc.exponentSignum)
                 case .Decimal(let coeff):
-                    let result = MantissaExponent(mant: acc.mantissa + coeff * BigFloat(num),
+                    let result = MantissaExponent(mant: acc.mantissa + coeff * Double(num),
                                                   expo: acc.exponent,
                                                   sign: acc.signum,
                                                   expoSign: acc.exponentSignum)
@@ -139,7 +138,7 @@ class InputBuffer: ObservableObject {
                     return result
                 case .Exponent(let coeff):
                     return MantissaExponent(mant: acc.mantissa,
-                                            expo: coeff * acc.exponent + BigFloat(num),
+                                            expo: coeff * acc.exponent + Double(num),
                                             sign: acc.signum,
                                             expoSign: acc.exponentSignum)
                 }
@@ -147,7 +146,7 @@ class InputBuffer: ObservableObject {
         }
     }
 
-    private var numericalValue: BigFloat {
+    private var numericalValue: Double {
         mantissaExpValue.value
     }
 
@@ -183,29 +182,29 @@ class InputBuffer: ObservableObject {
     }
 
     private enum InputState {
-        case Whole(_ coeff: BigFloat = 10.0)
-        case Decimal(_ coeff: BigFloat = 0.1)
-        case Exponent(_ coeff: BigFloat = 10.0)
+        case Whole(_ coeff: Double = 10.0)
+        case Decimal(_ coeff: Double = 0.1)
+        case Exponent(_ coeff: Double = 10.0)
     }
 }
 
 struct MantissaExponent {
-    var mantissa: BigFloat
-    var exponent: BigFloat
-    var signum: BigFloat
-    var exponentSignum: BigFloat
+    var mantissa: Double
+    var exponent: Double
+    var signum: Double
+    var exponentSignum: Double
 
-    init(mant: BigFloat = 0.0,
-         expo: BigFloat = 0.0,
-         sign: BigFloat = 1.0,
-         expoSign: BigFloat = 1.0) {
+    init(mant: Double = 0.0,
+         expo: Double = 0.0,
+         sign: Double = 1.0,
+         expoSign: Double = 1.0) {
         mantissa = mant
         exponent = expo
         signum = sign
         exponentSignum = expoSign
     }
 
-    var value: BigFloat {
-        signum * mantissa * BigFloat.pow(10.0, exponent * exponentSignum)
+    var value: Double {
+        signum * mantissa * pow(10.0, exponent * exponentSignum)
     }
 }

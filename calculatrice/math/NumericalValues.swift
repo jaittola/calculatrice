@@ -1,5 +1,4 @@
 import Foundation
-import BigNum
 
 public let realDefaultPrecision = 7
 
@@ -95,8 +94,8 @@ class ComplexValue: NSObject {
         case .cartesian:
             return originalComponents
         case .polar:
-            let re = polarAbsolute.value * BigFloat.cos(polarArgument.value)
-            let imag = polarAbsolute.value * BigFloat.sin(polarArgument.value)
+            let re = polarAbsolute.value * cos(polarArgument.value)
+            let imag = polarAbsolute.value * sin(polarArgument.value)
             return [NumericalValue(re), NumericalValue(imag)]
         }
     }
@@ -259,34 +258,8 @@ class ComplexValue: NSObject {
         }
     }
 
-    convenience init(_ real: BigFloat,
-                     _ imaginary: BigFloat,
-                     presentationFormat: Format = .cartesian) {
-        do {
-            try self.init([NumericalValue(real),
-                           NumericalValue(imaginary)],
-                          originalFormat: .cartesian,
-                          presentationFormat: presentationFormat)
-        } catch {
-            fatalError("ComplexValue init from doubles threw an exception. This should not happen")
-        }
-    }
-
     convenience init(absolute: Double,
                      argument: Double,
-                     presentationFormat: Format = .polar) {
-        do {
-            try self.init([NumericalValue(absolute),
-                           NumericalValue(argument)],
-                          originalFormat: .polar,
-                          presentationFormat: presentationFormat)
-        } catch {
-            fatalError("ComplexValue init from polar doubles threw an exception. This should not happen")
-        }
-    }
-
-    convenience init(absolute: BigFloat,
-                     argument: BigFloat,
                      presentationFormat: Format = .polar) {
         do {
             try self.init([NumericalValue(absolute),
@@ -333,12 +306,12 @@ class ComplexValue: NSObject {
 }
 
 class NumericalValue: NSObject {
-    private(set) var value: BigFloat
+    private(set) var value: Double
     private(set) var originalStringValue: String
-    private (set) var numberFormat: ValueNumberFormat
+    private(set) var numberFormat: ValueNumberFormat
 
     var doubleValue: Double {
-        value.asDouble
+        value
     }
 
     var asComplex: ComplexValue {
@@ -350,30 +323,18 @@ class NumericalValue: NSObject {
     }
 
     init(_ doubleValue: Double,
-         numberFormat: ValueNumberFormat = .auto) {
-        self.value = BigFloat(doubleValue)
-        self.numberFormat = numberFormat
-        self.originalStringValue = ""
-    }
-
-    init(_ value: BigFloat,
-         numberFormat: ValueNumberFormat = .auto) {
-        self.value = value
-        self.numberFormat = numberFormat
-        self.originalStringValue = ""
-    }
-
-    init(_ v: BigFloat,
-         originalStringValue: String) {
-        self.value = v
-        self.numberFormat = .fromInput
-        self.originalStringValue = originalStringValue
+         originalStringValue: String? = nil,
+         numberFormat: ValueNumberFormat? = nil) {
+        self.value = doubleValue
+        self.numberFormat = numberFormat ??
+            (originalStringValue != nil ? .fromInput : .auto)
+        self.originalStringValue = originalStringValue ?? ""
     }
 
     func stringValue(precision: Int = realDefaultPrecision,
                      engDecimalPlaces: Int = realDefaultPrecision,
-                     maxAutoDecimalFormat: BigFloat = 1E7,
-                     minAutoDecimalFormat: BigFloat = 1E-4,
+                     maxAutoDecimalFormat: Double = 1E7,
+                     minAutoDecimalFormat: Double = 1E-4,
                      withSign: Bool = true) -> String {
         let absv = abs(value)
 
@@ -402,7 +363,7 @@ class NumericalValue: NSObject {
     func stringDecimalValue(precision: Int, withSign: Bool) -> String {
         let v = withSign ? doubleValue : fabs(doubleValue)
         if v.isInfinite {
-            return stringLargeNumDecimalValue(withSign: withSign)
+            return Self.infFormatted
         }
 
         let rounding = NSDecimalNumberHandler(roundingMode: .plain,
@@ -415,53 +376,14 @@ class NumericalValue: NSObject {
         return rounded.stringValue
     }
 
-    func stringLargeNumDecimalValue(withSign: Bool) -> String {
-        if value.isInfinite {
-            return "Inf"
-        }
-
-        let v = withSign ? value : abs(value)
-        var stringified = v.toString()
-
-        if stringified.hasPrefix("+") {
-            stringified.removeFirst()
-        }
-        if stringified.hasSuffix(".0") {
-            stringified.removeLast(2)
-        }
-
-        return stringified
-    }
-
     func stringEngValue(precision: Int, engDecimalPlaces: Int, withSign: Bool) -> String {
         let v = withSign ? doubleValue : fabs(doubleValue)
         if v.isInfinite {
-            return stringLargeNumEngValue(engDecimalPlaces: engDecimalPlaces, withSign: withSign)
+            return Self.infFormatted
         }
 
         let format = String(format: "%%%d.%de", precision, engDecimalPlaces)
         return String(format: format, v)
-    }
-
-    func stringLargeNumEngValue(engDecimalPlaces: Int, withSign: Bool) -> String {
-        let absv = abs(value)
-        let v = withSign ? value : absv
-
-        let logv = BigFloat.log10(absv)
-        let exponent = logv.rounded(.towardZero)
-        let significand = v / BigFloat.exp10(exponent)
-
-        let rounding = NSDecimalNumberHandler(roundingMode: .plain,
-                                              scale: Int16(engDecimalPlaces),
-                                              raiseOnExactness: false,
-                                              raiseOnOverflow: false,
-                                              raiseOnUnderflow: false,
-                                              raiseOnDivideByZero: true)
-        let roundedSignificand = NSDecimalNumber(value: significand.asDouble).rounding(accordingToBehavior: rounding)
-
-        return String(format: "%@e%.0f",
-                      roundedSignificand.stringValue,
-                      exponent.asDouble)
     }
 
     override func isEqual(_ to: (Any)?) -> Bool {
@@ -471,8 +393,10 @@ class NumericalValue: NSObject {
         return abs(value.distance(to: other.value)) < NumericalValue.epsilon
     }
 
-    static let pi = NumericalValue(BigFloat.pi)
+    static let pi = NumericalValue(Double.pi)
 
-    static let epsilon = BigFloat(0.0001) // Mostly for tests, where we use the equality operator.
-    static var epsilond: Double { epsilon.asDouble }
+    static let epsilon = 0.0001 // Mostly for tests, where we use the equality operator.
+    static var epsilond: Double { epsilon }
+
+    static let infFormatted = "Inf"
 }
