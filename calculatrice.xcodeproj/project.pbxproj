@@ -43,7 +43,6 @@
 		4FC1C0B227F1D55A00794D9E /* MathOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1C0B027F1D55A00794D9E /* MathOps.swift */; };
 		4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA884927F37B3D00E95424 /* Styles.swift */; };
 		4FCA884B27F37B3D00E95424 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA884927F37B3D00E95424 /* Styles.swift */; };
-		4FD0E1432A4BC21000156AAF /* BigNum in Frameworks */ = {isa = PBXBuildFile; productRef = 4FD0E1422A4BC21000156AAF /* BigNum */; };
 		4FD352E327F0B0980073534E /* KeypadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD352E227F0B0980073534E /* KeypadModel.swift */; };
 		4FD352E427F0B0980073534E /* KeypadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD352E227F0B0980073534E /* KeypadModel.swift */; };
 		4FD352E827F0B1C90073534E /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD352E727F0B1C90073534E /* Stack.swift */; };
@@ -97,7 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FD0E1432A4BC21000156AAF /* BigNum in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,7 +224,6 @@
 			);
 			name = calculatrice;
 			packageProductDependencies = (
-				4FD0E1422A4BC21000156AAF /* BigNum */,
 			);
 			productName = calculatrice;
 			productReference = 4F064C6B27F0314200F33E75 /* calculatrice.app */;
@@ -280,7 +277,6 @@
 			);
 			mainGroup = 4F064C6227F0314200F33E75;
 			packageReferences = (
-				4FD0E1412A4BC21000156AAF /* XCRemoteSwiftPackageReference "swift-bignum" */,
 			);
 			productRefGroup = 4F064C6C27F0314200F33E75 /* Products */;
 			projectDirPath = "";
@@ -659,25 +655,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		4FD0E1412A4BC21000156AAF /* XCRemoteSwiftPackageReference "swift-bignum" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dankogai/swift-bignum.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4FD0E1422A4BC21000156AAF /* BigNum */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4FD0E1412A4BC21000156AAF /* XCRemoteSwiftPackageReference "swift-bignum" */;
-			productName = BigNum;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4F064C6327F0314200F33E75 /* Project object */;
 }
