@@ -52,6 +52,15 @@ enum ContainedValue: Equatable {
             return r.stringValue(precision: realDefaultPrecision)
         }
     }
+
+    func duplicateForStack() -> ContainedValue {
+        switch self {
+        case .rational(let r):
+            return ContainedValue.rational(value: r.duplicateForStack())
+        default:
+            return self
+        }
+    }
 }
 
 struct Value: Identifiable, Equatable {
@@ -89,6 +98,10 @@ struct Value: Identifiable, Equatable {
 
     func withId(_ newId: Int) -> Value {
         return Value(containedValue, id: newId)
+    }
+
+    func duplicateForStack() -> Value {
+        return Value(containedValue.duplicateForStack(), id: id)
     }
 
     func stringValue(_ calculatorMode: CalculatorMode) -> String {
@@ -451,6 +464,10 @@ class RationalValue: NSObject {
         try self.init(numerator: NumericalValue(fracNumerator, numberFormat: whole.numberFormat),
                       denominator: denominator,
                       simplifyOnInitialisation: false)
+    }
+
+    func duplicateForStack() -> RationalValue {
+        self.simplified
     }
 
     var isWholeNumber: Bool {

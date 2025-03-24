@@ -34,7 +34,7 @@ class Stack: ObservableObject {
             push(Value(input.value))
             clearInput()
         } else if !content.isEmpty {
-            push(content[0])
+            push(content[0].duplicateForStack())
         }
     }
 
