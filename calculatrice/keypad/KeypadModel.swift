@@ -47,6 +47,8 @@ struct Key: Identifiable {
 
     let mainTextColor: UIColor?
 
+    let isTightLayout: Bool
+
     var id: String {
         "\(op?.symbol ?? "")_\(opMod1?.symbol ?? "")_\(opMod2?.symbol ?? "")"
     }
@@ -55,12 +57,14 @@ struct Key: Identifiable {
           opMod1: CalcOp? = nil,
           opMod2: CalcOp? = nil,
           resetModAfterClick: ResetModAfterClick = .reset,
-          mainTextColor: UIColor? = nil) {
+          mainTextColor: UIColor? = nil,
+          isTightLayout: Bool = false) {
         self.op = op
         self.opMod1 = opMod1
         self.opMod2 = opMod2
         self.resetModAfterClick = resetModAfterClick
         self.mainTextColor = mainTextColor
+        self.isTightLayout = isTightLayout
     }
 
     func activeOp(_ calculatorMode: CalculatorMode,
@@ -160,7 +164,8 @@ struct Key: Identifiable {
     static func E() -> Key {
         Key(op: .stackOp("E", { stack, _ in stack.input.E() }, "InputExponent"),
             opMod1: .calcOp("→E", ToEng(), "ScientificFormat"),
-            opMod2: .calcOp("→D", ToDecimal(), "DecimalFormat")) }
+            opMod2: .calcOp("→D", ToDecimal(), "DecimalFormat"),
+            isTightLayout: true) }
 
     static func plus() -> Key {
         Key(op: .calcOp("+", Plus(), "CalcPlus"),
@@ -198,7 +203,8 @@ struct Key: Identifiable {
     static func root() -> Key {
         Key(op: .calcOp("√x", Sqrt(), "CalcSqrt"),
             opMod1: .calcOp("³√y", Root3(), "Calc3rdRoot"),
-            opMod2: .calcOp("ˣ√y", NthRoot(), "CalcNthRoot")) }
+            opMod2: .calcOp("ˣ√y", NthRoot(), "CalcNthRoot"),
+            isTightLayout: true) }
 
     static func log() -> Key {
         Key(op: .calcOp("ln", Log(), "CalcLn"),
@@ -215,7 +221,8 @@ struct Key: Identifiable {
     static func fraction() -> Key {
         Key(op: .calcOp("ʸ⁄ₓ", RationalNumber(), "MakeRational"),
             opMod1: .calcOp("zʸ⁄ₓ", MixedRationalNumber(), "MakeMixedRational"),
-            opMod2: .calcOp("→ʸ⁄ₓ", OnlyFraction(), "DisplayAsFraction"))
+            opMod2: .calcOp("→ʸ⁄ₓ", OnlyFraction(), "DisplayAsFraction"),
+            isTightLayout: true)
     }
 
     static func numkey(_ num: Int) -> Key {

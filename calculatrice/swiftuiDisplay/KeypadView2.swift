@@ -30,6 +30,8 @@ struct KeyView2: View {
     var onPressed: (_ key: Key) -> Void
 
     var body: some View {
+        let hPadding: CGFloat = (key?.isTightLayout ?? false) ? 2 : 6
+
         ZStack {
             Styles2.keypadBackgroundColor
             Button(action: {
@@ -42,7 +44,7 @@ struct KeyView2: View {
                         Spacer()
                         Mod2Label(label: key?.opMod2?.symbol)
                     }
-                    .padding([.horizontal], 4)
+                    .padding([.horizontal], hPadding)
                     .padding([.bottom], 4)
                     Spacer()
                     MainLabel(label: key?.op?.symbol,
