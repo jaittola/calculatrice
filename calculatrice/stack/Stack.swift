@@ -189,7 +189,7 @@ class Stack: ObservableObject {
                 let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
                 resultValue = Value(result)
             } else {
-                throw CalcError.badCalculationOp
+                throw CalcError.badCalculationOp()
             }
 
             manipulateStack { _ in
@@ -248,10 +248,11 @@ protocol NumTypeConversionCalculation {
 }
 
 enum CalcError: Error {
-    case divisionByZero
-    case badInput
-    case unsupportedValueType
-    case badCalculationOp
+    case divisionByZero(msgKey: String = "ErrDivByZero")
+    case badInput(msgKey: String = "ErrBadInput")
+    case unsupportedValueType(msgKey: String = "ErrUnsupportedValueType")
+    case badCalculationOp(msgKey: String = "ErrBadCalculationOp")
+    case nonIntegerInputToRational(msgKey: String =  "ErrNonIntegerInputToRational")
 }
 
 enum ValueNumberFormat {

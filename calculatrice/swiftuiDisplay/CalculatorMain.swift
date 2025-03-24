@@ -27,14 +27,14 @@ struct CalculatorMain: View {
         }
         .preferredColorScheme(.light)
         .background(Styles2.windowBackgroundColor)
-        .alert("Error",
+        .alert(LocalizedStringKey("Error"),
                isPresented: $calcErrorOccurred,
                presenting: calcError) {
             _ in Button(role: .cancel,
                         action: { calcErrorOccurred = false },
                         label: { Text("Ok") })
         } message: { details in
-            Text(errorMessage(for: details))
+            Text(LocalizedStringKey(errorMessage(for: details)))
         }
         .sheet(isPresented: $showingHelp) {
             HelpView(keypadModel: keypadModel)
@@ -56,14 +56,15 @@ struct CalculatorMain: View {
     }
 
     private func errorMessage(for details: any Error) -> String {
-        // TODO, improve the error codes and messages
         switch details {
-        case CalcError.divisionByZero:
-            return "Division by zero"
-        case CalcError.unsupportedValueType:
-            return "This calculation cannot be performed with the provided input values."
+        case CalcError.divisionByZero(let msgKey),
+            CalcError.badInput(let msgKey),
+            CalcError.unsupportedValueType(let msgKey),
+            CalcError.badCalculationOp(let msgKey),
+            CalcError.nonIntegerInputToRational(let msgKey):
+            return msgKey
         default:
-            return "Bad calculation"
+            return "ErrBadCalculationOp"
         }
     }
 

@@ -54,7 +54,7 @@ class Div: Calculation, RealCalculation, ComplexCalculation {
     func calculate(_ inputs: [NumericalValue],
                    _ calculatorMode: CalculatorMode) throws -> NumericalValue {
         if inputs[1].value == 0 {
-            throw CalcError.divisionByZero
+            throw CalcError.divisionByZero()
         }
         let result = inputs[0].value / inputs[1].value
         return NumericalValue(result)
@@ -63,7 +63,7 @@ class Div: Calculation, RealCalculation, ComplexCalculation {
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
 
         if inputs[1].polarAbsolute.value == 0 {
-            throw CalcError.divisionByZero
+            throw CalcError.divisionByZero()
         }
 
         let r = inputs[0].polarAbsolute.value / inputs[1].polarAbsolute.value
@@ -285,7 +285,7 @@ class ImaginaryNumber: Calculation, ComplexCalculation {
         if let inputAsReal = inputAsReal {
             return ComplexValue(0, inputAsReal.value, presentationFormat: .cartesian)
         } else {
-            throw CalcError.unsupportedValueType
+            throw CalcError.unsupportedValueType()
         }
     }
 }

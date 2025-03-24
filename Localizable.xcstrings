@@ -498,6 +498,74 @@
         }
       }
     },
+    "ErrBadCalculationOp" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculation failed"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laskutoimituksessa tapahtui virhe"
+          }
+        }
+      }
+    },
+    "ErrBadInput" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid input"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virheellinen syöte"
+          }
+        }
+      }
+    },
+    "ErrDivByZero" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Division by zero"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jakaja on nolla"
+          }
+        }
+      }
+    },
+    "ErrNonIntegerInputToRational" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You must use whole numbers with fractions"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Murtoluvuissa pitää käyttää kokonaislukuja"
+          }
+        }
+      }
+    },
     "Error" : {
       "localizations" : {
         "en" : {
@@ -510,6 +578,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tapahtui virhe"
+          }
+        }
+      }
+    },
+    "ErrUnsupportedValueType" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This calculation cannot be performed with the provided input values."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Arvoa ei voi käyttää tässä laskutoimituksessa"
           }
         }
       }
@@ -829,7 +914,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Muunna kompleksiluku reaali- ja imaginaarimuotoon"
           }
         }
@@ -846,7 +931,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Muunna kompleksiluku napakoordinaatistoesitykseen"
           }
         }
