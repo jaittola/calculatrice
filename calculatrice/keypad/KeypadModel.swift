@@ -212,6 +212,12 @@ struct Key: Identifiable {
             opMod1: .calcOp("y∠x", ComplexPolar(), "MakePolarComplex"),
             opMod2: .calcOp("xi", ImaginaryNumber(), "MakeImaginary")) }
 
+    static func fraction() -> Key {
+        Key(op: .calcOp("ʸ⁄ₓ", RationalNumber(), "MakeRational"),
+            opMod1: .calcOp("zʸ⁄ₓ", MixedRationalNumber(), "MakeMixedRational"),
+            opMod2: .calcOp("→ʸ⁄ₓ", OnlyFraction(), "DisplayAsFraction"))
+    }
+
     static func numkey(_ num: Int) -> Key {
         return Key(op: .stackOp(String(num), { stack, _ in stack.input.addNum(num) }))
     }
@@ -258,7 +264,7 @@ struct BasicKeypadModel: KeypadModel {
         KeyRow(keys: [ Key.pow(), Key.root(), Key.log(),
                        Key.lg(), Key.inv() ]),
         KeyRow(keys: [ Key.sin(), Key.cos(), Key.tan(),
-                       Key.empty(), Key.complex() ]),
+                       Key.fraction(), Key.complex() ]),
         KeyRow(keys: [ Key.mod1(), Key.mod2(), Key.angleMode(),
                        Key.swap(), Key.backspace() ]),
         KeyRow(keys: [ Key.seven(), Key.eight(), Key.nine(),

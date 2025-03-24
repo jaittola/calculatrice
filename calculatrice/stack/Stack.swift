@@ -164,11 +164,14 @@ class Stack: ObservableObject {
 
         let complexInputs = inputs.map { v in v.asComplex }
         let inputsAsReal = inputs.compactMap { n in n.asNum }
+        let inputsAsRational = inputs.compactMap { r in r.asRational }
 
         let allInputsReal = inputsAsReal.count == inputs.count
+        let allInputsRational = inputsAsRational.count == inputs.count
 
         let realCalc = calc as? RealCalculation
         let complexCalc = calc as? ComplexCalculation
+        let ratCalc = calc as? RationalCalculation
 
         let preferComplexCalc = (allInputsReal &&
                                  (complexCalc?.preferComplexCalculationWith(thisInput: inputsAsReal) ??
@@ -177,7 +180,10 @@ class Stack: ObservableObject {
         do {
             let resultValue: Value
 
-            if let realCalc = realCalc,
+            if let ratCalc = ratCalc, allInputsRational {
+                let result = try ratCalc.calcRational(inputsAsRational, calculatorMode)
+                resultValue = Value(result)
+            } else if let realCalc = realCalc,
                 allInputsReal,
                !preferComplexCalc {
                 let result = try realCalc.calculate(inputsAsReal, calculatorMode)
@@ -245,6 +251,11 @@ extension ComplexCalculation {
 protocol NumTypeConversionCalculation {
     func convert(_ inputs: [NumericalValue],
                  _ calculatorMode: CalculatorMode) throws -> Value
+}
+
+protocol RationalCalculation {
+    func calcRational(_ inputs: [RationalValue],
+                      _ calculatorMode: CalculatorMode) throws -> RationalValue
 }
 
 enum CalcError: Error {

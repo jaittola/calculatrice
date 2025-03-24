@@ -1,6 +1,6 @@
 import Foundation
 
-class Plus: Calculation, ComplexCalculation {
+class Plus: Calculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 2
 
     func calcComplex(_ inputs: [ComplexValue],
@@ -13,9 +13,16 @@ class Plus: Calculation, ComplexCalculation {
             throw error
         }
     }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        let (v1, v2) = try Utils.expandFractions(inputs[0], inputs[1])
+        return try RationalValue(v1.numerator.doubleValue + v2.numerator.doubleValue,
+                                 v1.denominator.doubleValue)
+    }
+
 }
 
-class Minus: Calculation, ComplexCalculation {
+class Minus: Calculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 2
 
     func calcComplex(_ inputs: [ComplexValue],
@@ -28,10 +35,17 @@ class Minus: Calculation, ComplexCalculation {
             throw error
         }
     }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        let (v1, v2) = try Utils.expandFractions(inputs[0], inputs[1])
+        return try RationalValue(v1.numerator.doubleValue - v2.numerator.doubleValue,
+                                 v1.denominator.doubleValue)
+    }
 }
 
-class Mult: Calculation, RealCalculation, ComplexCalculation {
+class Mult: Calculation, RealCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 2
+
     func calculate(_ inputs: [NumericalValue],
                    _ calculatorMode: CalculatorMode) -> NumericalValue {
         let result = inputs[0].value * inputs[1].value
@@ -47,10 +61,19 @@ class Mult: Calculation, RealCalculation, ComplexCalculation {
                             argument: arg,
                             presentationFormat: inputs[0].presentationFormat)
     }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        let v1 = inputs[0]
+        let v2 = inputs[1]
+
+        return try RationalValue(v1.numerator.doubleValue * v2.numerator.doubleValue,
+                             v1.denominator.doubleValue * v2.denominator.doubleValue)
+    }
 }
 
-class Div: Calculation, RealCalculation, ComplexCalculation {
+class Div: Calculation, RealCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 2
+
     func calculate(_ inputs: [NumericalValue],
                    _ calculatorMode: CalculatorMode) throws -> NumericalValue {
         if inputs[1].value == 0 {
@@ -73,9 +96,21 @@ class Div: Calculation, RealCalculation, ComplexCalculation {
                             argument: arg,
                             presentationFormat: inputs[0].presentationFormat)
     }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        let v1 = inputs[0]
+        let v2 = inputs[1]
+
+        if v2.numerator.doubleValue == 0 {
+            throw CalcError.divisionByZero()
+        }
+
+        return try RationalValue(v1.numerator.doubleValue * v2.denominator.doubleValue,
+                                 v1.denominator.doubleValue * v2.numerator.doubleValue)
+    }
 }
 
-class Neg: Calculation, RealCalculation, ComplexCalculation {
+class Neg: Calculation, RealCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [NumericalValue],
                    _ calculatorMode: CalculatorMode) -> NumericalValue {
@@ -85,6 +120,12 @@ class Neg: Calculation, RealCalculation, ComplexCalculation {
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
         return Mult().calcComplex([inputs[0], ComplexValue(-1.0, 0)], calculatorMode)
+    }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        let v = inputs[0]
+        return try RationalValue(-1 * v.numerator.doubleValue,
+                              v.denominator.doubleValue)
     }
 }
 
@@ -234,7 +275,7 @@ class ATan: Calculation, RealCalculation, ComplexCalculation {
     }
 }
 
-class Inv: Calculation, RealCalculation, ComplexCalculation {
+class Inv: Calculation, RealCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) -> NumericalValue {
         let input = inputs[0].value
@@ -255,6 +296,17 @@ class Inv: Calculation, RealCalculation, ComplexCalculation {
         return ComplexValue(absolute: absolute,
                             argument: argument,
                             presentationFormat: inputs[0].presentationFormat)
+    }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        let v1 = inputs[0]
+
+        if v1.denominator.value == 0 {
+            throw CalcError.badCalculationOp()
+        }
+
+        return try RationalValue(v1.denominator.doubleValue,
+                                 v1.numerator.doubleValue)
     }
 }
 
@@ -287,6 +339,34 @@ class ImaginaryNumber: Calculation, ComplexCalculation {
         } else {
             throw CalcError.unsupportedValueType()
         }
+    }
+}
+
+class RationalNumber: Calculation, NumTypeConversionCalculation {
+    var arity: Int = 2
+
+    func convert(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) throws -> Value {
+        Value(try RationalValue(numerator: inputs[0],
+                                denominator: inputs[1],
+                                simplifyOnInitialisation: false))
+    }
+}
+
+class MixedRationalNumber: Calculation, NumTypeConversionCalculation {
+    var arity: Int = 3
+
+    func convert(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) throws -> Value {
+        Value(try RationalValue(whole: inputs[0],
+                                numerator: inputs[1],
+                                denominator: inputs[2]))
+    }
+}
+
+class OnlyFraction: Calculation, RationalCalculation {
+    var arity: Int = 1
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) -> RationalValue {
+        inputs[0].fracOnly
     }
 }
 
@@ -587,5 +667,63 @@ class Utils {
             result += diff
         }
         return result
+    }
+
+    static func expandFractions(_ v1: RationalValue, _ v2: RationalValue) throws -> (RationalValue, RationalValue) {
+        let simplifiedV1 = try simplifyFraction(v1)
+        let simplifiedV2 = try simplifyFraction(v2)
+
+        if simplifiedV1.denominator.value == simplifiedV2.denominator.value {
+            return (simplifiedV1, simplifiedV2)
+        }
+
+        let newV1 = try RationalValue(simplifiedV1.numerator.doubleValue * simplifiedV2.denominator.doubleValue,
+                                      simplifiedV1.denominator.doubleValue * simplifiedV2.denominator.doubleValue,
+                                      simplifyOnInitialisation: false)
+        let newV2 = try RationalValue(simplifiedV2.numerator.doubleValue * simplifiedV1.denominator.doubleValue,
+                                      simplifiedV2.denominator.doubleValue * simplifiedV1.denominator.doubleValue,
+                                      simplifyOnInitialisation: false)
+
+        return (newV1, newV2)
+    }
+
+    static func simplifyFraction(_ v: RationalValue) throws -> RationalValue {
+        let (num, den) = try simplifyFractionComponents(v.numerator.doubleValue,
+                                                        v.denominator.doubleValue)
+        return try RationalValue(num, den)
+    }
+
+    static func simplifyFractionComponents(_ numerator: Double,
+                                           _ denominator: Double) throws -> (Double, Double) {
+        let absNum = abs(numerator)
+        let absDen = abs(denominator)
+
+        let common = try gcd(absNum, absDen)
+        if common == 1 {
+            return (numerator, absDen)
+        } else {
+            let dc = Double(common)
+            return (numerator / dc, absDen / dc)
+        }
+    }
+
+    static func gcd(_ xf: Double, _ yf: Double) throws -> Int64 {
+        let x = Int64(exactly: xf)
+        let y = Int64(exactly: yf)
+
+        guard let x = x, let y = y else {
+            throw CalcError.badInput()
+        }
+
+        var a: Int64 = 0
+        var b = max(x, y)
+        var r = min(x, y)
+
+        while r != 0 {
+            a = b
+            b = r
+            r = a % b
+        }
+        return b
     }
 }

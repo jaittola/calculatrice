@@ -251,6 +251,64 @@ class TestStack: XCTestCase {
                        [[], [3], [2, 3], [5, 2, 3], [2, 5, 3], [5, 2, 3]])
     }
 
+    func testCalcRational() {
+        let s = Stack()
+
+        assertNoThrow {
+            s.push(Value(try RationalValue(1, 2)))
+            s.push(Value(try RationalValue(1, 4)))
+
+            try s.calculate(Plus(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content.count, 1)
+
+        let result = s.content[0].asRational
+
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.numerator.doubleValue, 3)
+        XCTAssertEqual(result?.denominator.doubleValue, 4)
+    }
+
+    func testCalcIntegerWithRational() {
+        let s = Stack()
+
+        assertNoThrow {
+            s.push(Value(NumericalValue(2)))
+            s.push(Value(try RationalValue(1, 3)))
+
+            try s.calculate(Minus(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content.count, 1)
+
+        let result = s.content[0].asRational
+
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.numerator.doubleValue, 5)
+        XCTAssertEqual(result?.denominator.doubleValue, 3)
+    }
+
+    func testCalcRealWithRational() {
+        let s = Stack()
+
+        assertNoThrow {
+            s.push(Value(NumericalValue(2.21)))
+            s.push(Value(try RationalValue(2, 3)))
+
+            try s.calculate(Minus(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content.count, 1)
+
+        let result = s.content[0]
+        XCTAssertNotNil(result)
+        XCTAssertNil(result.asRational)
+
+        XCTAssertEqual(result.asNum!.doubleValue, 1.54333333,
+                       accuracy: NumericalValue.epsilon)
+    }
+
     private func threeValueStack() -> Stack {
         let s = Stack()
 
