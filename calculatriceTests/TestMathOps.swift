@@ -370,33 +370,33 @@ class TestMathOps: XCTestCase {
 
     func testComplexCartesian() {
         let result = assertNoThrow {
-            try Complex().calcToComplex([num(1), num(2)],
+            try Complex().convert([num(1), num(2)],
                                         self.calculatorMode)
         }
-        XCTAssertEqual(result, complex(1, 2))
+        XCTAssertEqual(result?.asComplex, complex(1, 2))
     }
 
     func testComplexCartesian2() {
         let result = assertNoThrow {
-            try Complex().calcToComplex([num(1), num(-2)],
+            try Complex().convert([num(1), num(-2)],
                                         self.calculatorMode)
         }
-        XCTAssertEqual(result, complex(1, -2))
+        XCTAssertEqual(result?.asComplex, complex(1, -2))
     }
 
     func testComplexPolar() {
-        let result = ComplexPolar().calcToComplex([num(2), num(45)],
+        let result = ComplexPolar().convert([num(2), num(45)],
                                                    self.calculatorMode)
-        XCTAssertEqual(result, complex(sqrt(2), sqrt(2)))
+        XCTAssertEqual(result.asComplex, complex(sqrt(2), sqrt(2)))
     }
 
     func testComplexPolarRad() {
         let calculatorModeRad = CalculatorMode()
         calculatorModeRad.swapAngle()
         XCTAssertEqual(calculatorModeRad.angle, .Rad)
-        let result = ComplexPolar().calcToComplex([num(2), num(Double.pi / 4.0)],
+        let result = ComplexPolar().convert([num(2), num(Double.pi / 4.0)],
                                                   calculatorModeRad)
-        XCTAssertEqual(result, complex(sqrt(2), sqrt(2)))
+        XCTAssertEqual(result.asComplex, complex(sqrt(2), sqrt(2)))
     }
 
     func testComplexInv() {

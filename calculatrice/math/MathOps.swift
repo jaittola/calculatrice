@@ -258,21 +258,21 @@ class Inv: Calculation, RealCalculation, ComplexCalculation {
     }
 }
 
-class Complex: Calculation, RealToComplexCalculation {
+class Complex: Calculation, NumTypeConversionCalculation {
     let arity: Int = 2
 
-    func calcToComplex(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
-        return ComplexValue(inputs[0].value, inputs[1].value)
+    func convert(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) throws -> Value {
+        return Value(ComplexValue(inputs[0].value, inputs[1].value))
     }
 }
 
-class ComplexPolar: Calculation, RealToComplexCalculation {
+class ComplexPolar: Calculation, NumTypeConversionCalculation {
     let arity: Int = 2
 
-    func calcToComplex(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func convert(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) -> Value {
         let argument = Utils.deg2Rad([inputs[1]], calculatorMode)[0]
-        return ComplexValue(absolute: inputs[0].value,
-                            argument: argument)
+        return Value(ComplexValue(absolute: inputs[0].value,
+                                  argument: argument))
     }
 }
 

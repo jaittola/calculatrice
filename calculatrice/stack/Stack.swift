@@ -182,9 +182,9 @@ class Stack: ObservableObject {
                !preferComplexCalc {
                 let result = try realCalc.calculate(inputsAsReal, calculatorMode)
                 resultValue = Value(result)
-            } else if let realToComplexCalc = calc as? RealToComplexCalculation, allInputsReal {
-                let result = try realToComplexCalc.calcToComplex(inputsAsReal, calculatorMode)
-                resultValue = Value(result)
+            } else if let conversionCalc = calc as? NumTypeConversionCalculation, allInputsReal {
+                resultValue = try conversionCalc.convert(inputsAsReal,
+                                                         calculatorMode)
             } else if let complexCalc = complexCalc {
                 let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
                 resultValue = Value(result)
@@ -242,9 +242,9 @@ extension ComplexCalculation {
     }
 }
 
-protocol RealToComplexCalculation {
-    func calcToComplex(_ inputs: [NumericalValue],
-                       _ calculatorMode: CalculatorMode) throws -> ComplexValue
+protocol NumTypeConversionCalculation {
+    func convert(_ inputs: [NumericalValue],
+                 _ calculatorMode: CalculatorMode) throws -> Value
 }
 
 enum CalcError: Error {
