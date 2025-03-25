@@ -759,6 +759,12 @@
             "state" : "translated",
             "value" : "Create a fraction from a whole part and a fractional part"
           }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luo murtoluku kokonais- ja murto-osista"
+          }
         }
       }
     },
@@ -785,7 +791,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Construct a fraction"
+            "value" : "Create a fraction"
           }
         },
         "fi" : {
