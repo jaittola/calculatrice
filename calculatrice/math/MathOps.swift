@@ -348,7 +348,7 @@ class RationalNumber: Calculation, NumTypeConversionCalculation {
     func convert(_ inputs: [NumericalValue], _ calculatorMode: CalculatorMode) throws -> Value {
         Value(try RationalValue(numerator: inputs[0],
                                 denominator: inputs[1],
-                                simplifyOnInitialisation: false))
+                                simplifyOnInitialisation: true))
     }
 }
 
