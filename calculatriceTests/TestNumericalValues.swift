@@ -45,6 +45,19 @@ class TestNumericalValues: XCTestCase {
         XCTAssertEqual(v2.id, 4)
     }
 
+    func testEquality() {
+        let v1 = NumericalValue(1.2)
+        let v2 = NumericalValue(1.2)
+        let v3 = NumericalValue(1.3)
+        let v4 = Value(v1)
+
+        XCTAssertTrue(v1.isEqual(v1))
+        XCTAssertTrue(v1.isEqual(v2))
+
+        XCTAssertFalse(v1.isEqual(v3))
+        XCTAssertFalse(v1.isEqual(v4))
+    }
+
     func testPositiveComplexNumberString() {
         let c = ComplexValue(3.0, 2.0)
         XCTAssertEqual(c.stringValue(), "3 + 2i")

@@ -120,6 +120,7 @@ protocol Num {
     var isWholeNumber: Bool { get }
     var description: String { get }
     func stringValue(precision: Int) -> String
+    func isEqual(_ to: Any?) -> Bool
 }
 
 class NumericalValue: NSObject, Num {
@@ -217,10 +218,10 @@ class NumericalValue: NSObject, Num {
     }
 
     override func isEqual(_ to: (Any)?) -> Bool {
-        guard let other = to as? NumericalValue else {
+        guard let other = to as? Num else {
             return false
         }
-        return abs(value.distance(to: other.value)) < NumericalValue.epsilon
+        return abs(doubleValue.distance(to: other.doubleValue)) < NumericalValue.epsilon
     }
 
     static let pi = NumericalValue(Double.pi)

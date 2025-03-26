@@ -119,4 +119,24 @@ class TestNumericalValuesRational: XCTestCase {
 
         XCTAssertEqual("7/3", fractionalised.stringValue())
     }
+
+    func testEquality() {
+        let v1 = assertNoThrow { try RationalValue(-2, 4) }!
+        let v2 = assertNoThrow { try RationalValue(-1, 2) }!
+        let v3 = NumericalValue(-0.5)
+
+        let v4 = assertNoThrow { try RationalValue(-1, 3) }!
+        let v5 = NumericalValue(1.3)
+        let v6 = Value(v1)
+
+        XCTAssertTrue(v1.isEqual(v1))
+        XCTAssertTrue(v1.isEqual(v2))
+        XCTAssertTrue(v1.isEqual(v3), "v1 == v3 (\(v1) == \(v3))")
+        XCTAssertTrue(v3.isEqual(v1), "v3 == v1 (\(v3) == \(v1))")
+
+        XCTAssertFalse(v1.isEqual(v4))
+        XCTAssertFalse(v1.isEqual(v5))
+        XCTAssertFalse(v1.isEqual(v6))
+    }
+
 }

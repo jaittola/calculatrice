@@ -136,15 +136,17 @@ class RationalValue: NSObject, Num {
     }
 
     override func isEqual(_ to: Any?) -> Bool {
-        guard let other = to as? RationalValue else {
+        if let other = to as? RationalValue {
+            let selfSimplified = self.simplified
+            let otherSimplified = other.simplified
+
+            return selfSimplified.numerator == otherSimplified.numerator &&
+            selfSimplified.denominator == otherSimplified.denominator
+        } else if let other = to as? Num {
+            return NumericalValue(doubleValue).isEqual(other)
+        } else {
             return false
         }
-
-        let selfSimplified = self.simplified
-        let otherSimplified = other.simplified
-
-        return selfSimplified.numerator == otherSimplified.numerator &&
-        selfSimplified.denominator == otherSimplified.denominator
     }
 
     static func == (lhs: RationalValue, rhs: RationalValue) -> Bool {
