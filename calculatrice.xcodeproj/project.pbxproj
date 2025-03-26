@@ -17,6 +17,8 @@
 		4F0AC5152A41A42B00BA68D0 /* KeypadView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0AC5142A41A42B00BA68D0 /* KeypadView2.swift */; };
 		4F1B3BD22D93E4860022110D /* ComplexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B3BD12D93E4810022110D /* ComplexValue.swift */; };
 		4F1B3BD32D93E4860022110D /* ComplexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B3BD12D93E4810022110D /* ComplexValue.swift */; };
+		4F1B3BD52D93E51F0022110D /* RationalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B3BD42D93E51C0022110D /* RationalValue.swift */; };
+		4F1B3BD62D93E51F0022110D /* RationalValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B3BD42D93E51C0022110D /* RationalValue.swift */; };
 		4F256BBC27F20B1400123DA8 /* NumericalValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* NumericalValues.swift */; };
 		4F256BBD27F20B1400123DA8 /* NumericalValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F256BBB27F20B1400123DA8 /* NumericalValues.swift */; };
 		4F337DC82A4188EC0021CAE0 /* CalculatorMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */; };
@@ -78,6 +80,7 @@
 		4F0AC5122A41A42100BA68D0 /* InputDisplay2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDisplay2.swift; sourceTree = "<group>"; };
 		4F0AC5142A41A42B00BA68D0 /* KeypadView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypadView2.swift; sourceTree = "<group>"; };
 		4F1B3BD12D93E4810022110D /* ComplexValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexValue.swift; sourceTree = "<group>"; };
+		4F1B3BD42D93E51C0022110D /* RationalValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RationalValue.swift; sourceTree = "<group>"; };
 		4F256BBB27F20B1400123DA8 /* NumericalValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericalValues.swift; sourceTree = "<group>"; };
 		4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorMain.swift; sourceTree = "<group>"; };
 		4F337DCA2A4189210021CAE0 /* CalculatorViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewController2.swift; sourceTree = "<group>"; };
@@ -191,6 +194,7 @@
 		4FC1C0AF27F1D52B00794D9E /* math */ = {
 			isa = PBXGroup;
 			children = (
+				4F1B3BD42D93E51C0022110D /* RationalValue.swift */,
 				4F1B3BD12D93E4810022110D /* ComplexValue.swift */,
 				4FC1C0B027F1D55A00794D9E /* MathOps.swift */,
 				4F256BBB27F20B1400123DA8 /* NumericalValues.swift */,
@@ -361,6 +365,7 @@
 				4F0AC5152A41A42B00BA68D0 /* KeypadView2.swift in Sources */,
 				4F0AC50F2A41A3DF00BA68D0 /* StatusRow2.swift in Sources */,
 				4F337DC82A4188EC0021CAE0 /* CalculatorMain.swift in Sources */,
+				4F1B3BD52D93E51F0022110D /* RationalValue.swift in Sources */,
 				4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */,
 				4FD352EC27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4FD352E327F0B0980073534E /* KeypadModel.swift in Sources */,
@@ -386,6 +391,7 @@
 				4F483DD129FE6E0F00A34E28 /* TestNumberInput.swift in Sources */,
 				4FB536622AE3EFD1008EC8BD /* HelpView.swift in Sources */,
 				4FBE9E242A44784200E3BA7F /* StackDisplay2.swift in Sources */,
+				4F1B3BD62D93E51F0022110D /* RationalValue.swift in Sources */,
 				4FBE9E272A44785D00E3BA7F /* KeypadView2.swift in Sources */,
 				4F3C51412A495FB1006366EF /* TestStack.swift in Sources */,
 				4FBFC06F27F32F7600DAB444 /* CalculatorMode.swift in Sources */,
