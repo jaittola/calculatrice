@@ -1,9 +1,5 @@
 import Foundation
 
-enum ValueError: Error {
-    case invalidDimension
-}
-
 class ComplexValue: NSObject {
     enum Format {
         case polar
@@ -153,7 +149,7 @@ class ComplexValue: NSObject {
          originalFormat: Format,
          presentationFormat: Format) throws {
         if components.count != 2 {
-            throw ValueError.invalidDimension
+            throw CalcError.invalidComplexDimension()
         }
 
         self.originalComponents = components

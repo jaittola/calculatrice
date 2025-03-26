@@ -566,6 +566,23 @@
         }
       }
     },
+    "ErrInvalidComplexDimension" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating a complex number requires two values"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kompleksilukuun tarvitaan kaksi komponenttia"
+          }
+        }
+      }
+    },
     "ErrNonIntegerInputToRational" : {
       "extractionState" : "manual",
       "localizations" : {
