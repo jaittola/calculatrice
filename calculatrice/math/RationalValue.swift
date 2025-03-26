@@ -1,6 +1,6 @@
 import Foundation
 
-class RationalValue: NSObject {
+class RationalValue: NSObject, Num {
     enum DisplayFormat {
         case mixed
         case fractionalOnly
@@ -19,6 +19,8 @@ class RationalValue: NSObject {
     var asComplex: ComplexValue {
         ComplexValue(realValue: NumericalValue(doubleValue))
     }
+
+    var asRational: RationalValue? { self }
 
     var wholePart: Double {
         modf(numerator.doubleValue / denominator.doubleValue).0

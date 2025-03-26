@@ -10,8 +10,8 @@ class TestNumericalValues: XCTestCase {
     func testWithId() {
         let v1 = Value(NumericalValue(1.2))
         let v2 = v1.withId(4)
-        let v1r = v1.asNum!
-        let v2r = v2.asNum!
+        let v1r = v1.asNumericalValue!
+        let v2r = v2.asNumericalValue!
         XCTAssertEqual(v1r, v2r)
         XCTAssertEqual(v1r.stringValue(), v2r.stringValue())
         XCTAssertEqual(v1r.numberFormat,
@@ -24,8 +24,8 @@ class TestNumericalValues: XCTestCase {
                                       originalStringValue: "My weird number format"),
                        id: 3)
         let v2 = v1.withId(4)
-        let v1r = v1.asNum!
-        let v2r = v2.asNum!
+        let v1r = v1.asNumericalValue!
+        let v2r = v2.asNumericalValue!
         XCTAssertEqual(v1r.doubleValue, v2r.doubleValue)
         XCTAssertEqual(v2r.stringValue(), "My weird number format")
         XCTAssertEqual(v1r.numberFormat,
@@ -36,8 +36,8 @@ class TestNumericalValues: XCTestCase {
     func testWithIdAndEngNumberFormat() {
         let v1 = Value(NumericalValue(1.2, numberFormat: .eng), id: 99)
         let v2 = v1.withId(4)
-        let v1r = v1.asNum!
-        let v2r = v2.asNum!
+        let v1r = v1.asNumericalValue!
+        let v2r = v2.asNumericalValue!
         XCTAssertEqual(v1r.doubleValue, v2r.doubleValue)
         XCTAssertEqual(v2r.stringValue(), "1.2000000e+00")
         XCTAssertEqual(v1r.numberFormat,

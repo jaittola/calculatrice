@@ -163,7 +163,7 @@ class Stack: ObservableObject {
         let inputs = calcParams.calcInputs
 
         let complexInputs = inputs.map { v in v.asComplex }
-        let inputsAsReal = inputs.compactMap { n in n.asNum }
+        let inputsAsReal = inputs.compactMap { n in n.asNumericalValue }
         let inputsAsRational = inputs.compactMap { r in r.asRational }
 
         let allInputsReal = inputsAsReal.count == inputs.count

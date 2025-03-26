@@ -71,7 +71,7 @@ struct Value: Identifiable, Equatable {
         containedValue.asComplex
     }
 
-    var asNum: NumericalValue? {
+    var asNumericalValue: NumericalValue? {
         containedValue.asReal
     }
 
@@ -113,8 +113,16 @@ struct Value: Identifiable, Equatable {
     }
 }
 
+protocol Num {
+    var doubleValue: Double { get }
+    var asComplex: ComplexValue { get }
+    var asRational: RationalValue? { get }
+    var isWholeNumber: Bool { get }
+    var description: String { get }
+    func stringValue(precision: Int) -> String
+}
 
-class NumericalValue: NSObject {
+class NumericalValue: NSObject, Num {
     private(set) var value: Double
     private(set) var originalStringValue: String
     private(set) var numberFormat: ValueNumberFormat
@@ -175,6 +183,11 @@ class NumericalValue: NSObject {
                                   engDecimalPlaces: engDecimalPlaces,
                                   withSign: withSign)
         }
+    }
+
+    func stringValue(precision: Int) -> String {
+        stringValue(precision: precision,
+                    engDecimalPlaces: precision)
     }
 
     func stringDecimalValue(precision: Int, withSign: Bool) -> String {
