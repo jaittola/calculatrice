@@ -8,25 +8,25 @@ class ComplexValue: NSObject {
 
     let dimensions = [2]
 
-    let originalComponents: [NumericalValue]
+    let originalComponents: [Num]
     let originalFormat: Format
     let presentationFormat: Format
 
-    var cartesian: [NumericalValue] {
+    var cartesian: [Num] {
         switch originalFormat {
         case .cartesian:
             return originalComponents
         case .polar:
-            let re = polarAbsolute.value * cos(polarArgument.value)
-            let imag = polarAbsolute.value * sin(polarArgument.value)
+            let re = polarAbsolute.floatingPoint * cos(polarArgument.floatingPoint)
+            let imag = polarAbsolute.floatingPoint * sin(polarArgument.floatingPoint)
             return [NumericalValue(re), NumericalValue(imag)]
         }
     }
 
-    var real: NumericalValue { cartesian[0] }
-    var imag: NumericalValue { cartesian[1] }
+    var real: Num { cartesian[0] }
+    var imag: Num { cartesian[1] }
 
-    var polarAbsolute: NumericalValue {
+    var polarAbsolute: Num {
         switch originalFormat {
         case .cartesian:
             let r = sqrt(pow(real.floatingPoint, 2) + pow(imag.floatingPoint, 2))
@@ -36,7 +36,7 @@ class ComplexValue: NSObject {
         }
     }
 
-    var polarArgument: NumericalValue {
+    var polarArgument: Num {
         switch originalFormat {
         case .cartesian:
             let x = real.floatingPoint
@@ -57,8 +57,8 @@ class ComplexValue: NSObject {
         }
     }
 
-    var asReal: NumericalValue? {
-        cartesian[1].floatingPoint == 0 ? cartesian[0] : nil
+    var asReal: Num? {
+        cartesian[1].floatingPoint == 0 ? cartesian[0].asNumericalValue : nil
     }
 
     var isNan: Bool {
@@ -84,7 +84,7 @@ class ComplexValue: NSObject {
         }
 
         let realPart = (cart[0].floatingPoint != 0 ?
-                        cart[0].stringValue(precision: precision)
+                        cart[0].stringValue(precision: precision, withSign: true)
                         : "")
         var plusminus = ""
         var imaginaryPart = ""
@@ -124,7 +124,7 @@ class ComplexValue: NSObject {
             return "0"
         }
 
-        let absPart = polarAbs.stringValue(precision: precision)
+        let absPart = polarAbs.stringValue(precision: precision, withSign: false)
         let argPart: String
         let angleUnitS: String
 
@@ -134,7 +134,7 @@ class ComplexValue: NSObject {
             argPart = argDeg.stringValue(precision: precision)
             angleUnitS = "°"
         case .Rad:
-            argPart = polarArg.stringValue(precision: precision)
+            argPart = polarArg.stringValue(precision: precision, withSign: true)
             angleUnitS = ""
         }
 
@@ -145,7 +145,7 @@ class ComplexValue: NSObject {
         return "ComplexValue (\(stringValue(precision: realDefaultPrecision))"
     }
 
-    init(_ components: [NumericalValue],
+    init(_ components: [Num],
          originalFormat: Format,
          presentationFormat: Format) throws {
         if components.count != 2 {
@@ -157,10 +157,11 @@ class ComplexValue: NSObject {
         self.presentationFormat = presentationFormat
     }
 
-    convenience init(realValue: NumericalValue) {
+    convenience init(realValue: Num = NumericalValue(0),
+                     imagValue: Num = NumericalValue(0)) {
         do {
             try self.init([realValue,
-                           NumericalValue(Double(0))],
+                           imagValue],
                           originalFormat: .cartesian,
                           presentationFormat: .cartesian)
         } catch {
@@ -194,15 +195,30 @@ class ComplexValue: NSObject {
         }
     }
 
+    convenience init(absolute: Num,
+                     argument: Num,
+                     presentationFormat: Format = .polar) {
+        do {
+            try self.init([absolute,
+                           argument],
+                          originalFormat: .polar,
+                          presentationFormat: presentationFormat)
+        } catch {
+            fatalError("ComplexValue init from polar doubles threw an exception. This should not happen")
+        }
+    }
+
     convenience init(_ v: ComplexValue,
                      numberFormat: ValueNumberFormat? = nil,
                      presentationFormat: Format) {
         do {
-            let nf = numberFormat ?? v.originalComponents[0].numberFormat
+            let nf = numberFormat ??
+            (v.originalComponents[0] as? NumericalValue)?.numberFormat
 
-            try self.init([NumericalValue(v.originalComponents[0].value,
+            // TODO, don't initialize with floating points, consider rationals, too
+            try self.init([NumericalValue(v.originalComponents[0].floatingPoint,
                                           numberFormat: nf),
-                           NumericalValue(v.originalComponents[1].value,
+                           NumericalValue(v.originalComponents[1].floatingPoint,
                                           numberFormat: nf)],
                           originalFormat: v.originalFormat,
                           presentationFormat: presentationFormat)

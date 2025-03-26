@@ -18,14 +18,14 @@ enum ContainedValue: Equatable {
         }
     }
 
-    var asReal: NumericalValue? {
+    var asNum: Num? {
         switch self {
         case .complex(let c):
             return c.asReal
         case .number(let n):
             return n
         case .rational(let r):
-            return NumericalValue(r.floatingPoint)
+            return r
         }
     }
 
@@ -67,12 +67,16 @@ struct Value: Identifiable, Equatable {
     let containedValue: ContainedValue
     let id: Int
 
+    var asNumericalValue: NumericalValue? {
+        containedValue.asNum?.asNumericalValue
+    }
+
     var asComplex: ComplexValue {
         containedValue.asComplex
     }
 
-    var asNumericalValue: NumericalValue? {
-        containedValue.asReal
+    var asNum: Num? {
+        containedValue.asNum
     }
 
     var asRational: RationalValue? {

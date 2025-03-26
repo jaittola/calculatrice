@@ -163,18 +163,18 @@ class Stack: ObservableObject {
         let inputs = calcParams.calcInputs
 
         let complexInputs = inputs.map { v in v.asComplex }
-        let inputsAsReal = inputs.compactMap { n in n.asNumericalValue }
+        let inputsAsNum = inputs.compactMap { n in n.asNum }
         let inputsAsRational = inputs.compactMap { r in r.asRational }
 
-        let allInputsReal = inputsAsReal.count == inputs.count
+        let allInputsNum = inputsAsNum.count == inputs.count
         let allInputsRational = inputsAsRational.count == inputs.count
 
-        let realCalc = calc as? RealCalculation
+        let realCalc = calc as? ScalarCalculation
         let complexCalc = calc as? ComplexCalculation
         let ratCalc = calc as? RationalCalculation
 
-        let preferComplexCalc = (allInputsReal &&
-                                 (complexCalc?.preferComplexCalculationWith(thisInput: inputsAsReal) ??
+        let preferComplexCalc = (allInputsNum &&
+                                 (complexCalc?.preferComplexCalculationWith(thisInput: inputsAsNum) ??
                                   false))
 
         do {
@@ -184,12 +184,12 @@ class Stack: ObservableObject {
                 let result = try ratCalc.calcRational(inputsAsRational, calculatorMode)
                 resultValue = Value(result)
             } else if let realCalc = realCalc,
-                allInputsReal,
+                allInputsNum,
                !preferComplexCalc {
-                let result = try realCalc.calculate(inputsAsReal, calculatorMode)
+                let result = try realCalc.calculate(inputsAsNum, calculatorMode)
                 resultValue = Value(result)
-            } else if let conversionCalc = calc as? NumTypeConversionCalculation, allInputsReal {
-                resultValue = try conversionCalc.convert(inputsAsReal,
+            } else if let conversionCalc = calc as? NumTypeConversionCalculation, allInputsNum {
+                resultValue = try conversionCalc.convert(inputsAsNum,
                                                          calculatorMode)
             } else if let complexCalc = complexCalc {
                 let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
@@ -231,25 +231,25 @@ protocol Calculation {
     var arity: Int { get }
 }
 
-protocol RealCalculation {
-    func calculate(_ inputs: [NumericalValue],
+protocol ScalarCalculation {
+    func calculate(_ inputs: [Num],
                    _ calculatorMode: CalculatorMode) throws -> NumericalValue
 }
 
 protocol ComplexCalculation {
-    func preferComplexCalculationWith(thisInput: [NumericalValue]) -> Bool
+    func preferComplexCalculationWith(thisInput: [Num]) -> Bool
     func calcComplex(_ inputs: [ComplexValue],
                      _ calculatorMode: CalculatorMode) throws -> ComplexValue
 }
 
 extension ComplexCalculation {
-    func preferComplexCalculationWith(thisInput: [NumericalValue]) -> Bool {
+    func preferComplexCalculationWith(thisInput: [Num]) -> Bool {
         false
     }
 }
 
 protocol NumTypeConversionCalculation {
-    func convert(_ inputs: [NumericalValue],
+    func convert(_ inputs: [Num],
                  _ calculatorMode: CalculatorMode) throws -> Value
 }
 

@@ -94,6 +94,16 @@ class TestNumericalValuesRational: XCTestCase {
         XCTAssertEqual("2 2/6", v?.stringValue())
     }
 
+    func testWholeFractionConstructorErrors() {
+        let vReal = NumericalValue(2.2)
+        let vInt = NumericalValue(2)
+        let vInt2 = NumericalValue(3)
+
+        XCTAssertThrowsError(try RationalValue(whole: vReal, numerator: vInt, denominator: vInt2))
+        XCTAssertThrowsError(try RationalValue(whole: vInt, numerator: vReal, denominator: vInt2))
+        XCTAssertThrowsError(try RationalValue(whole: vInt, numerator: vInt2, denominator: vReal))
+    }
+
     func testWholeFractionFormatting() {
         let v = assertNoThrow { try RationalValue(14, 6) }!
         let negv = assertNoThrow { try RationalValue(-14, 6) }!

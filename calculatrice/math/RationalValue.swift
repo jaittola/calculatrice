@@ -17,7 +17,7 @@ class RationalValue: NSObject, Num {
     }
 
     var asComplex: ComplexValue {
-        ComplexValue(realValue: asNumericalValue)
+        ComplexValue(realValue: self)
     }
 
     var asNumericalValue: NumericalValue {
@@ -78,8 +78,8 @@ class RationalValue: NSObject, Num {
         }
     }
 
-    init(numerator: NumericalValue,
-         denominator: NumericalValue,
+    init(numerator: Num,
+         denominator: Num,
          displayFormat: DisplayFormat = .mixed,
          simplifyOnInitialisation: Bool = true) throws {
         guard denominator.floatingPoint != 0 else {
@@ -118,12 +118,21 @@ class RationalValue: NSObject, Num {
                       simplifyOnInitialisation: simplifyOnInitialisation)
     }
 
-    convenience init(whole: NumericalValue,
-                     numerator: NumericalValue,
-                     denominator: NumericalValue) throws {
+    convenience init(whole: Num,
+                     numerator: Num,
+                     denominator: Num) throws {
+        if modf(whole.floatingPoint).1 != 0.0 ||
+            modf(numerator.floatingPoint).1 != 0.0 ||
+            modf(denominator.floatingPoint).1 != 0.0 {
+            throw CalcError.nonIntegerInputToRational()
+        }
+
         let sign = whole.floatingPoint < 0.0 ? -1.0 : 1.0
         let fracNumerator = sign * (abs(whole.floatingPoint) * abs(denominator.floatingPoint) + abs(numerator.floatingPoint))
-        try self.init(numerator: NumericalValue(fracNumerator, numberFormat: whole.numberFormat),
+
+        let numberFormat = whole.asNumericalValue.numberFormat
+
+        try self.init(numerator: NumericalValue(fracNumerator, numberFormat: numberFormat),
                       denominator: denominator,
                       simplifyOnInitialisation: false)
     }
