@@ -117,6 +117,7 @@ protocol Num {
     var floatingPoint: Double { get }
     var asComplex: ComplexValue { get }
     var asRational: RationalValue? { get }
+    var asNumericalValue: NumericalValue { get }
     var isWholeNumber: Bool { get }
     var description: String { get }
     func stringValue(precision: Int, withSign: Bool) -> String
@@ -139,6 +140,10 @@ class NumericalValue: NSObject, Num {
 
     var asRational: RationalValue? {
         isWholeNumber ? try? RationalValue(value, 1) : nil
+    }
+
+    var asNumericalValue: NumericalValue {
+        self
     }
 
     var isWholeNumber: Bool {

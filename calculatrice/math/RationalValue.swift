@@ -17,7 +17,11 @@ class RationalValue: NSObject, Num {
     }
 
     var asComplex: ComplexValue {
-        ComplexValue(realValue: NumericalValue(floatingPoint))
+        ComplexValue(realValue: asNumericalValue)
+    }
+
+    var asNumericalValue: NumericalValue {
+        NumericalValue(floatingPoint)
     }
 
     var asRational: RationalValue? { self }
@@ -144,7 +148,7 @@ class RationalValue: NSObject, Num {
             return selfSimplified.numerator == otherSimplified.numerator &&
             selfSimplified.denominator == otherSimplified.denominator
         } else if let other = to as? Num {
-            return NumericalValue(floatingPoint).isEqual(other)
+            return asNumericalValue.isEqual(other)
         } else {
             return false
         }
