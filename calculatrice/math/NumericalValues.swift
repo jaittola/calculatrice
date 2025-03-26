@@ -114,7 +114,6 @@ struct Value: Identifiable, Equatable {
 }
 
 
-
 class NumericalValue: NSObject {
     private(set) var value: Double
     private(set) var originalStringValue: String

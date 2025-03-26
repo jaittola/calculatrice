@@ -258,14 +258,6 @@ protocol RationalCalculation {
                       _ calculatorMode: CalculatorMode) throws -> RationalValue
 }
 
-enum CalcError: Error {
-    case divisionByZero(msgKey: String = "ErrDivByZero")
-    case badInput(msgKey: String = "ErrBadInput")
-    case unsupportedValueType(msgKey: String = "ErrUnsupportedValueType")
-    case badCalculationOp(msgKey: String = "ErrBadCalculationOp")
-    case nonIntegerInputToRational(msgKey: String =  "ErrNonIntegerInputToRational")
-}
-
 enum ValueNumberFormat {
     case fromInput
     case auto
