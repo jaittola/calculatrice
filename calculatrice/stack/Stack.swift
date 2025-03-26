@@ -209,7 +209,7 @@ class Stack: ObservableObject {
     }
 
     func printContents(_ calculatorMode: CalculatorMode) {
-        print("Input Buffer: string = \(input.value.stringValue(precision: 8)) double = \(input.value.doubleValue)")
+        print("Input Buffer: string = \(input.value.stringValue(precision: 8)) double = \(input.value.floatingPoint)")
         print("STACK: ")
         content.enumerated().forEach { idx, value in
             print("  \(idx): string = \(value.stringValue(calculatorMode))")

@@ -106,7 +106,7 @@ class TestMathOps: XCTestCase {
 
     func testMult() {
         let result = Mult().calculate(twothree, calculatorMode)
-        XCTAssertEqual(result.doubleValue, 6)
+        XCTAssertEqual(result.floatingPoint, 6)
     }
 
     func testComplexMult() {
@@ -123,7 +123,7 @@ class TestMathOps: XCTestCase {
 
     func testDiv() {
         let result = try? Div().calculate(twothree, calculatorMode)
-        XCTAssertEqual(result?.doubleValue, 1.5)
+        XCTAssertEqual(result?.floatingPoint, 1.5)
     }
 
     func testComplexDiv() {
@@ -203,17 +203,17 @@ class TestMathOps: XCTestCase {
     func testComplexExp2() {
         let values = [complex(1, 4 * Double.pi + Double.pi/4)]
         let result = Exp().calcComplex(values, self.calculatorMode)
-        XCTAssertEqual(result.polarAbsolute.doubleValue, 2.71828,
+        XCTAssertEqual(result.polarAbsolute.floatingPoint, 2.71828,
                        accuracy: NumericalValue.epsilond)
-        XCTAssertEqual(result.polarArgument.doubleValue, Double.pi/4,
+        XCTAssertEqual(result.polarArgument.floatingPoint, Double.pi/4,
                        accuracy: NumericalValue.epsilond)
     }
 
     func testComplexExp10() {
         let values = [complex(1, 2)]
         let result = Exp10().calcComplex(values, self.calculatorMode)
-        XCTAssertEqual(result.polarAbsolute.doubleValue, 10)
-        XCTAssertEqual(result.polarArgument.doubleValue, -1.6780151,
+        XCTAssertEqual(result.polarAbsolute.floatingPoint, 10)
+        XCTAssertEqual(result.polarArgument.floatingPoint, -1.6780151,
                        accuracy: NumericalValue.epsilond)
     }
 
@@ -221,8 +221,8 @@ class TestMathOps: XCTestCase {
         let v = complex(1, 2)
         let values = [v]
         let result = Log().calcComplex(values, self.calculatorMode)
-        XCTAssertEqual(result, complex(log(v.polarAbsolute.doubleValue),
-                                       v.polarArgument.doubleValue))
+        XCTAssertEqual(result, complex(log(v.polarAbsolute.floatingPoint),
+                                       v.polarArgument.floatingPoint))
     }
 
     func testComplexLog10() {
@@ -350,22 +350,22 @@ class TestMathOps: XCTestCase {
 
     func testNeg() {
         let result = Neg().calculate([num(2.5)], calculatorMode)
-        XCTAssertEqual(result.doubleValue, -2.5)
+        XCTAssertEqual(result.floatingPoint, -2.5)
     }
 
     func testSin() {
         let result = Sin().calculate([num(90)], calculatorMode)
-        XCTAssertEqual(result.doubleValue, 1)
+        XCTAssertEqual(result.floatingPoint, 1)
     }
 
     func testCos() {
         let result = Cos().calculate([num(0)], calculatorMode)
-        XCTAssertEqual(result.doubleValue, 1)
+        XCTAssertEqual(result.floatingPoint, 1)
     }
 
     func testTan() {
         let result = Tan().calculate([num(45)], calculatorMode)
-        XCTAssertEqual(result.doubleValue, 1, accuracy: 0.0001)
+        XCTAssertEqual(result.floatingPoint, 1, accuracy: 0.0001)
     }
 
     func testComplexCartesian() {
@@ -413,8 +413,8 @@ class TestMathOps: XCTestCase {
     func testComplexInvZero() {
         let result = Inv().calcComplex([complex(0, 0)],
                                        calculatorMode)
-        XCTAssertTrue(result.real.doubleValue.isNaN)
-        XCTAssertTrue(result.imag.doubleValue.isNaN)
+        XCTAssertTrue(result.real.floatingPoint.isNaN)
+        XCTAssertTrue(result.imag.floatingPoint.isNaN)
     }
 
     func testClampCyclical() {

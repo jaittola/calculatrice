@@ -25,7 +25,7 @@ enum ContainedValue: Equatable {
         case .number(let n):
             return n
         case .rational(let r):
-            return NumericalValue(r.doubleValue)
+            return NumericalValue(r.floatingPoint)
         }
     }
 
@@ -114,7 +114,7 @@ struct Value: Identifiable, Equatable {
 }
 
 protocol Num {
-    var doubleValue: Double { get }
+    var floatingPoint: Double { get }
     var asComplex: ComplexValue { get }
     var asRational: RationalValue? { get }
     var isWholeNumber: Bool { get }
@@ -129,7 +129,7 @@ class NumericalValue: NSObject, Num {
     private(set) var originalStringValue: String
     private(set) var numberFormat: ValueNumberFormat
 
-    var doubleValue: Double {
+    var floatingPoint: Double {
         value
     }
 
@@ -192,7 +192,7 @@ class NumericalValue: NSObject, Num {
     }
 
     func stringDecimalValue(precision: Int, withSign: Bool) -> String {
-        let v = withSign ? doubleValue : fabs(doubleValue)
+        let v = withSign ? floatingPoint : fabs(floatingPoint)
         if v.isInfinite {
             return Self.infFormatted
         }
@@ -208,7 +208,7 @@ class NumericalValue: NSObject, Num {
     }
 
     func stringEngValue(precision: Int, engDecimalPlaces: Int, withSign: Bool) -> String {
-        let v = withSign ? doubleValue : fabs(doubleValue)
+        let v = withSign ? floatingPoint : fabs(floatingPoint)
         if v.isInfinite {
             return Self.infFormatted
         }
@@ -221,7 +221,7 @@ class NumericalValue: NSObject, Num {
         guard let other = to as? Num else {
             return false
         }
-        return abs(doubleValue.distance(to: other.doubleValue)) < NumericalValue.epsilon
+        return abs(floatingPoint.distance(to: other.floatingPoint)) < NumericalValue.epsilon
     }
 
     static let pi = NumericalValue(Double.pi)

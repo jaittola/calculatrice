@@ -4,10 +4,10 @@ import XCTest
 class TestNumericalValuesRational: XCTestCase {
     func testSimpleRational() {
         let v = assertNoThrow { try RationalValue(3, 7) }!
-        XCTAssertEqual(3.0, v.numerator.doubleValue)
-        XCTAssertEqual(7.0, v.denominator.doubleValue)
+        XCTAssertEqual(3.0, v.numerator.floatingPoint)
+        XCTAssertEqual(7.0, v.denominator.floatingPoint)
         XCTAssertEqual("3/7", v.stringValue())
-        XCTAssertEqual(0.42857143, v.doubleValue, accuracy: NumericalValue.epsilon)
+        XCTAssertEqual(0.42857143, v.floatingPoint, accuracy: NumericalValue.epsilon)
     }
 
     func testNonIntInputToRational() {
@@ -48,39 +48,39 @@ class TestNumericalValuesRational: XCTestCase {
 
     func testNegativeInputToRational() {
         let v = assertNoThrow { try RationalValue(-3, -7) }!
-        XCTAssertEqual(-3.0, v.numerator.doubleValue)
-        XCTAssertEqual(7.0, v.denominator.doubleValue)
+        XCTAssertEqual(-3.0, v.numerator.floatingPoint)
+        XCTAssertEqual(7.0, v.denominator.floatingPoint)
         XCTAssertEqual("-3/7", v.stringValue())
-        XCTAssertEqual(-0.42857143, v.doubleValue, accuracy: NumericalValue.epsilon)
+        XCTAssertEqual(-0.42857143, v.floatingPoint, accuracy: NumericalValue.epsilon)
     }
 
     func testNegativeDenominatorInputToRational() {
         let v = assertNoThrow { try RationalValue(3, -7) }!
-        XCTAssertEqual(-3.0, v.numerator.doubleValue)
-        XCTAssertEqual(7.0, v.denominator.doubleValue)
+        XCTAssertEqual(-3.0, v.numerator.floatingPoint)
+        XCTAssertEqual(7.0, v.denominator.floatingPoint)
         XCTAssertEqual("-3/7", v.stringValue())
-        XCTAssertEqual(-0.42857143, v.doubleValue, accuracy: NumericalValue.epsilon)
+        XCTAssertEqual(-0.42857143, v.floatingPoint, accuracy: NumericalValue.epsilon)
     }
 
     func testSimplifyingRationalConstructor() {
         let v = assertNoThrow { try RationalValue(-2, 4) }!
-        XCTAssertEqual(-1, v.numerator.doubleValue)
-        XCTAssertEqual(2, v.denominator.doubleValue)
+        XCTAssertEqual(-1, v.numerator.floatingPoint)
+        XCTAssertEqual(2, v.denominator.floatingPoint)
         XCTAssertFalse(v.isWholeNumber)
     }
 
     func testSimplifyingRationalConstructor2() {
         let v = assertNoThrow { try RationalValue(8, 4) }!
-        XCTAssertEqual(2, v.numerator.doubleValue)
-        XCTAssertEqual(1, v.denominator.doubleValue)
+        XCTAssertEqual(2, v.numerator.floatingPoint)
+        XCTAssertEqual(1, v.denominator.floatingPoint)
         XCTAssertTrue(v.isWholeNumber)
     }
 
     func testNonSimplifyingRationalConstructor() {
         let v = assertNoThrow { try RationalValue(-2, 4,
                                                    simplifyOnInitialisation: false) }!
-        XCTAssertEqual(-2, v.numerator.doubleValue)
-        XCTAssertEqual(4, v.denominator.doubleValue)
+        XCTAssertEqual(-2, v.numerator.floatingPoint)
+        XCTAssertEqual(4, v.denominator.floatingPoint)
         XCTAssertFalse(v.isWholeNumber)
     }
 

@@ -16,8 +16,8 @@ class Plus: Calculation, ComplexCalculation, RationalCalculation {
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
         let (v1, v2) = try Utils.expandFractions(inputs[0], inputs[1])
-        return try RationalValue(v1.numerator.doubleValue + v2.numerator.doubleValue,
-                                 v1.denominator.doubleValue)
+        return try RationalValue(v1.numerator.floatingPoint + v2.numerator.floatingPoint,
+                                 v1.denominator.floatingPoint)
     }
 
 }
@@ -38,8 +38,8 @@ class Minus: Calculation, ComplexCalculation, RationalCalculation {
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
         let (v1, v2) = try Utils.expandFractions(inputs[0], inputs[1])
-        return try RationalValue(v1.numerator.doubleValue - v2.numerator.doubleValue,
-                                 v1.denominator.doubleValue)
+        return try RationalValue(v1.numerator.floatingPoint - v2.numerator.floatingPoint,
+                                 v1.denominator.floatingPoint)
     }
 }
 
@@ -66,8 +66,8 @@ class Mult: Calculation, RealCalculation, ComplexCalculation, RationalCalculatio
         let v1 = inputs[0]
         let v2 = inputs[1]
 
-        return try RationalValue(v1.numerator.doubleValue * v2.numerator.doubleValue,
-                             v1.denominator.doubleValue * v2.denominator.doubleValue)
+        return try RationalValue(v1.numerator.floatingPoint * v2.numerator.floatingPoint,
+                             v1.denominator.floatingPoint * v2.denominator.floatingPoint)
     }
 }
 
@@ -101,12 +101,12 @@ class Div: Calculation, RealCalculation, ComplexCalculation, RationalCalculation
         let v1 = inputs[0]
         let v2 = inputs[1]
 
-        if v2.numerator.doubleValue == 0 {
+        if v2.numerator.floatingPoint == 0 {
             throw CalcError.divisionByZero()
         }
 
-        return try RationalValue(v1.numerator.doubleValue * v2.denominator.doubleValue,
-                                 v1.denominator.doubleValue * v2.numerator.doubleValue)
+        return try RationalValue(v1.numerator.floatingPoint * v2.denominator.floatingPoint,
+                                 v1.denominator.floatingPoint * v2.numerator.floatingPoint)
     }
 }
 
@@ -124,8 +124,8 @@ class Neg: Calculation, RealCalculation, ComplexCalculation, RationalCalculation
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
         let v = inputs[0]
-        return try RationalValue(-1 * v.numerator.doubleValue,
-                              v.denominator.doubleValue)
+        return try RationalValue(-1 * v.numerator.floatingPoint,
+                              v.denominator.floatingPoint)
     }
 }
 
@@ -305,8 +305,8 @@ class Inv: Calculation, RealCalculation, ComplexCalculation, RationalCalculation
             throw CalcError.badCalculationOp()
         }
 
-        return try RationalValue(v1.denominator.doubleValue,
-                                 v1.numerator.doubleValue)
+        return try RationalValue(v1.denominator.floatingPoint,
+                                 v1.numerator.floatingPoint)
     }
 }
 
@@ -677,19 +677,19 @@ class Utils {
             return (simplifiedV1, simplifiedV2)
         }
 
-        let newV1 = try RationalValue(simplifiedV1.numerator.doubleValue * simplifiedV2.denominator.doubleValue,
-                                      simplifiedV1.denominator.doubleValue * simplifiedV2.denominator.doubleValue,
+        let newV1 = try RationalValue(simplifiedV1.numerator.floatingPoint * simplifiedV2.denominator.floatingPoint,
+                                      simplifiedV1.denominator.floatingPoint * simplifiedV2.denominator.floatingPoint,
                                       simplifyOnInitialisation: false)
-        let newV2 = try RationalValue(simplifiedV2.numerator.doubleValue * simplifiedV1.denominator.doubleValue,
-                                      simplifiedV2.denominator.doubleValue * simplifiedV1.denominator.doubleValue,
+        let newV2 = try RationalValue(simplifiedV2.numerator.floatingPoint * simplifiedV1.denominator.floatingPoint,
+                                      simplifiedV2.denominator.floatingPoint * simplifiedV1.denominator.floatingPoint,
                                       simplifyOnInitialisation: false)
 
         return (newV1, newV2)
     }
 
     static func simplifyFraction(_ v: RationalValue) throws -> RationalValue {
-        let (num, den) = try simplifyFractionComponents(v.numerator.doubleValue,
-                                                        v.denominator.doubleValue)
+        let (num, den) = try simplifyFractionComponents(v.numerator.floatingPoint,
+                                                        v.denominator.floatingPoint)
         return try RationalValue(num, den)
     }
 

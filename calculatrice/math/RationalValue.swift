@@ -12,18 +12,18 @@ class RationalValue: NSObject, Num {
     let displayFormat: DisplayFormat
     let simplifyOnInitialisation: Bool
 
-    var doubleValue: Double {
+    var floatingPoint: Double {
         numerator.value / denominator.value
     }
 
     var asComplex: ComplexValue {
-        ComplexValue(realValue: NumericalValue(doubleValue))
+        ComplexValue(realValue: NumericalValue(floatingPoint))
     }
 
     var asRational: RationalValue? { self }
 
     var wholePart: Double {
-        modf(numerator.doubleValue / denominator.doubleValue).0
+        modf(numerator.floatingPoint / denominator.floatingPoint).0
     }
 
     var fractionalPart: RationalValue {
@@ -32,10 +32,10 @@ class RationalValue: NSObject, Num {
         if absWhole < 1 {
             return self
         } else {
-            let absn = abs(numerator.doubleValue)
-            let fractNumerator = (absn - absWhole * denominator.doubleValue)
+            let absn = abs(numerator.floatingPoint)
+            let fractNumerator = (absn - absWhole * denominator.floatingPoint)
             return (try? RationalValue(fractNumerator,
-                                       denominator.doubleValue,
+                                       denominator.floatingPoint,
                                        displayFormat: displayFormat,
                                        simplifyOnInitialisation: simplifyOnInitialisation)) ?? self
         }
@@ -78,16 +78,16 @@ class RationalValue: NSObject, Num {
          denominator: NumericalValue,
          displayFormat: DisplayFormat = .mixed,
          simplifyOnInitialisation: Bool = true) throws {
-        guard denominator.doubleValue != 0 else {
+        guard denominator.floatingPoint != 0 else {
             throw CalcError.badInput()
         }
 
-        let absNumerator = abs(numerator.doubleValue)
-        let absDenominator = abs(denominator.doubleValue)
+        let absNumerator = abs(numerator.floatingPoint)
+        let absDenominator = abs(denominator.floatingPoint)
 
-        let sign = numerator.doubleValue < 0 || denominator.doubleValue < 0 ? -1.0 : 1.0
+        let sign = numerator.floatingPoint < 0 || denominator.floatingPoint < 0 ? -1.0 : 1.0
 
-        if modf(numerator.doubleValue).1 != 0.0 ||
+        if modf(numerator.floatingPoint).1 != 0.0 ||
             modf(absDenominator).1 != 0.0 {
             throw CalcError.nonIntegerInputToRational()
         }
@@ -117,8 +117,8 @@ class RationalValue: NSObject, Num {
     convenience init(whole: NumericalValue,
                      numerator: NumericalValue,
                      denominator: NumericalValue) throws {
-        let sign = whole.doubleValue < 0.0 ? -1.0 : 1.0
-        let fracNumerator = sign * (abs(whole.doubleValue) * abs(denominator.doubleValue) + abs(numerator.doubleValue))
+        let sign = whole.floatingPoint < 0.0 ? -1.0 : 1.0
+        let fracNumerator = sign * (abs(whole.floatingPoint) * abs(denominator.floatingPoint) + abs(numerator.floatingPoint))
         try self.init(numerator: NumericalValue(fracNumerator, numberFormat: whole.numberFormat),
                       denominator: denominator,
                       simplifyOnInitialisation: false)
@@ -129,7 +129,7 @@ class RationalValue: NSObject, Num {
     }
 
     var isWholeNumber: Bool {
-        denominator.doubleValue == 1.0
+        denominator.floatingPoint == 1.0
     }
 
     override var description: String {
@@ -144,7 +144,7 @@ class RationalValue: NSObject, Num {
             return selfSimplified.numerator == otherSimplified.numerator &&
             selfSimplified.denominator == otherSimplified.denominator
         } else if let other = to as? Num {
-            return NumericalValue(doubleValue).isEqual(other)
+            return NumericalValue(floatingPoint).isEqual(other)
         } else {
             return false
         }

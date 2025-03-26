@@ -13,7 +13,7 @@ class TestNumberInput: XCTestCase {
         ib.addNum(2)
 
         let v = ib.value
-        XCTAssertEqual(v.doubleValue, 12.0000000002)
+        XCTAssertEqual(v.floatingPoint, 12.0000000002)
         XCTAssertEqual(v.stringValue(), "12.0000000002")
     }
 
@@ -28,7 +28,7 @@ class TestNumberInput: XCTestCase {
         ib.plusminus()
 
         let v = ib.value
-        XCTAssertEqual(v.doubleValue, 0.199)
+        XCTAssertEqual(v.floatingPoint, 0.199)
         XCTAssertEqual(v.stringValue(), "1.99E-1")
     }
 
@@ -43,7 +43,7 @@ class TestNumberInput: XCTestCase {
         ib.plusminus()
 
         let v = ib.value
-        XCTAssertEqual(v.doubleValue, 1.25E-9)
+        XCTAssertEqual(v.floatingPoint, 1.25E-9)
         XCTAssertEqual(v.stringValue(), "1.25E-9")
     }
 
@@ -58,7 +58,7 @@ class TestNumberInput: XCTestCase {
         ib.plusminus()
 
         let v = ib.value
-        XCTAssertEqual(v.doubleValue, -0.0023)
+        XCTAssertEqual(v.floatingPoint, -0.0023)
         XCTAssertEqual(v.stringValue(), "-2.3E-3")
     }
 }

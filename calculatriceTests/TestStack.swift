@@ -266,8 +266,8 @@ class TestStack: XCTestCase {
         let result = s.content[0].asRational
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result?.numerator.doubleValue, 3)
-        XCTAssertEqual(result?.denominator.doubleValue, 4)
+        XCTAssertEqual(result?.numerator.floatingPoint, 3)
+        XCTAssertEqual(result?.denominator.floatingPoint, 4)
     }
 
     func testCalcIntegerWithRational() {
@@ -285,8 +285,8 @@ class TestStack: XCTestCase {
         let result = s.content[0].asRational
 
         XCTAssertNotNil(result)
-        XCTAssertEqual(result?.numerator.doubleValue, 5)
-        XCTAssertEqual(result?.denominator.doubleValue, 3)
+        XCTAssertEqual(result?.numerator.floatingPoint, 5)
+        XCTAssertEqual(result?.denominator.floatingPoint, 3)
     }
 
     func testCalcRealWithRational() {
@@ -305,7 +305,7 @@ class TestStack: XCTestCase {
         XCTAssertNotNil(result)
         XCTAssertNil(result.asRational)
 
-        XCTAssertEqual(result.asNumericalValue!.doubleValue, 1.54333333,
+        XCTAssertEqual(result.asNumericalValue!.floatingPoint, 1.54333333,
                        accuracy: NumericalValue.epsilon)
     }
 
@@ -335,7 +335,7 @@ class TestStack: XCTestCase {
     }
 
     private func stackToDoubles(_ values: [Value]) -> [Double?] {
-        values.map { v in v.asNumericalValue?.doubleValue }
+        values.map { v in v.asNumericalValue?.floatingPoint }
     }
 
     private func stackToIds(_ values: [Value]) -> [Int] {
@@ -343,7 +343,7 @@ class TestStack: XCTestCase {
     }
 
     private func stackToDoubleIdTuples(_ values: [Value]) -> [(doubleValue: Double?, id: Int)] {
-        values.map { v in (doubleValue: v.asNumericalValue?.doubleValue,
+        values.map { v in (doubleValue: v.asNumericalValue?.floatingPoint,
                            id: v.id) }
     }
 }

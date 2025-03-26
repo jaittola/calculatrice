@@ -29,7 +29,7 @@ class ComplexValue: NSObject {
     var polarAbsolute: NumericalValue {
         switch originalFormat {
         case .cartesian:
-            let r = sqrt(pow(real.doubleValue, 2) + pow(imag.doubleValue, 2))
+            let r = sqrt(pow(real.floatingPoint, 2) + pow(imag.floatingPoint, 2))
             return NumericalValue(r)
         case .polar:
             return originalComponents[0]
@@ -39,8 +39,8 @@ class ComplexValue: NSObject {
     var polarArgument: NumericalValue {
         switch originalFormat {
         case .cartesian:
-            let x = real.doubleValue
-            let y = imag.doubleValue
+            let x = real.floatingPoint
+            let y = imag.floatingPoint
 
             // Based on https://en.wikipedia.org/wiki/Complex_number#Modulus_and_argument,
             // referred on May 1st 2023.
@@ -49,7 +49,7 @@ class ComplexValue: NSObject {
             } else if x < 0 && y == 0 {
                 return NumericalValue(Double.pi)
             } else { // y != 0 || x > 0 {
-                let arg = 2 * atan(imag.doubleValue / (polarAbsolute.doubleValue + real.doubleValue))
+                let arg = 2 * atan(imag.floatingPoint / (polarAbsolute.floatingPoint + real.floatingPoint))
                 return NumericalValue(arg)
             }
         case .polar:
@@ -58,12 +58,12 @@ class ComplexValue: NSObject {
     }
 
     var asReal: NumericalValue? {
-        cartesian[1].doubleValue == 0 ? cartesian[0] : nil
+        cartesian[1].floatingPoint == 0 ? cartesian[0] : nil
     }
 
     var isNan: Bool {
-        originalComponents[0].doubleValue.isNaN ||
-        originalComponents[1].doubleValue.isNaN
+        originalComponents[0].floatingPoint.isNaN ||
+        originalComponents[1].floatingPoint.isNaN
     }
 
     func stringValue(precision: Int = realDefaultPrecision,
@@ -79,30 +79,30 @@ class ComplexValue: NSObject {
     func cartesianStringValue(_ precision: Int) -> String {
         let cart = cartesian
 
-        if cart[0].doubleValue == 0 && cart[1].doubleValue == 0 {
+        if cart[0].floatingPoint == 0 && cart[1].floatingPoint == 0 {
             return "0"
         }
 
-        let realPart = (cart[0].doubleValue != 0 ?
+        let realPart = (cart[0].floatingPoint != 0 ?
                         cart[0].stringValue(precision: precision)
                         : "")
         var plusminus = ""
         var imaginaryPart = ""
 
-        switch cartesian[1].doubleValue {
+        switch cartesian[1].floatingPoint {
         case 1:
             imaginaryPart = "i"
-            plusminus = (cart[0].doubleValue != 0 ? " + " : "")
+            plusminus = (cart[0].floatingPoint != 0 ? " + " : "")
         case -1:
             imaginaryPart = "i"
-            plusminus = cart[0].doubleValue != 0 ? " - " : "-"
+            plusminus = cart[0].floatingPoint != 0 ? " - " : "-"
         case 0:
             plusminus = ""
             imaginaryPart = ""
         default:
             let withSign: Bool
-            if cart[0].doubleValue != 0 {
-                plusminus = cart[1].doubleValue > 0 ? " + " : " - "
+            if cart[0].floatingPoint != 0 {
+                plusminus = cart[1].floatingPoint > 0 ? " + " : " - "
                 withSign = false
             } else {
                 plusminus = ""
@@ -120,7 +120,7 @@ class ComplexValue: NSObject {
         let polarAbs = polarAbsolute
         let polarArg = polarArgument
 
-        if polarAbs.doubleValue == 0 {
+        if polarAbs.floatingPoint == 0 {
             return "0"
         }
 
@@ -130,7 +130,7 @@ class ComplexValue: NSObject {
 
         switch angleUnit {
         case .Deg:
-            let argDeg = NumericalValue(polarArg.doubleValue * 180.0 / Double.pi)
+            let argDeg = NumericalValue(polarArg.floatingPoint * 180.0 / Double.pi)
             argPart = argDeg.stringValue(precision: precision)
             angleUnitS = "°"
         case .Rad:
