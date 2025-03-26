@@ -119,11 +119,12 @@ protocol Num {
     var asRational: RationalValue? { get }
     var isWholeNumber: Bool { get }
     var description: String { get }
-    func stringValue(precision: Int) -> String
+    func stringValue(precision: Int, withSign: Bool) -> String
     func isEqual(_ to: Any?) -> Bool
 }
 
 class NumericalValue: NSObject, Num {
+
     private(set) var value: Double
     private(set) var originalStringValue: String
     private(set) var numberFormat: ValueNumberFormat
@@ -186,9 +187,8 @@ class NumericalValue: NSObject, Num {
         }
     }
 
-    func stringValue(precision: Int) -> String {
-        stringValue(precision: precision,
-                    engDecimalPlaces: precision)
+    func stringValue(precision: Int, withSign: Bool) -> String {
+        stringValue(precision: precision, engDecimalPlaces: precision, withSign: withSign)
     }
 
     func stringDecimalValue(precision: Int, withSign: Bool) -> String {

@@ -97,8 +97,10 @@ class TestNumericalValuesRational: XCTestCase {
     func testWholeFractionFormatting() {
         let v = assertNoThrow { try RationalValue(14, 6) }!
         let negv = assertNoThrow { try RationalValue(-14, 6) }!
+        let negv2 = assertNoThrow { try RationalValue(-2, 3) }!
         let vNoSimplify = assertNoThrow { try RationalValue(14, 6, simplifyOnInitialisation: false) }!
         let wholeNum = assertNoThrow { try RationalValue(2, 1) }!
+        let wholeNumNeg = assertNoThrow { try RationalValue(-2, 1) }!
 
         let fractionalised = vNoSimplify.fracOnly
 
@@ -109,6 +111,7 @@ class TestNumericalValuesRational: XCTestCase {
         XCTAssertEqual(-2, negv.wholePart)
         XCTAssertEqual(try RationalValue(1, 3), negv.fractionalPart)
         XCTAssertEqual("-2 1/3", negv.stringValue())
+        XCTAssertEqual("2 1/3", negv.stringValue(withSign: false))
 
         XCTAssertEqual(2, vNoSimplify.wholePart)
         XCTAssertEqual(try RationalValue(2, 6,
@@ -118,6 +121,12 @@ class TestNumericalValuesRational: XCTestCase {
         XCTAssertEqual("2", wholeNum.stringValue())
 
         XCTAssertEqual("7/3", fractionalised.stringValue())
+
+        XCTAssertEqual("-2", wholeNumNeg.stringValue(withSign: true))
+        XCTAssertEqual("2", wholeNumNeg.stringValue(withSign: false))
+
+        XCTAssertEqual("-2/3", negv2.stringValue(withSign: true))
+        XCTAssertEqual("2/3", negv2.stringValue(withSign: false))
     }
 
     func testEquality() {

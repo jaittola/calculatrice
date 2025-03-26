@@ -55,19 +55,20 @@ class RationalValue: NSObject, Num {
                             simplifyOnInitialisation: true)) ?? self
     }
 
-    func stringValue(precision: Int = realDefaultPrecision) -> String {
+    func stringValue(precision: Int = realDefaultPrecision,
+                     withSign: Bool = true) -> String {
         let whole = wholePart
         if isWholeNumber {
-            return numerator.stringValue(precision: precision)
+            return numerator.stringValue(precision: precision, withSign: withSign)
         } else if whole == 0 || displayFormat == .fractionalOnly {
-            let ns = numerator.stringValue(precision: precision)
+            let ns = numerator.stringValue(precision: precision, withSign: withSign)
             let dns = denominator.stringValue(precision: precision)
             return "\(ns)/\(dns)"
         } else {
             let frac = fractionalPart
             let ws = NumericalValue(whole,
                                     numberFormat: numerator.numberFormat)
-                .stringValue(precision: precision)
+                .stringValue(precision: precision, withSign: withSign)
             let fracStr = frac.stringValue(precision: precision)
             return "\(ws) \(fracStr)"
         }
