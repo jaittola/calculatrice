@@ -484,6 +484,12 @@ func complexPolar(_ absolute: Double, _ argumentDegrees: Double) -> ComplexValue
                                                 CalculatorMode())[0])
 }
 
+func rat(_ numerator: Double,
+         _ denominator: Double) -> RationalValue {
+    assertNoThrow { try RationalValue(numerator, denominator,
+                                      simplifyOnInitialisation: false) }!
+}
+
 func assertNoThrow<T>(f: () throws -> T) -> T? {
     do {
         return try f()

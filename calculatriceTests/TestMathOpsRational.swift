@@ -131,10 +131,4 @@ class TestMathOpsRational: XCTestCase {
         }
         XCTAssertEqual(res?.asRational, rat(4, 8))
     }
-
-    private func rat(_ numerator: Double,
-                     _ denominator: Double) -> RationalValue {
-        assertNoThrow { try RationalValue(numerator, denominator,
-                                          simplifyOnInitialisation: false) }!
-    }
 }
