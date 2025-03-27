@@ -5,21 +5,28 @@ class Plus: Calculation, ComplexCalculation, RationalCalculation {
 
     func calcComplex(_ inputs: [ComplexValue],
                      _ calculatorMode: CalculatorMode) throws -> ComplexValue {
-        do {
-            return try Utils.calculateComplexCartesian(inputs) { v1, v2 in
-                NumericalValue(v1.value + v2.value)
-            }
-        } catch {
-            throw error
-        }
+        let sum = try Utils.sumPolynomials(inputs[0].cartesian,
+                                            inputs[1].cartesian,
+                                            opNumerical: Self.numericalSum,
+                                            opRational: Self.rationalSum)
+        return try ComplexValue(sum,
+                                originalFormat: .cartesian,
+                                presentationFormat: inputs[0].presentationFormat)
     }
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        return try Plus.rationalSum(inputs)
+    }
+
+    static func numericalSum(_ inputs: [Num]) throws -> Num {
+        return NumericalValue(inputs[0].floatingPoint + inputs[1].floatingPoint)
+    }
+
+    static func rationalSum(_ inputs: [RationalValue]) throws -> RationalValue {
         let (v1, v2) = try Utils.expandFractions(inputs[0], inputs[1])
         return try RationalValue(v1.numerator.floatingPoint + v2.numerator.floatingPoint,
                                  v1.denominator.floatingPoint)
     }
-
 }
 
 class Minus: Calculation, ComplexCalculation, RationalCalculation {
@@ -27,16 +34,24 @@ class Minus: Calculation, ComplexCalculation, RationalCalculation {
 
     func calcComplex(_ inputs: [ComplexValue],
                      _ calculatorMode: CalculatorMode) throws -> ComplexValue {
-        do {
-            return try Utils.calculateComplexCartesian(inputs) { v1, v2 in
-                NumericalValue(v1.value - v2.value)
-            }
-        } catch {
-            throw error
-        }
+        let diff = try Utils.sumPolynomials(inputs[0].cartesian,
+                                            inputs[1].cartesian,
+                                            opNumerical: Self.numericalDiff,
+                                            opRational: Self.rationalDiff)
+        return try ComplexValue(diff,
+                                originalFormat: .cartesian,
+                                presentationFormat: inputs[0].presentationFormat)
     }
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        return try Minus.rationalDiff(inputs)
+    }
+
+    static func numericalDiff(_ inputs: [Num]) throws -> Num {
+        return NumericalValue(inputs[0].floatingPoint - inputs[1].floatingPoint)
+    }
+
+    static func rationalDiff(_ inputs: [RationalValue]) throws -> RationalValue {
         let (v1, v2) = try Utils.expandFractions(inputs[0], inputs[1])
         return try RationalValue(v1.numerator.floatingPoint - v2.numerator.floatingPoint,
                                  v1.denominator.floatingPoint)
@@ -635,20 +650,16 @@ class Utils {
         }
     }
 
-    static func calculateComplexCartesian(_ values: [ComplexValue],
-                                          _ op: (NumericalValue, NumericalValue) -> NumericalValue) throws -> ComplexValue {
-        do {
-            let resultComponents: [NumericalValue] = values[0].cartesian.enumerated().map { (index, v1) in
-                let v2 = values[1].cartesian[index]
-                // TODO, consider fractionals
-                return op(v1.asNumericalValue, v2.asNumericalValue)
+    static func sumPolynomials(_ a: [Num], _ b: [Num],
+                               opNumerical: (_ inputs: [Num]) throws -> any Num,
+                               opRational: (_ inputs: [RationalValue]) throws -> any Num) throws -> [any Num] {
+        return try a.enumerated().map { (index, v1) in
+            let v2 = b[index]
+            if let v1R = v1.asRational, let v2R = v2.asRational {
+                return try opRational([v1R, v2R])
+            } else {
+                return try opNumerical([v1, v2])
             }
-
-            return try ComplexValue(resultComponents,
-                                    originalFormat: .cartesian,
-                                    presentationFormat: values[0].presentationFormat)
-        } catch {
-            throw error
         }
     }
 

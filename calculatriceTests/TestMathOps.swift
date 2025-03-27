@@ -29,6 +29,31 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(4, -2))
     }
 
+    func testComplexPlusRat() {
+        let values = [ComplexValue(realValue: rat(1, 3),
+                                   imagValue: rat(2, 5)),
+                      complex(3, -4)]
+        let result = assertNoThrow {
+            try Plus().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, ComplexValue(realValue: rat(10, 3),
+                                            imagValue: rat(-18, 5)))
+        XCTAssertEqual("3 1/3 - 3 3/5i", result?.stringValue())
+    }
+
+    func testComplexMinusRat() {
+        let values = [ComplexValue(realValue: rat(1, 3),
+                                   imagValue: rat(2, 5)),
+                      complex(1, 2)]
+        let result = assertNoThrow {
+            try Minus().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, ComplexValue(realValue: rat(-2, 3),
+                                            imagValue: rat(-8, 5)))
+        XCTAssertEqual("-2/3 - 1 3/5i", result?.stringValue())
+    }
+
+
     func testMinus1() throws {
         let values = [complex(4, 1), complex(1, 3)]
         let result = assertNoThrow {
