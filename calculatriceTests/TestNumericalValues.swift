@@ -169,6 +169,22 @@ class TestNumericalValues: XCTestCase {
         XCTAssertEqual("1/3 - 3/7i", c.stringValue())
     }
 
+    func testComplexRationalConversion() {
+        let re = assertNoThrow { try RationalValue(1, 3) }!
+        let im = assertNoThrow { try RationalValue(-3, 7) }!
+        let c = ComplexValue(realValue: re, imagValue: im)
+
+        let c2 = ComplexValue(c, presentationFormat: .cartesian)
+        let c3 = ComplexValue(c, numberFormat: .decimal, presentationFormat: .cartesian)
+        let c4 = ComplexValue(c, numberFormat: .eng, presentationFormat: .cartesian)
+        let c5 = ComplexValue(c, presentationFormat: .polar)
+
+        XCTAssertEqual("1/3 - 3/7i", c2.stringValue())
+        XCTAssertEqual("0.3333333 - 0.4285714i", c3.stringValue())
+        XCTAssertEqual("3.3333333e-01 - 4.2857143e-01i", c4.stringValue())
+        XCTAssertEqual("0.5429407 ∠ -52.1250163°", c5.stringValue())
+    }
+
     func checkPolarComplexToCartesian(_ c: ComplexValue, _ real: Double, _ imaginary: Double) {
         XCTAssertEqual(c.real.floatingPoint, real, accuracy: NumericalValue.epsilond)
         XCTAssertEqual(c.imag.floatingPoint, imaginary, accuracy: NumericalValue.epsilond)

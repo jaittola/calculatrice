@@ -139,6 +139,19 @@ class TestNumericalValuesRational: XCTestCase {
         XCTAssertEqual("2/3", negv2.stringValue(withSign: false))
     }
 
+    func testFormattingConversionConstruction() {
+        let v = assertNoThrow { try RationalValue(47, 12) }!
+
+        let vDec = v.withFloatingPointNumberFormat(.decimal) as! RationalValue
+        let vEng = v.withFloatingPointNumberFormat(.eng) as! RationalValue
+
+        let vMixed = vDec.duplicateForStack()
+
+        XCTAssertEqual("3.9166667", vDec.stringValue())
+        XCTAssertEqual("3.9166667e+00", vEng.stringValue())
+        XCTAssertEqual("3 11/12", vMixed.stringValue())
+    }
+
     func testEquality() {
         let v1 = assertNoThrow { try RationalValue(-2, 4) }!
         let v2 = assertNoThrow { try RationalValue(-1, 2) }!
@@ -157,5 +170,4 @@ class TestNumericalValuesRational: XCTestCase {
         XCTAssertFalse(v1.isEqual(v5))
         XCTAssertFalse(v1.isEqual(v6))
     }
-
 }

@@ -212,19 +212,24 @@ class ComplexValue: NSObject {
                      numberFormat: ValueNumberFormat? = nil,
                      presentationFormat: Format) {
         do {
-            let nf = numberFormat ??
-            (v.originalComponents[0] as? NumericalValue)?.numberFormat
-
-            // TODO, don't initialize with floating points, consider rationals, too
-            try self.init([NumericalValue(v.originalComponents[0].floatingPoint,
-                                          numberFormat: nf),
-                           NumericalValue(v.originalComponents[1].floatingPoint,
-                                          numberFormat: nf)],
-                          originalFormat: v.originalFormat,
-                          presentationFormat: presentationFormat)
+            if let numberFormat = numberFormat {
+                try self.init([v.originalComponents[0].withFloatingPointNumberFormat(numberFormat),
+                               v.originalComponents[1].withFloatingPointNumberFormat(numberFormat)],
+                              originalFormat: v.originalFormat,
+                              presentationFormat: presentationFormat)
+            } else {
+                try self.init([v.originalComponents[0].withDefaultPresentation,
+                               v.originalComponents[1].withDefaultPresentation],
+                              originalFormat: v.originalFormat,
+                              presentationFormat: presentationFormat)
+            }
         } catch {
             fatalError("ComplexValue init from another complex value threw an exception. This should not happen")
         }
+    }
+
+    func duplicateForStack() -> ComplexValue {
+        return ComplexValue(self, presentationFormat: self.presentationFormat)
     }
 
     override func isEqual(_ to: Any?) -> Bool {

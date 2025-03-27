@@ -4,6 +4,7 @@ class RationalValue: NSObject, Num {
     enum DisplayFormat {
         case mixed
         case fractionalOnly
+        case floatingPoint(format: ValueNumberFormat)
     }
 
     let numerator: NumericalValue
@@ -21,7 +22,15 @@ class RationalValue: NSObject, Num {
     }
 
     var asNumericalValue: NumericalValue {
-        NumericalValue(floatingPoint)
+        if case .floatingPoint(let format) = displayFormat {
+            NumericalValue(floatingPoint, numberFormat: format)
+        } else {
+            NumericalValue(floatingPoint)
+        }
+    }
+
+    var withDefaultPresentation: any Num {
+        simplified
     }
 
     var asRational: RationalValue? { self }
@@ -61,20 +70,35 @@ class RationalValue: NSObject, Num {
 
     func stringValue(precision: Int = realDefaultPrecision,
                      withSign: Bool = true) -> String {
-        let whole = wholePart
         if isWholeNumber {
             return numerator.stringValue(precision: precision, withSign: withSign)
-        } else if whole == 0 || displayFormat == .fractionalOnly {
-            let ns = numerator.stringValue(precision: precision, withSign: withSign)
-            let dns = denominator.stringValue(precision: precision)
-            return "\(ns)/\(dns)"
-        } else {
+        }
+
+        let whole = wholePart
+
+        var format = displayFormat
+        if case .mixed = format {
+            if whole == 0 {
+                format = .fractionalOnly
+            }
+        }
+
+        switch format {
+        case .mixed:
             let frac = fractionalPart
             let ws = NumericalValue(whole,
                                     numberFormat: numerator.numberFormat)
                 .stringValue(precision: precision, withSign: withSign)
             let fracStr = frac.stringValue(precision: precision)
             return "\(ws) \(fracStr)"
+        case .fractionalOnly:
+            let ns = numerator.stringValue(precision: precision, withSign: withSign)
+            let dns = denominator.stringValue(precision: precision)
+            return "\(ns)/\(dns)"
+        case .floatingPoint:
+            return asNumericalValue.stringValue(precision: precision,
+                                                engDecimalPlaces: precision,
+                                                withSign: withSign)
         }
     }
 
@@ -115,6 +139,7 @@ class RationalValue: NSObject, Num {
                      simplifyOnInitialisation: Bool = true) throws {
         try self.init(numerator: NumericalValue(numerator),
                       denominator: NumericalValue(denominator),
+                      displayFormat: displayFormat,
                       simplifyOnInitialisation: simplifyOnInitialisation)
     }
 
@@ -135,6 +160,13 @@ class RationalValue: NSObject, Num {
         try self.init(numerator: NumericalValue(fracNumerator, numberFormat: numberFormat),
                       denominator: denominator,
                       simplifyOnInitialisation: false)
+    }
+
+    func withFloatingPointNumberFormat(_ format: ValueNumberFormat) -> any Num {
+        (try? RationalValue(numerator: numerator,
+                            denominator: denominator,
+                            displayFormat: .floatingPoint(format: format),
+                            simplifyOnInitialisation: true)) ?? self
     }
 
     func duplicateForStack() -> RationalValue {

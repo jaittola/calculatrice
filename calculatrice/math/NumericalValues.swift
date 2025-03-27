@@ -55,10 +55,12 @@ enum ContainedValue: Equatable {
 
     func duplicateForStack() -> ContainedValue {
         switch self {
+        case .complex(let c):
+            return ContainedValue.complex(value: c.duplicateForStack()) // TODO
+        case .number:
+            return self
         case .rational(let r):
             return ContainedValue.rational(value: r.duplicateForStack())
-        default:
-            return self
         }
     }
 }
@@ -122,14 +124,15 @@ protocol Num {
     var asComplex: ComplexValue { get }
     var asRational: RationalValue? { get }
     var asNumericalValue: NumericalValue { get }
+    var withDefaultPresentation: any Num { get }
     var isWholeNumber: Bool { get }
     var description: String { get }
+    func withFloatingPointNumberFormat(_ format: ValueNumberFormat) -> Num
     func stringValue(precision: Int, withSign: Bool) -> String
     func isEqual(_ to: Any?) -> Bool
 }
 
 class NumericalValue: NSObject, Num {
-
     private(set) var value: Double
     private(set) var originalStringValue: String
     private(set) var numberFormat: ValueNumberFormat
@@ -147,6 +150,10 @@ class NumericalValue: NSObject, Num {
     }
 
     var asNumericalValue: NumericalValue {
+        self
+    }
+
+    var withDefaultPresentation: any Num {
         self
     }
 
@@ -194,6 +201,10 @@ class NumericalValue: NSObject, Num {
                                   engDecimalPlaces: engDecimalPlaces,
                                   withSign: withSign)
         }
+    }
+
+    func withFloatingPointNumberFormat(_ format: ValueNumberFormat) -> Num {
+        NumericalValue(floatingPoint, numberFormat: format)
     }
 
     func stringValue(precision: Int, withSign: Bool) -> String {

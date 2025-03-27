@@ -601,9 +601,7 @@ class ToCartesian: Calculation, ComplexCalculation {
     let arity: Int = 1
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
         let v = inputs[0]
-        let numberFormat = (v.originalComponents[0] as? NumericalValue)?.numberFormat
         return ComplexValue(v,
-                            numberFormat: numberFormat,
                             presentationFormat: .cartesian)
     }
 }
@@ -612,9 +610,7 @@ class ToPolar: Calculation, ComplexCalculation {
     let arity: Int = 1
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
         let v = inputs[0]
-        let numberFormat = (v.originalComponents[0] as? NumericalValue)?.numberFormat
         return ComplexValue(v,
-                            numberFormat: numberFormat,
                             presentationFormat: .polar)
     }
 }
