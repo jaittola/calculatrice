@@ -146,6 +146,17 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(8, 0))
     }
 
+    func testComplexMultRat() {
+        let values = [ComplexValue(realValue: rat(1, 3),
+                                   imagValue: rat(2, 5)),
+                      ComplexValue(realValue: rat(4, 7),
+                                   imagValue: rat(1, 9))]
+        let result = Mult().calcComplex(values, self.calculatorMode)
+        XCTAssertEqual(result, ComplexValue(realValue: rat(46, 315),
+                                            imagValue: rat(251, 945)))
+        XCTAssertEqual("46/315 + 251/945i", result.stringValue())
+    }
+
     func testDiv() {
         let result = try? Div().calculate(twothree, calculatorMode)
         XCTAssertEqual(result?.floatingPoint, 1.5)
