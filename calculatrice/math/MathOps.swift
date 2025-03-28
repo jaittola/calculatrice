@@ -129,17 +129,23 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
     }
 
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        let v1 = inputs[0]
+        let v2 = inputs[1]
 
-        if inputs[1].polarAbsolute.floatingPoint == 0 {
+        if v2.polarAbsolute.floatingPoint == 0 {
             throw CalcError.divisionByZero()
         }
 
-        let r = inputs[0].polarAbsolute.floatingPoint / inputs[1].polarAbsolute.floatingPoint
-        let arg = Utils.clampComplexArg(inputs[0].polarArgument.floatingPoint - inputs[1].polarArgument.floatingPoint)
+        if let rationalResult = tryCalcComplexPolynomial(v1, v2, calculatorMode) {
+            return rationalResult
+        } else {
+            let r = v1.polarAbsolute.floatingPoint / v2.polarAbsolute.floatingPoint
+            let arg = Utils.clampComplexArg(v1.polarArgument.floatingPoint - v2.polarArgument.floatingPoint)
 
-        return ComplexValue(absolute: r,
-                            argument: arg,
-                            presentationFormat: inputs[0].presentationFormat)
+            return ComplexValue(absolute: r,
+                                argument: arg,
+                                presentationFormat: v2.presentationFormat)
+        }
     }
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
@@ -152,6 +158,24 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
 
         return try RationalValue(v1.numerator.floatingPoint * v2.denominator.floatingPoint,
                                  v1.denominator.floatingPoint * v2.numerator.floatingPoint)
+    }
+
+    // Division as a polynomial if the divisor is a real rational number.
+    func tryCalcComplexPolynomial(_ v1: ComplexValue, _ v2: ComplexValue, _ calculatorMode: CalculatorMode) -> ComplexValue? {
+        if v1.originalFormat == .cartesian,
+           v2.originalFormat == .cartesian,
+           v1.real.asRational != nil,
+           v1.imag.asRational != nil,
+           let v2r = v2.real.asRational,
+           let invV2R = try? Inv().calcRational([v2r], calculatorMode),
+           v2.imag.floatingPoint == 0 {
+            let invV2RComplex = ComplexValue(realValue: invV2R,
+                                             imagValue: RationalValue.zero)
+            return Mult().tryCalcComplexPolynomial(v1,
+                                                   invV2RComplex,
+                                                   calculatorMode)
+        }
+        return nil
     }
 }
 

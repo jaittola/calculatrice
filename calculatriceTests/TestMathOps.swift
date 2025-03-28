@@ -170,6 +170,18 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complexPolar(2, 30))
     }
 
+    func testComplexDivRat() {
+        let values = [ComplexValue(realValue: rat(1, 3),
+                                   imagValue: rat(2, 5)),
+                      ComplexValue(realValue: rat(1, 4),
+                                   imagValue: NumericalValue(0))]
+        let result = assertNoThrow {
+            try Div().calcComplex(values, self.calculatorMode)
+        }
+        XCTAssertEqual(result, ComplexValue(realValue: rat(4, 3), imagValue: rat(8, 5)))
+        XCTAssertEqual("1 1/3 + 1 3/5i", result?.stringValue())
+    }
+
     func testComplexSquare() {
         let values = [complex(3, 2)]
         let result = Square().calcComplex(values, self.calculatorMode)

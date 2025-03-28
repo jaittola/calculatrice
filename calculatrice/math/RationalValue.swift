@@ -198,4 +198,6 @@ class RationalValue: NSObject, Num {
     static func == (lhs: RationalValue, rhs: RationalValue) -> Bool {
         return lhs.isEqual(rhs)
     }
+
+    static let zero = (try? RationalValue(0.0, 1.0))!
 }
