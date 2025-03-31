@@ -458,11 +458,21 @@ class Im: Calculation, ComplexCalculation {
 class Conjugate: Calculation, ComplexCalculation {
     let arity: Int = 1
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
-        // TODO, consider fractions
-        return ComplexValue(inputs[0].real.floatingPoint,
-                            -inputs[0].imag.floatingPoint,
-                            presentationFormat: inputs[0].presentationFormat)
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        var negImag: Num
+        if let imagRat = inputs[0].imag.asRational {
+            print("Imag rational \(imagRat)")
+            negImag = try Neg().calcRational([imagRat], calculatorMode) as Num
+        }  else {
+            print("Imag real \(inputs[0].imag)")
+            negImag = Neg().calculate([inputs[0].imag], calculatorMode) as Num
+            print("Neg imag \(negImag)")
+        }
+
+        return try ComplexValue([inputs[0].real,
+                                 negImag],
+                                originalFormat: .cartesian,
+                                presentationFormat: inputs[0].presentationFormat)
     }
 }
 

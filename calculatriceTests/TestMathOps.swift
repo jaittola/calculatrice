@@ -107,22 +107,33 @@ class TestMathOps: XCTestCase {
 
     func testComplexConjugate() {
         let values = [complex(1, -2)]
-        let result = Conjugate().calcComplex(values, self.calculatorMode)
+        let result = assertNoThrow { try Conjugate().calcComplex(values, self.calculatorMode) }!
         XCTAssertEqual(result, complex(1, 2))
     }
 
     func testComplexConjugate2() {
         let values = [complex(-3, -2)]
-        let result = Conjugate().calcComplex(values, self.calculatorMode)
+        let result = assertNoThrow { try Conjugate().calcComplex(values, self.calculatorMode) }!
         XCTAssertEqual(result, complex(-3, 2))
     }
 
     func testComplexConjugate3() {
         let values = [ComplexValue(absolute: 1, argument: Double.pi / 6)]
-        let result = Conjugate().calcComplex(values, self.calculatorMode)
+        let result = assertNoThrow { try Conjugate().calcComplex(values, self.calculatorMode) }!
         XCTAssertEqual(result, ComplexValue(absolute: 1, argument: -Double.pi / 6))
         XCTAssertEqual(result.stringValue(precision: 6, angleUnit: .Deg),
                        "1 ∠ -30°")
+    }
+
+    func testComplexConjugateWithRationalNumbers() {
+        let values = [ComplexValue(realValue: rat(1, 3),
+                                   imagValue: rat(2, 5))]
+
+        let result = assertNoThrow { try Conjugate().calcComplex(values, self.calculatorMode) }!
+
+        XCTAssertEqual(result, ComplexValue(realValue: rat(1, 3),
+                                            imagValue: rat(-2, 5)))
+        XCTAssertEqual(result.stringValue(), "1/3 - 2/5i")
     }
 
     func testImaginaryNumber() {
