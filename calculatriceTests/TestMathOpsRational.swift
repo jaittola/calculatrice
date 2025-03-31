@@ -98,6 +98,14 @@ class TestMathOpsRational: XCTestCase {
         XCTAssertEqual(res, rat(3, 5))
     }
 
+    func testDivByWholeNumber() {
+        let v1 = rat(4, 5)
+        let v2 = NumericalValue(2).asRational!
+
+        let res = assertNoThrow { try Div().calcRational([v1, v2], CalculatorMode()) }
+        XCTAssertEqual(res, rat(2, 5))
+    }
+
     func testInv() {
         let v1 = rat(3, 8)
         let res = assertNoThrow {
@@ -130,5 +138,19 @@ class TestMathOpsRational: XCTestCase {
             try RationalNumber().convert([v1, v2], CalculatorMode())
         }
         XCTAssertEqual(res?.asRational, rat(4, 8))
+    }
+
+    func testDivPreferRealCalculation() {
+        XCTAssertTrue(Div().preferRealCalculationWith(thisInput: [Value(NumericalValue(1)),
+                                                                  Value(NumericalValue(2))]))
+        XCTAssertTrue(Div().preferRealCalculationWith(thisInput: [Value(NumericalValue(1.47)),
+                                                                  Value(NumericalValue(2.1))]))
+
+        XCTAssertFalse(Div().preferRealCalculationWith(thisInput: [Value(NumericalValue(1)),
+                                                                   Value(rat(2, 3))]))
+        XCTAssertFalse(Div().preferRealCalculationWith(thisInput: [Value(rat(1, 7)),
+                                                                   Value(rat(2, 3))]))
+        XCTAssertFalse(Div().preferRealCalculationWith(thisInput: [Value(rat(1, 1)),
+                                                                   Value(rat(2, 1))]))
     }
 }

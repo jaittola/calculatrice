@@ -186,6 +186,7 @@ class TestMathOps: XCTestCase {
     func testDiv() {
         let result = try? Div().calculate(twothree, calculatorMode)
         XCTAssertEqual(result?.floatingPoint, 1.5)
+        XCTAssertEqual(result?.stringValue(), "1.5")
     }
 
     func testComplexDiv() {
@@ -540,8 +541,6 @@ class TestMathOps: XCTestCase {
         }
         XCTAssertEqual(result?.stringValue(precision: 5), "3 + 3i")
     }
-
-    // TODO, add more of this.
 }
 
 func num(_ value: Double) -> NumericalValue {

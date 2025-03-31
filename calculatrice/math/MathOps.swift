@@ -177,6 +177,22 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
         }
         return nil
     }
+
+    func preferRealCalculationWith(thisInput: [Value]) -> Bool {
+        // Solves a special case:
+        // when calculating a division of whole numbers (which can
+        // be converted to rationals), the result should be a numeric
+        // value, and not a fraction.
+        // I.e., 1 / 2 should be 0.5 (not 1/2), but, on the other hand,
+        // ((1/2) + (1/2)) / 2 should be 1/2
+
+        if case .number = thisInput[0].containedValue,
+            case .number = thisInput[1].containedValue {
+            return true
+        }
+
+        return false
+    }
 }
 
 class Neg: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculation {

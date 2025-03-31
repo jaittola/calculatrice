@@ -176,11 +176,12 @@ class Stack: ObservableObject {
         let preferComplexCalc = (allInputsNum &&
                                  (complexCalc?.preferComplexCalculationWith(thisInput: inputsAsNum) ??
                                   false))
+        let preferRealCalc = (allInputsRational && ratCalc?.preferRealCalculationWith(thisInput: inputs) ?? false)
 
         do {
             let resultValue: Value
 
-            if let ratCalc = ratCalc, allInputsRational {
+            if let ratCalc = ratCalc, allInputsRational, !preferRealCalc {
                 let result = try ratCalc.calcRational(inputsAsRational, calculatorMode)
                 resultValue = Value(result)
             } else if let realCalc = realCalc,
@@ -254,9 +255,17 @@ protocol NumTypeConversionCalculation {
 }
 
 protocol RationalCalculation {
+    func preferRealCalculationWith(thisInput: [Value]) -> Bool
     func calcRational(_ inputs: [RationalValue],
                       _ calculatorMode: CalculatorMode) throws -> RationalValue
 }
+
+extension RationalCalculation {
+    func preferRealCalculationWith(thisInput: [Value]) -> Bool {
+        false
+    }
+}
+
 
 enum ValueNumberFormat {
     case fromInput
