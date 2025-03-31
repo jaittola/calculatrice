@@ -492,7 +492,7 @@ class Conjugate: Calculation, ComplexCalculation {
     }
 }
 
-class Square: Calculation, ScalarCalculation, ComplexCalculation {
+class Square: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [Num], _ calculatorMode: CalculatorMode) -> NumericalValue {
         let input = inputs[0].floatingPoint
@@ -503,9 +503,13 @@ class Square: Calculation, ScalarCalculation, ComplexCalculation {
         return Pow().calcComplex([inputs[0], ComplexValue(2.0, 0.0)],
                                  calculatorMode)
     }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        return try Pow().calcRational([inputs[0], RationalValue(2, 1)], calculatorMode)
+    }
 }
 
-class Pow: Calculation, ScalarCalculation, ComplexCalculation {
+class Pow: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 2
     func calculate(_ inputs: [Num], _ calculatorMode: CalculatorMode) -> NumericalValue {
         let result = pow(inputs[0].floatingPoint, inputs[1].floatingPoint)
@@ -531,9 +535,24 @@ class Pow: Calculation, ScalarCalculation, ComplexCalculation {
         return ComplexValue(absolute: resultR, argument: resultArg,
                             presentationFormat: inputs[0].presentationFormat)
     }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        guard inputs[1].isWholeNumber else {
+            throw CalcError.badInput()
+        }
+
+        let resultNumerator = pow(inputs[0].numerator.floatingPoint, inputs[1].floatingPoint)
+        let resultDenominator = pow(inputs[0].denominator.floatingPoint, inputs[1].floatingPoint)
+
+        return try RationalValue(resultNumerator, resultDenominator)
+    }
+
+    func preferRealCalculationWith(thisInput: [Value]) -> Bool {
+        return !(thisInput[1].asRational?.isWholeNumber ?? false)
+    }
 }
 
-class Pow3: Calculation, ScalarCalculation, ComplexCalculation {
+class Pow3: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculation {
     let arity: Int = 1
     func calculate(_ inputs: [Num], _ calculatorMode: CalculatorMode) -> NumericalValue {
         let result = pow(inputs[0].floatingPoint, 3)
@@ -543,6 +562,10 @@ class Pow3: Calculation, ScalarCalculation, ComplexCalculation {
     func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
         return Pow().calcComplex([inputs[0], ComplexValue(3.0, 0.0)],
                                  calculatorMode)
+    }
+
+    func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
+        return try Pow().calcRational([inputs[0], RationalValue(3, 1)], calculatorMode)
     }
 }
 

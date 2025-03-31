@@ -153,4 +153,19 @@ class TestMathOpsRational: XCTestCase {
         XCTAssertFalse(Div().preferRealCalculationWith(thisInput: [Value(rat(1, 1)),
                                                                    Value(rat(2, 1))]))
     }
+
+    func testPowRational() {
+        let v1 = rat(3, 4)
+        XCTAssertEqual(rat(9, 16), try Square().calcRational([v1], CalculatorMode()))
+        XCTAssertEqual(rat(27, 64), try Pow3().calcRational([v1], CalculatorMode()))
+        XCTAssertEqual(rat(81, 256), try Pow().calcRational([v1, rat(4, 1)], CalculatorMode()))
+        XCTAssertEqual(rat(9, 16), try Pow().calcRational([v1, rat(4, 2)], CalculatorMode()))
+        XCTAssertThrowsError(try Pow().calcRational([v1, rat(3, 2)], CalculatorMode()))
+    }
+
+    func testPowPreferRealCalculation() {
+        XCTAssertTrue(Pow().preferRealCalculationWith(thisInput: [Value(rat(3, 4)), Value(rat(3, 4))]))
+        XCTAssertFalse(Pow().preferRealCalculationWith(thisInput: [Value(rat(3, 4)), Value(rat(3, 1))]))
+        XCTAssertFalse(Pow().preferRealCalculationWith(thisInput: [Value(rat(3, 4)), Value(rat(1, 1))]))
+    }
 }

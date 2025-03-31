@@ -71,7 +71,9 @@ class RationalValue: NSObject, Num {
     func stringValue(precision: Int = realDefaultPrecision,
                      withSign: Bool = true) -> String {
         if isWholeNumber {
-            return numerator.stringValue(precision: precision, withSign: withSign)
+            let toStringify = denominator.floatingPoint == 1.0 ? numerator :
+                NumericalValue(round(numerator.floatingPoint / denominator.floatingPoint))
+            return toStringify.stringValue(precision: precision, withSign: withSign)
         }
 
         let whole = wholePart
@@ -174,7 +176,8 @@ class RationalValue: NSObject, Num {
     }
 
     var isWholeNumber: Bool {
-        denominator.floatingPoint == 1.0
+        return denominator.floatingPoint == 1.0 ||
+        (modf(numerator.floatingPoint/denominator.floatingPoint).1 == 0.0)
     }
 
     override var description: String {

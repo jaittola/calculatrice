@@ -109,7 +109,8 @@ class TestNumericalValuesRational: XCTestCase {
         let negv = assertNoThrow { try RationalValue(-14, 6) }!
         let negv2 = assertNoThrow { try RationalValue(-2, 3) }!
         let vNoSimplify = assertNoThrow { try RationalValue(14, 6, simplifyOnInitialisation: false) }!
-        let wholeNum = assertNoThrow { try RationalValue(2, 1) }!
+        let wholeNum = assertNoThrow { try RationalValue(4, 2) }!
+        let wholeNumNotSimplified = assertNoThrow { try RationalValue(4, 2, simplifyOnInitialisation: false) }!
         let wholeNumNeg = assertNoThrow { try RationalValue(-2, 1) }!
 
         let fractionalised = vNoSimplify.fracOnly
@@ -129,6 +130,7 @@ class TestNumericalValuesRational: XCTestCase {
         XCTAssertEqual("2 2/6", vNoSimplify.stringValue())
 
         XCTAssertEqual("2", wholeNum.stringValue())
+        XCTAssertEqual("2", wholeNumNotSimplified.stringValue())
 
         XCTAssertEqual("7/3", fractionalised.stringValue())
 
