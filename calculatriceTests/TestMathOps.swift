@@ -90,6 +90,21 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result, complex(-2, 0))
     }
 
+    func testComplexReImRational() {
+        let values = [ComplexValue(realValue: rat(1, 3),
+                                   imagValue: rat(2, 5))]
+        let re = Re().calcComplex(values, self.calculatorMode)
+        let im = Im().calcComplex(values, self.calculatorMode)
+
+        let inputs = [re, im].compactMap { $0.asReal }
+
+        let newComplex = assertNoThrow { try Complex().convert(inputs, self.calculatorMode) }!.asComplex
+
+        XCTAssertEqual(newComplex, ComplexValue(realValue: rat(1, 3),
+                                                imagValue: rat(2, 5)))
+        XCTAssertEqual(newComplex.stringValue(), "1/3 + 2/5i")
+    }
+
     func testComplexConjugate() {
         let values = [complex(1, -2)]
         let result = Conjugate().calcComplex(values, self.calculatorMode)

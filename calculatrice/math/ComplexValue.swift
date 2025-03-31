@@ -58,7 +58,7 @@ class ComplexValue: NSObject {
     }
 
     var asReal: Num? {
-        cartesian[1].floatingPoint == 0 ? cartesian[0].asNumericalValue : nil
+        cartesian[1].floatingPoint == 0 ? cartesian[0] : nil
     }
 
     var isNan: Bool {
