@@ -211,6 +211,23 @@
         }
       }
     },
+    "CalcFactorial" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Factorial (n!) of a whole number"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Kokonaisluvun kertoma (n!)"
+          }
+        }
+      }
+    },
     "CalcInv" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -511,6 +528,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Muunna sekaluku murtolukumuotoon (esim. 3 1/3 -> 10/3)"
+          }
+        }
+      }
+    },
+    "ErrArithmeticOverflow" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The result is too large (overflow)"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Arvo on liian suuri (ylivuoto)"
           }
         }
       }

@@ -61,7 +61,8 @@ struct CalculatorMain: View {
             CalcError.badInput(let msgKey),
             CalcError.unsupportedValueType(let msgKey),
             CalcError.badCalculationOp(let msgKey),
-            CalcError.nonIntegerInputToRational(let msgKey):
+            CalcError.nonIntegerInputToRational(let msgKey),
+            CalcError.arithmeticOverflow(let msgKey):
             return msgKey
         default:
             return "ErrBadCalculationOp"

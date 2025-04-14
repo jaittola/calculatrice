@@ -541,6 +541,29 @@ class TestMathOps: XCTestCase {
         }
         XCTAssertEqual(result?.stringValue(precision: 5), "3 + 3i")
     }
+
+    func testFactorial() {
+        let result = assertNoThrow { try Factorial().calculate([num(5)], calculatorMode) }
+        XCTAssertEqual(result?.floatingPoint, 120)
+    }
+
+    func testFactorialSpecialCases() {
+        XCTAssertEqual(assertNoThrow { try Factorial().calculate([num(0)], calculatorMode) }?.floatingPoint, 1)
+        XCTAssertEqual(
+            assertNoThrow { try Factorial().calculate([num(1)], calculatorMode) }?.floatingPoint, 1)
+    }
+
+    func testFactorialNegative() {
+        XCTAssertThrowsError(try Factorial().calculate([num(-5)], calculatorMode))
+    }
+
+    func testFactorialFloatingPoint() {
+        XCTAssertThrowsError(try Factorial().calculate([num(5.5)], calculatorMode))
+    }
+
+    func testFactorialLargeNumber() {
+        XCTAssertThrowsError(try Factorial().calculate([num(171)], calculatorMode))
+    }
 }
 
 func num(_ value: Double) -> NumericalValue {

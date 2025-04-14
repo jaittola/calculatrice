@@ -211,7 +211,8 @@ struct Key: Identifiable {
             opMod1: .calcOp("eˣ", Exp(), "CalcExp")) }
 
     static func lg() -> Key { Key(op: .calcOp("lg", Log10(), "CalcLog10"),
-                                  opMod1: .calcOp("10ˣ", Exp10(), "CalcExp10")) }
+                                  opMod1: .calcOp("10ˣ", Exp10(), "CalcExp10"),
+                                  opMod2: .calcOp("n!", Factorial(), "CalcFactorial")) }
 
     static func complex() -> Key {
         Key(op: .calcOp("y + xi", Complex(), "MakeComplex"),

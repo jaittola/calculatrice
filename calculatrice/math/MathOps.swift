@@ -732,6 +732,36 @@ class ToPolar: Calculation, ComplexCalculation {
     }
 }
 
+class Factorial: Calculation, ScalarCalculation {
+    let arity: Int = 1
+
+    func calculate(_ inputs: [Num], _ calculatorMode: CalculatorMode) throws -> NumericalValue {
+        let (whole, fractional) = modf(inputs[0].floatingPoint)
+
+        guard fractional == 0, whole >= 0 else {
+            throw CalcError.badInput()
+        }
+
+        if whole == 0 {
+            return NumericalValue(1)
+        }
+
+        let n = Int64(inputs[0].floatingPoint)
+
+        var result: Double = 1
+        for i in 1...n {
+            let partialResult = result * Double(i)
+            if partialResult.isInfinite {
+                throw CalcError.arithmeticOverflow()
+            }
+
+            result = partialResult
+        }
+
+        return NumericalValue(Double(result))
+    }
+}
+
 class Utils {
     static func deg2Rad(_ inputs: [Num],
                         _ calculatorMode: CalculatorMode) -> [Double] {
