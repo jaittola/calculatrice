@@ -732,6 +732,25 @@ class ToPolar: Calculation, ComplexCalculation {
     }
 }
 
+class Combinations: Calculation, ScalarCalculation {
+    let arity: Int = 2
+
+    func calculate(_ inputs: [Num], _ calculatorMode: CalculatorMode) throws -> NumericalValue {
+        let n = inputs[0]
+        let r = inputs[1]
+
+        let fn = try Factorial().calculate([n], calculatorMode)
+        let fr = try Factorial().calculate([r], calculatorMode)
+        guard let fMinusR = try Minus().calcComplex([n.asComplex, r.asComplex], calculatorMode).asReal else {
+            throw CalcError.badInput()
+        }
+        let fnr = try Factorial().calculate([fMinusR], calculatorMode)
+        let denominator = Mult().calculate([fr, fnr], calculatorMode)
+        let result = try Div().calculate([fn, denominator], calculatorMode)
+        return result
+    }
+}
+
 class Factorial: Calculation, ScalarCalculation {
     let arity: Int = 1
 

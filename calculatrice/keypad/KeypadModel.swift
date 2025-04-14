@@ -193,7 +193,8 @@ struct Key: Identifiable {
             opMod1: .calcOp("tan⁻¹", ATan(), "CalcArcTan")) }
 
     static func inv() -> Key {
-        Key(op: .calcOp("¹/ₓ", Inv(), "CalcInv")) }
+        Key(op: .calcOp("¹/ₓ", Inv(), "CalcInv"),
+            opMod1: .calcOp("nCr", Combinations(), "CalcCombinations")) }
 
     static func pow() -> Key {
         Key(op: .calcOp("x²", Square(), "CalcSquare"),

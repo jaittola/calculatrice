@@ -564,6 +564,23 @@ class TestMathOps: XCTestCase {
     func testFactorialLargeNumber() {
         XCTAssertThrowsError(try Factorial().calculate([num(171)], calculatorMode))
     }
+
+    func testCombinations() {
+        let result = assertNoThrow { try Combinations().calculate([num(4), num(2)], calculatorMode) }
+        XCTAssertEqual(result?.floatingPoint, 6)
+    }
+
+    func testCombinationsNSmaller() {
+        XCTAssertThrowsError(try Combinations().calculate([num(2), num(4)], calculatorMode))
+    }
+
+    func testCombinationsNeg() {
+        XCTAssertThrowsError(try Combinations().calculate([num(-4), num(3)], calculatorMode))
+    }
+
+    func testCombinationsFract() {
+        XCTAssertThrowsError(try Combinations().calculate([num(4), num(3.1)], calculatorMode))
+    }
 }
 
 func num(_ value: Double) -> NumericalValue {

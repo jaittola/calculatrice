@@ -126,6 +126,23 @@
         }
       }
     },
+    "CalcCombinations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinations of two values"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kahden kokonaisluvun kombinaatiot"
+          }
+        }
+      }
+    },
     "CalcCos" : {
       "extractionState" : "manual",
       "localizations" : {
