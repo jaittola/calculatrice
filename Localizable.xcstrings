@@ -239,7 +239,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Kokonaisluvun kertoma (n!)"
           }
         }
@@ -577,7 +577,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Arvo on liian suuri (ylivuoto)"
           }
         }
@@ -695,7 +695,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Arvoa ei voi käyttää tässä laskutoimituksessa"
           }
         }
@@ -881,7 +881,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Luo murtoluku"
           }
         }
