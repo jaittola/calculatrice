@@ -581,6 +581,33 @@ class TestMathOps: XCTestCase {
     func testCombinationsFract() {
         XCTAssertThrowsError(try Combinations().calculate([num(4), num(3.1)], calculatorMode))
     }
+
+    func testPermutations() {
+        let result = assertNoThrow { try Permutations().calculate([num(5), num(3)], calculatorMode) }
+        XCTAssertEqual(result?.floatingPoint, 60)
+    }
+
+    func testPermutationsNSmaller() {
+        XCTAssertThrowsError(try Permutations().calculate([num(3), num(5)], calculatorMode))
+    }
+
+    func testPermutationsNeg() {
+        XCTAssertThrowsError(try Permutations().calculate([num(-5), num(3)], calculatorMode))
+    }
+
+    func testPermutationsFract() {
+        XCTAssertThrowsError(try Permutations().calculate([num(5), num(3.5)], calculatorMode))
+    }
+
+    func testPermutationsZeroR() {
+        let result = assertNoThrow { try Permutations().calculate([num(5), num(0)], calculatorMode) }
+        XCTAssertEqual(result?.floatingPoint, 1)
+    }
+
+    func testPermutationsEqualNR() {
+        let result = assertNoThrow { try Permutations().calculate([num(4), num(4)], calculatorMode) }
+        XCTAssertEqual(result?.floatingPoint, 24)
+    }
 }
 
 func num(_ value: Double) -> NumericalValue {

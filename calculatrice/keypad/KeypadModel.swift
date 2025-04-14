@@ -194,7 +194,9 @@ struct Key: Identifiable {
 
     static func inv() -> Key {
         Key(op: .calcOp("¹/ₓ", Inv(), "CalcInv"),
-            opMod1: .calcOp("nCr", Combinations(), "CalcCombinations")) }
+            opMod1: .calcOp("nCr", Combinations(), "CalcCombinations"),
+            opMod2: .calcOp("nPr", Permutations(), "CalcPermutations"),
+            isTightLayout: true) }
 
     static func pow() -> Key {
         Key(op: .calcOp("x²", Square(), "CalcSquare"),

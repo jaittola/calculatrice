@@ -347,6 +347,23 @@
         }
       }
     },
+    "CalcPermutations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permutations of two values"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kahden kokonaisluvun permutaatiot"
+          }
+        }
+      }
+    },
     "CalcPlus" : {
       "extractionState" : "manual",
       "localizations" : {
