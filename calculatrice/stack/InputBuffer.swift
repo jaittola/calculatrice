@@ -2,209 +2,128 @@ import Foundation
 
 class InputBuffer: ObservableObject {
     var value: NumericalValue {
-        buildValue()
+        NumericalValue(
+            doubleValue,
+            originalStringValue: cleanedStringValue)
     }
 
     var isEmpty: Bool {
-        inputs.isEmpty
+        stringValue.isEmpty
     }
 
     var isFull: Bool {
-        inputs.count >= 100
+        stringValue.count >= 100
     }
 
     @Published
-    var inputs: [InputElement] = []
+    private(set) var stringValue: String = ""
 
     @Published
-    private var signum: Double = 1.0
+    private(set) var cleanedStringValue: String = ""
 
     @Published
-    private var exponentSignum: Double = 1.0
+    private(set) var doubleValue: Double = 0
 
     func addNum(_ number: Int) {
-        let v = mantissaExpValue
-        if (number != 0 || inputs.isEmpty || v.value != 0 || isInputtingDecimals) && !isFull && v.exponent < 10000 && v.exponent > -10000 {
-            inputs.append(.Number(number))
-        }
-    }
-
-    func paste(_ text: String) {
-        text.forEach { c in
-            if c == "." || c == "," {
-                dot()
-            } else if c.isNumber, let intv = Int(String(c)) {
-                addNum(intv)
-            }
-        }
+        let nextInput = stringValue + String(number)
+        parseInput(nextInput)
     }
 
     func dot() {
         if !isInputtingDecimals && !isInputtingExponent {
-            inputs.append(.Dot)
+            parseInput(stringValue + ".")
         }
     }
 
     func E() {
         if !isInputtingExponent && !isEmpty {
-            inputs.append(.E)
+            parseInput(stringValue + "E")
         }
     }
 
     func plusminus() {
         if isInputtingExponent {
-            exponentSignum = swapSignum(exponentSignum)
+            let parts = stringValue.split(separator: "E")
+            guard parts.count == 2, parts[1].count > 0 else {
+                return
+            }
+
+            let swappedSign = swapSign(String(parts[1]))
+            let newValue = String(parts[0]) + "E" + swappedSign
+            parseInput(newValue)
         } else {
-            signum = swapSignum(signum)
+            parseInput(swapSign(stringValue))
         }
     }
 
+    func paste(_ text: String) {
+        parseInput(text)
+    }
+
+    private func swapSign(_ input: String) -> String {
+        var swappedSign = input
+        if swappedSign.first == "-" {
+            swappedSign.removeFirst()
+        } else {
+            swappedSign = "-" + swappedSign
+        }
+        return swappedSign
+    }
+
     func backspace() {
-        if !inputs.isEmpty {
-            inputs.removeLast()
-            if !isInputtingExponent {
-                exponentSignum = 1.0
-            }
+        if !stringValue.isEmpty {
+            var input = stringValue
+            input.removeLast()
+            parseInput(input)
         }
     }
 
     func clear() {
-        inputs = []
-        signum = 1.0
-        exponentSignum = 1.0
+        stringValue = ""
+        cleanedStringValue = ""
+        doubleValue = 0
     }
 
-    private func swapSignum(_ sign: Double) -> Double {
-        sign < 0 ? 1.0 : -1.0
-    }
+    private func parseInput(_ input: String) {
+        var cleanedInput = input
+        cleanedInput.replace([",", "e"], with: [".", "E"])
+        cleanedInput.replace(" ", with: "")
 
-    private func buildValue() -> NumericalValue {
-        NumericalValue(numericalValue,
-                       originalStringValue: stringValue)
+        while (cleanedInput.count > 1 && cleanedInput.last == ".") || cleanedInput.last == "E"
+            || cleanedInput.last == "-"
+        {
+            cleanedInput.removeLast()
+        }
+
+        if cleanedInput.isEmpty {
+            clear()
+            return
+        }
+
+        let withLeadingZero =
+            switch cleanedInput {
+            case let str where str.first == ".":
+                "0" + str
+            case let str where str.starts(with: "-."):
+                "-0" + str.dropFirst()
+            default:
+                cleanedInput
+            }
+
+        guard let parsedValue = Double(withLeadingZero) else {
+            return
+        }
+
+        stringValue = input
+        cleanedStringValue = withLeadingZero
+        doubleValue = parsedValue
     }
 
     private var isInputtingDecimals: Bool {
-        inputs.contains { ie in
-            if case .Dot = ie {
-                return true
-            } else {
-                return false
-            }
-        }
+        stringValue.firstIndex(of: Character(".")) != nil
     }
 
     private var isInputtingExponent: Bool {
-        inputs.contains { ie in
-            if case .E = ie {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
-
-    private var mantissaExpValue: MantissaExponent {
-        var inputState: InputState = .Whole()
-        return inputs.reduce(
-            MantissaExponent(sign: signum, expoSign: exponentSignum)) { (_ acc: MantissaExponent,
-                                                                         _ input: InputElement) -> MantissaExponent in
-            switch input {
-            case .Dot:
-                if case .Whole = inputState {
-                    inputState = .Decimal()
-                }
-                return acc
-            case .E:
-                switch inputState {
-                case .Decimal, .Whole:
-                    inputState = .Exponent()
-                case .Exponent:
-                    break
-                }
-                return acc
-            case .Number(let num):
-                switch inputState {
-                case .Whole(let coeff):
-                    return MantissaExponent(mant: coeff * acc.mantissa + Double(num),
-                                            expo: acc.exponent,
-                                            sign: acc.signum,
-                                            expoSign: acc.exponentSignum)
-                case .Decimal(let coeff):
-                    let result = MantissaExponent(mant: acc.mantissa + coeff * Double(num),
-                                                  expo: acc.exponent,
-                                                  sign: acc.signum,
-                                                  expoSign: acc.exponentSignum)
-                    inputState = .Decimal(coeff * 0.1)
-                    return result
-                case .Exponent(let coeff):
-                    return MantissaExponent(mant: acc.mantissa,
-                                            expo: coeff * acc.exponent + Double(num),
-                                            sign: acc.signum,
-                                            expoSign: acc.exponentSignum)
-                }
-            }
-        }
-    }
-
-    private var numericalValue: Double {
-        mantissaExpValue.value
-    }
-
-    private var stringValue: String {
-        var startValue = signum > 0 ? "" : "-"
-        if inputs.count == 0 {
-            startValue.append("0")
-        } else if case .Dot = inputs[0] {
-            startValue.append("0")
-        }
-
-        return inputs.reduce(startValue) { (buffer, input) in
-            var b = buffer
-            switch input {
-            case .Dot:
-                b.append(".")
-            case .Number(let n):
-                b.append(String(n))
-            case .E:
-                b.append("E")
-                if exponentSignum < 0 {
-                    b.append("-")
-                }
-            }
-            return b
-        }
-    }
-
-    enum InputElement {
-        case Number(_ number: Int)
-        case Dot
-        case E
-    }
-
-    private enum InputState {
-        case Whole(_ coeff: Double = 10.0)
-        case Decimal(_ coeff: Double = 0.1)
-        case Exponent(_ coeff: Double = 10.0)
-    }
-}
-
-struct MantissaExponent {
-    var mantissa: Double
-    var exponent: Double
-    var signum: Double
-    var exponentSignum: Double
-
-    init(mant: Double = 0.0,
-         expo: Double = 0.0,
-         sign: Double = 1.0,
-         expoSign: Double = 1.0) {
-        mantissa = mant
-        exponent = expo
-        signum = sign
-        exponentSignum = expoSign
-    }
-
-    var value: Double {
-        signum * mantissa * pow(10.0, exponent * exponentSignum)
+        stringValue.firstIndex(of: Character("E")) != nil
     }
 }

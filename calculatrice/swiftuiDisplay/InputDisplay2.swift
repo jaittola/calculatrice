@@ -5,7 +5,8 @@ struct InputDisplay2: View {
     var inputBuffer: InputBuffer
 
     var body: some View {
-        let value = inputBuffer.isEmpty ? " " : inputBuffer.value.originalStringValue
+        let value = inputBuffer.isEmpty ? " " : inputBuffer.stringValue
+
         Text(value)
             .font(Styles2.stackFont)
             .foregroundColor(Styles2.stackTextColor)
@@ -14,7 +15,7 @@ struct InputDisplay2: View {
             .background(.white)
             .contextMenu {
                 Button {
-                    UIPasteboard.general.string = inputBuffer.value.originalStringValue
+                    UIPasteboard.general.string = inputBuffer.stringValue
                 } label: { Text("Copy") }
                 PasteButton(payloadType: String.self) { strings in
                     inputBuffer.paste(strings[0])

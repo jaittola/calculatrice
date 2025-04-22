@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import calculatrice
 
 class TestNumberInput: XCTestCase {
@@ -60,5 +61,104 @@ class TestNumberInput: XCTestCase {
         let v = ib.value
         XCTAssertEqual(v.floatingPoint, -0.0023)
         XCTAssertEqual(v.stringValue(), "-2.3E-3")
+    }
+
+    func testBackspace() {
+        let ib = InputBuffer()
+        ib.addNum(1)
+        ib.addNum(2)
+        ib.backspace()
+
+        XCTAssertEqual(ib.value.floatingPoint, 1)
+        XCTAssertEqual(ib.value.stringValue(), "1")
+
+        ib.addNum(2)
+        ib.dot()
+        ib.addNum(3)
+        ib.addNum(4)
+        ib.backspace()
+
+        XCTAssertEqual(ib.value.floatingPoint, 12.3)
+        XCTAssertEqual(ib.value.stringValue(), "12.3")
+    }
+
+    func testBackspace2() {
+        let ib = InputBuffer()
+        ib.addNum(1)
+        ib.addNum(2)
+        ib.dot()
+        ib.addNum(3)
+        ib.addNum(4)
+        ib.E()
+
+        XCTAssertEqual(ib.stringValue, "12.34E")
+        XCTAssertEqual(ib.value.stringValue(), "12.34")
+
+        ib.backspace()
+
+        XCTAssertEqual(ib.value.floatingPoint, 12.34)
+        XCTAssertEqual(ib.value.stringValue(), "12.34")
+    }
+
+    func testBackspaceToEmpty() {
+        let ib = InputBuffer()
+        ib.addNum(1)
+        ib.addNum(2)
+        ib.backspace()
+        ib.backspace()
+        XCTAssertEqual(ib.stringValue, "")
+        XCTAssertEqual(ib.value.floatingPoint, 0)
+    }
+
+    func testBackspaceWithEMinusAtEnd() {
+        let ib = InputBuffer()
+        ib.addNum(1)
+        ib.addNum(2)
+        ib.dot()
+        ib.addNum(3)
+        ib.E()
+        ib.addNum(2)
+        ib.plusminus()
+        ib.backspace()
+
+        XCTAssertEqual(ib.stringValue, "12.3E-")
+        XCTAssertEqual(ib.value.floatingPoint, 12.3)
+        XCTAssertEqual(ib.value.stringValue(), "12.3")
+    }
+
+    func testInputWithoutLeadingZero() {
+        let ib = InputBuffer()
+        ib.dot()
+        ib.addNum(2)
+        ib.addNum(3)
+        XCTAssertEqual(ib.stringValue, ".23")
+        XCTAssertEqual(ib.value.stringValue(), "0.23")
+        XCTAssertEqual(ib.value.floatingPoint, 0.23)
+    }
+
+    func testNegativeInputWithoutLeadingZero() {
+        let ib = InputBuffer()
+        ib.dot()
+        ib.addNum(2)
+        ib.addNum(3)
+        ib.plusminus()
+        XCTAssertEqual(ib.stringValue, "-.23")
+        XCTAssertEqual(ib.value.stringValue(), "-0.23")
+        XCTAssertEqual(ib.value.floatingPoint, -0.23)
+    }
+
+    func testPaste() {
+        verifyPaste("1.2", num(1.2), "1.2")
+        verifyPaste("-1.2", num(-1.2), "-1.2")
+        verifyPaste("9.12E-3", num(9.12E-3), "9.12E-3")
+        verifyPaste("-2.156E-6", num(-2.156E-6), "-2.156E-6")
+    }
+
+    func verifyPaste(_ text: String, _ expectedNumericalValue: Num, _ expectedString: String) {
+        let ib = InputBuffer()
+        ib.paste(text)
+        let v = ib.value
+        XCTAssertTrue(v.isEqual(expectedNumericalValue))
+        XCTAssertEqual(v.stringValue(), expectedString)
     }
 }
