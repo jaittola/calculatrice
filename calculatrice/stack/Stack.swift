@@ -134,14 +134,14 @@ class Stack: ObservableObject {
             return nil
         }
 
+        if !input.isEmpty {
+            pushInput()
+        }
+
+
         var calcInputs: [Value] = []
 
         var count = n
-        if !input.isEmpty {
-            calcInputs.insert(Value(input.value), at: 0)
-            count -= 1
-        }
-
         var nextStack = content
 
         while count > 0 {

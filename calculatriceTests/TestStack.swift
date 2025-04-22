@@ -127,6 +127,28 @@ class TestStack: XCTestCase {
         XCTAssertEqual(stackToDoubles(s.content), [3])
     }
 
+    func testCalcWhenInputNotPushed() {
+        let s = threeValueStack()
+        s.input.addNum(9)
+        assertNoThrow {
+            try s.calculate(Plus(), CalculatorMode())
+        }
+        XCTAssertEqual(stackToDoubles(s.content), [14, 2, 3])
+        XCTAssertEqual(stackToIds(s.content), [4, 1, 0])
+
+        XCTAssertEqual(s.testValues.stackHistory.count, 6)
+        XCTAssertEqual(s.testValues.stackHistory.map { stack in stackToDoubles(stack) }, [
+            [],
+            [3],
+            [2, 3],
+            [5, 2, 3],
+            [9, 5, 2, 3],
+            [14, 2, 3]])
+
+        s.undo()
+        XCTAssertEqual(stackToDoubles(s.content), [9, 5, 2, 3])
+    }
+
     func testCalcIds() {
         let s = threeValueStack()
 
@@ -160,6 +182,8 @@ class TestStack: XCTestCase {
         assertNoThrow {
             try s.calculate(Plus(), CalculatorMode())
         }
+
+        XCTAssertEqual(stackToDoubles(s.content), [7, 3])
 
         s.undo()
 
