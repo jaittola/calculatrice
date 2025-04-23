@@ -7,6 +7,17 @@ enum ContainedValue: Equatable {
     case complex(value: ComplexValue)
     case rational(value: RationalValue)
 
+    var asNumericalValue: NumericalValue? {
+        switch self {
+        case .complex(let c):
+            return c.asReal?.asNumericalValue
+        case .number(let n):
+            return n
+        case .rational(let r):
+            return r.asNumericalValue
+        }
+    }
+
     var asComplex: ComplexValue {
         switch self {
         case .complex(let c):

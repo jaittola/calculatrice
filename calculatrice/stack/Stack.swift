@@ -13,6 +13,7 @@ class Stack: ObservableObject {
         return current
     }
 
+    let pasteParser = try! PasteParser()
     let input = InputBuffer()
 
     @Published
@@ -210,7 +211,9 @@ class Stack: ObservableObject {
     }
 
     func printContents(_ calculatorMode: CalculatorMode) {
-        print("Input Buffer: string = \(input.value.stringValue(precision: 8)) double = \(input.value.floatingPoint)")
+        print(
+            "Input Buffer: string = \(input.value.stringValue(calculatorMode))"
+        )
         print("STACK: ")
         content.enumerated().forEach { idx, value in
             print("  \(idx): string = \(value.stringValue(calculatorMode))")

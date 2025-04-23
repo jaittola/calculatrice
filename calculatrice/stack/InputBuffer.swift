@@ -1,10 +1,12 @@
 import Foundation
 
 class InputBuffer: ObservableObject {
-    var value: NumericalValue {
-        NumericalValue(
-            doubleValue,
-            originalStringValue: cleanedStringValue)
+    var value: ContainedValue {
+        ContainedValue.number(
+            value:
+                NumericalValue(
+                    doubleValue,
+                    originalStringValue: cleanedStringValue))
     }
 
     var isEmpty: Bool {
@@ -56,7 +58,8 @@ class InputBuffer: ObservableObject {
         }
     }
 
-    func paste(_ text: String) {
+    @discardableResult
+    func paste(_ text: String) -> Bool {
         parseInput(text)
     }
 
@@ -84,7 +87,8 @@ class InputBuffer: ObservableObject {
         doubleValue = 0
     }
 
-    private func parseInput(_ input: String) {
+    @discardableResult
+    private func parseInput(_ input: String) -> Bool {
         var cleanedInput = input
         cleanedInput.replace([",", "e"], with: [".", "E"])
         cleanedInput.replace(" ", with: "")
@@ -95,9 +99,13 @@ class InputBuffer: ObservableObject {
             cleanedInput.removeLast()
         }
 
+        if cleanedInput.first == "+" {
+            cleanedInput.removeFirst()
+        }
+
         if cleanedInput.isEmpty {
             clear()
-            return
+            return false
         }
 
         let withLeadingZero =
@@ -111,12 +119,14 @@ class InputBuffer: ObservableObject {
             }
 
         guard let parsedValue = Double(withLeadingZero) else {
-            return
+            return false
         }
 
         stringValue = input
         cleanedStringValue = withLeadingZero
         doubleValue = parsedValue
+
+        return true
     }
 
     private var isInputtingDecimals: Bool {

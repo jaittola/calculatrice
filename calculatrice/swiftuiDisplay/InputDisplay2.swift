@@ -4,6 +4,8 @@ struct InputDisplay2: View {
     @ObservedObject
     var inputBuffer: InputBuffer
 
+    var stack: Stack
+
     var body: some View {
         let value = inputBuffer.isEmpty ? " " : inputBuffer.stringValue
 
@@ -16,9 +18,12 @@ struct InputDisplay2: View {
             .contextMenu {
                 Button {
                     UIPasteboard.general.string = inputBuffer.stringValue
-                } label: { Text("Copy") }
+                } label: {
+                    Text("Copy")
+                }
                 PasteButton(payloadType: String.self) { strings in
-                    inputBuffer.paste(strings[0])
+                    // TODO, add error messaging.
+                    _ = handlePaste(strings[0], stack)
                 }
             }
     }
@@ -28,10 +33,10 @@ struct InputDisplay2_Previews: PreviewProvider {
     static var previews: some View {
         let ib = makeInput()
         HStack {
-            InputDisplay2(inputBuffer: ib)
+            InputDisplay2(inputBuffer: ib, stack: Stack())
         }.padding(.vertical, 10).background(.red)
         HStack {
-            InputDisplay2(inputBuffer: InputBuffer())
+            InputDisplay2(inputBuffer: InputBuffer(), stack: Stack())
         }.padding(.vertical, 10).background(.green)
     }
 

@@ -20,7 +20,7 @@ struct CalculatorMain: View {
             StackDisplay2(stack: stack,
                           calculatorMode: calculatorMode,
                           selection: $selection)
-            InputDisplay2(inputBuffer: stack.input)
+            InputDisplay2(inputBuffer: stack.input, stack: stack)
             KeypadView2(model: keypadModel,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the keyboard to the safe area
