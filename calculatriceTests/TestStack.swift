@@ -333,6 +333,27 @@ class TestStack: XCTestCase {
                        accuracy: NumericalValue.epsilon)
     }
 
+    func testComplexWithNegativeImaginaryPartInput() {
+        // This is a regression test case for a bug.
+
+        let s = Stack()
+        let ib = s.input
+
+        ib.addNum(2)
+        s.pushInput()
+        ib.addNum(3)
+        ib.plusminus()
+        s.pushInput()
+
+        assertNoThrow {
+            try s.calculate(Complex(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content[0].asComplex.stringValue(), "2 - 3i")
+        XCTAssertEqual(s.content[0].asComplex.real.floatingPoint, 2.0)
+        XCTAssertEqual(s.content[0].asComplex.imag.floatingPoint, -3.0)
+    }
+
     private func threeValueStack() -> Stack {
         let s = Stack()
 

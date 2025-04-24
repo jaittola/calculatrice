@@ -154,7 +154,7 @@ class NumericalValue: NSObject, Num {
     }
 
     var withDefaultPresentation: any Num {
-        self
+        return NumericalValue(value)
     }
 
     var isWholeNumber: Bool {
