@@ -149,6 +149,7 @@
 		4F064C6D27F0314200F33E75 /* calculatrice */ = {
 			isa = PBXGroup;
 			children = (
+				4F49B2442DBF57D70004ADD3 /* PasteParser */,
 				4F337DC62A4188AF0021CAE0 /* swiftuiDisplay */,
 				4FC1C0AF27F1D52B00794D9E /* math */,
 				4F37925F27F0D04D007B013E /* utils */,
@@ -201,6 +202,14 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
+		4F49B2442DBF57D70004ADD3 /* PasteParser */ = {
+			isa = PBXGroup;
+			children = (
+				4F6C89152DB7B42C00510D75 /* PasteParser.swift */,
+			);
+			path = PasteParser;
+			sourceTree = "<group>";
+		};
 		4FC1C0AF27F1D52B00794D9E /* math */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,7 +233,6 @@
 		4FD352E627F0B1B90073534E /* stack */ = {
 			isa = PBXGroup;
 			children = (
-				4F6C89152DB7B42C00510D75 /* PasteParser.swift */,
 				4FD352E727F0B1C90073534E /* Stack.swift */,
 				4FD352EB27F0B5120073534E /* InputBuffer.swift */,
 			);
