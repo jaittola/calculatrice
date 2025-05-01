@@ -41,10 +41,11 @@ class PasteParser {
 
     private func convertParsedExpression(_ expression: ParsedExpression) -> ContainedValue? {
         var typedSiblings: [ContainedValue] = []
+        var numSiblings: [Num] = []
 
         if let siblings = expression.siblings as? [ParsedExpression] {
             typedSiblings = siblings.compactMap { convertParsedExpression($0) }
-
+            numSiblings = typedSiblings.compactMap { $0.asNum }
         }
 
         switch expression.kind {
@@ -57,15 +58,24 @@ class PasteParser {
             return inputBuffer.value
 
         case e_complex_cart:
-            let numSiblings = typedSiblings.compactMap { $0.asNum }
             guard numSiblings.count == 2 else {
                 NSLog("Invalid number of arguments for complex number literal")
                 return nil
             }
             return ContainedValue.complex(value: ComplexValue(realValue: numSiblings[0], imagValue: numSiblings[1]))
 
+        case e_complex_polar:
+            guard numSiblings.count == 2 else {
+                NSLog("Invalid number of arguments for complex number literal")
+                return nil
+            }
+            let argument = expression.angle_unit == e_au_deg ?
+                NumericalValue(Utils.deg2Rad([numSiblings[1]], CalculatorMode())[0]) :
+                numSiblings[1]
+            return ContainedValue.complex(value: ComplexValue(absolute: numSiblings[0],
+                                                              argument: argument))
+
         case e_fraction:
-            let numSiblings = typedSiblings.compactMap { $0.asNum }
             let rational: RationalValue? = switch numSiblings.count {
             case 2:
                 try? RationalValue(numerator: numSiblings[0],

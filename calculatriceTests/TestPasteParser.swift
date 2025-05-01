@@ -121,6 +121,30 @@ class TestPasteParser: XCTestCase {
         XCTAssertEqual(v?.asComplex.imag.asRational?.stringValue(), "-2/5")
     }
 
+    func testPastePolarComplexDeg() {
+        let input = "2 ∠ 32°"
+        let v = pasteParser.parsePastedInput(input)
+        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.asComplex.polarAbsolute.floatingPoint, 2)
+        XCTAssertEqual(v?.asComplex.polarArgument.floatingPoint,
+                       Utils.deg2Rad([NumericalValue(32)], CalculatorMode())[0])
+    }
+
+    func testPastePolarComplexRad() {
+        let radMode = CalculatorMode()
+        radMode.angle = .Rad
+
+        let input = "2 ∠ 0.7853982"
+        let v = pasteParser.parsePastedInput(input)
+        XCTAssertEqual(v?.stringValue(radMode), input)
+        XCTAssertEqual(v?.asComplex.polarAbsolute.floatingPoint, 2)
+        XCTAssertEqual(v?.asComplex.polarArgument.floatingPoint,
+                       0.7853982)
+        XCTAssertEqual(v?.asComplex.polarArgument.floatingPoint ?? -1,
+                       Utils.deg2Rad([NumericalValue(45)], CalculatorMode())[0],
+                       accuracy: NumericalValue.epsilon)
+    }
+
     func testParseFractional() {
         let input = "3/4"
         let v = pasteParser.parsePastedInput(input)

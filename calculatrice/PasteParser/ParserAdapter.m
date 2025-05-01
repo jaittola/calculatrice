@@ -52,10 +52,11 @@ NSString *identifier;
 
 @implementation ParsedExpression
 
-+ (ParsedExpression *)create:(expression_kind) kind text:(const char *)text siblings:(NSArray*)siblings {
++ (ParsedExpression *)create:(expression_kind) kind angle_unit:(expression_angle_unit) angle_unit text:(const char *)text siblings:(NSArray*)siblings {
     ParsedExpression *e = [ParsedExpression alloc];
 
     e->_kind = kind;
+    e->_angle_unit = angle_unit;
     e->_text = text != NULL ? [NSString stringWithUTF8String:text] : nil;
     e->_siblings = siblings != nil ? siblings : [[NSArray alloc] init];
     return e;
@@ -70,7 +71,7 @@ NSString *identifier;
         }
     }
 
-    ParsedExpression *pe = [ParsedExpression create:expr->kind text:expr->text siblings:siblings];
+    ParsedExpression *pe = [ParsedExpression create:expr->kind angle_unit:expr->angle_unit text:expr->text siblings:siblings];
     return pe;
 }
 

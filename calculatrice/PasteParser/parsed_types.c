@@ -27,6 +27,15 @@ expression_t *expression_complex_cart(expression_t *real, expression_t *imag) {
     return expression_multicomponent(real, imag, NULL, e_complex_cart);
 }
 
+expression_t *expression_complex_polar(expression_t *abs,
+                                       expression_t *arg,
+                                       expression_angle_unit angle_unit) {
+    expression_t *expr = expression_multicomponent(abs, arg, NULL, e_complex_polar);
+    expr->angle_unit = angle_unit;
+
+    return expr;
+}
+
 expression_t *expression_fraction(expression_t *v1, expression_t *v2, expression_t *v3) {
     return expression_multicomponent(v1, v2, v3, e_fraction);
 }
@@ -76,7 +85,9 @@ expression_t *expression_scalar(const char *text, expression_kind kind) {
     return expr;
 }
 
-expression_t *expression_multicomponent(expression_t *c1, expression_t *c2, expression_t *c3, expression_kind kind) {
+expression_t *expression_multicomponent(expression_t *c1,
+                                        expression_t *c2, expression_t *c3,
+                                        expression_kind kind) {
     expression_t *expr = calloc(sizeof(expression_t), 1);
     if (expr == NULL) {
         fprintf(stderr, "Memory allocation failed: %s", strerror(errno));

@@ -29,13 +29,21 @@ extern void yyerror(char *);
     return MINUS;
 }
 
+\xE2\x88\xA0 return ANGLE;
+
+° return DEGREE;
+
 \/ return DASH;
 
 i return IMAG;
 
 [ \n\t]  ; // Ignore whitespace
 
-. yyerror("invalid character");
+. {
+    char errmsg[256] = { '\0' } ;
+    snprintf(errmsg, 254, "Invalid character %s", yytext);
+    yyerror(errmsg);
+}
 
 
 %%

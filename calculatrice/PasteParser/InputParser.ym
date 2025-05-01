@@ -16,12 +16,12 @@ void yyerror(char *);
 %token <expression> UNSIGNED_INTEGER
 %token <expression> UNSIGNED_DOUBLE
 %token <sign> MINUS PLUS
-%token IMAG DASH
+%token IMAG DASH ANGLE DEGREE
 
 %type <expression> expr
 %type <expression> scalar_value integer_value double_value
 %type <expression> fraction_value true_fraction_value mixed_fraction_value
-%type <expression> cartesian_complex_value
+%type <expression> complex_value cartesian_complex_value cartesian_polar_value
 %type <sign> sign maybesign
 
 %%
@@ -36,7 +36,9 @@ program: expr {
 }
 ;
 
-expr: scalar_value | cartesian_complex_value;
+expr: scalar_value | complex_value;
+
+complex_value: cartesian_complex_value | cartesian_polar_value;
 
 scalar_value: integer_value | double_value | fraction_value;
 
@@ -77,11 +79,21 @@ scalar_value sign scalar_value IMAG {
 }
 ;
 
+cartesian_polar_value:
+scalar_value ANGLE scalar_value DEGREE {
+    $$ = expression_complex_polar($1, $3, e_au_deg);
+}
+| scalar_value ANGLE scalar_value {
+    $$ = expression_complex_polar($1, $3, e_au_rad);
+}
+;
+
 sign: PLUS | MINUS;
 
 maybesign:
 sign { $$ = $1; }
 | { $$ = 1; }
+;
 
 %%
 

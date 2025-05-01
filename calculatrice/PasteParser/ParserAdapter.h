@@ -27,8 +27,9 @@ extern ParserAdapter *parserAdapter;
 @property NSArray* siblings;
 @property NSString *text;
 @property expression_kind kind;
+@property expression_angle_unit angle_unit;
 
-+ (ParsedExpression *)create:(expression_kind) kind text:(const char *)text siblings:(NSArray*)siblings;
++ (ParsedExpression *)create:(expression_kind) kind angle_unit:(expression_angle_unit) angle_unit text:(const char *)text siblings:(NSArray*)siblings;
 + (ParsedExpression *)create:(expression_t *)expr;
 
 @end
