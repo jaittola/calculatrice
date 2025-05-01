@@ -13,7 +13,7 @@ class Stack: ObservableObject {
         return current
     }
 
-    let pasteParser = try! PasteParser()
+    let pasteParser = PasteParser()
     let input = InputBuffer()
 
     @Published

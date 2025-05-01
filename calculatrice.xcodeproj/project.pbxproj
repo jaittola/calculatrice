@@ -33,6 +33,13 @@
 		4F483DD129FE6E0F00A34E28 /* TestNumberInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F483DCF29FE6E0F00A34E28 /* TestNumberInput.swift */; };
 		4F483DD229FE6E0F00A34E28 /* TestMathOps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F483DD029FE6E0F00A34E28 /* TestMathOps.swift */; };
 		4F483DD429FE6F0800A34E28 /* TestNumericalValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F483DD329FE6F0800A34E28 /* TestNumericalValues.swift */; };
+		4F49B2462DBF599E0004ADD3 /* InputParser.ym in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B2452DBF58820004ADD3 /* InputParser.ym */; };
+		4F49B2472DBF599E0004ADD3 /* InputParser.ym in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B2452DBF58820004ADD3 /* InputParser.ym */; };
+		4F49B2492DBF59C00004ADD3 /* InputTokeniser.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B2482DBF59AB0004ADD3 /* InputTokeniser.lm */; };
+		4F49B24A2DBF59C00004ADD3 /* InputTokeniser.lm in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B2482DBF59AB0004ADD3 /* InputTokeniser.lm */; };
+		4F49B24E2DBF5D140004ADD3 /* ParserAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B24C2DBF5D0C0004ADD3 /* ParserAdapter.m */; };
+		4F49B2572DBFC1C80004ADD3 /* parsed_types.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B2562DBFC1C10004ADD3 /* parsed_types.c */; };
+		4F49B2582DBFC1C80004ADD3 /* parsed_types.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F49B2562DBFC1C10004ADD3 /* parsed_types.c */; };
 		4F6C89162DB7B43000510D75 /* PasteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C89152DB7B42C00510D75 /* PasteParser.swift */; };
 		4F6C89172DB7B43000510D75 /* PasteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C89152DB7B42C00510D75 /* PasteParser.swift */; };
 		4F975F5529FE48A300BF57A8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C7027F0314200F33E75 /* SceneDelegate.swift */; };
@@ -96,6 +103,14 @@
 		4F483DCF29FE6E0F00A34E28 /* TestNumberInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestNumberInput.swift; sourceTree = "<group>"; };
 		4F483DD029FE6E0F00A34E28 /* TestMathOps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMathOps.swift; sourceTree = "<group>"; };
 		4F483DD329FE6F0800A34E28 /* TestNumericalValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNumericalValues.swift; sourceTree = "<group>"; };
+		4F49B2452DBF58820004ADD3 /* InputParser.ym */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.yacc; path = InputParser.ym; sourceTree = "<group>"; };
+		4F49B2482DBF59AB0004ADD3 /* InputTokeniser.lm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.lex; path = InputTokeniser.lm; sourceTree = "<group>"; };
+		4F49B24B2DBF5CF30004ADD3 /* ParserAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParserAdapter.h; sourceTree = "<group>"; };
+		4F49B24C2DBF5D0C0004ADD3 /* ParserAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParserAdapter.m; sourceTree = "<group>"; };
+		4F49B24F2DBF5D1A0004ADD3 /* calculatrice-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "calculatrice-Bridging-Header.h"; sourceTree = "<group>"; };
+		4F49B2502DBF5D1A0004ADD3 /* calculatriceTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "calculatriceTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		4F49B2552DBFC1A40004ADD3 /* parsed_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parsed_types.h; sourceTree = "<group>"; };
+		4F49B2562DBFC1C10004ADD3 /* parsed_types.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = parsed_types.c; sourceTree = "<group>"; };
 		4F6C89152DB7B42C00510D75 /* PasteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteParser.swift; sourceTree = "<group>"; };
 		4FB536602AE3EFD1008EC8BD /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		4FB536632AE3F43A008EC8BD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -161,6 +176,8 @@
 				4F064C7927F0314300F33E75 /* LaunchScreen.storyboard */,
 				4F064C7C27F0314300F33E75 /* Info.plist */,
 				4F337DCA2A4189210021CAE0 /* CalculatorViewController2.swift */,
+				4F49B24F2DBF5D1A0004ADD3 /* calculatrice-Bridging-Header.h */,
+				4F49B2502DBF5D1A0004ADD3 /* calculatriceTests-Bridging-Header.h */,
 			);
 			path = calculatrice;
 			sourceTree = "<group>";
@@ -205,6 +222,12 @@
 		4F49B2442DBF57D70004ADD3 /* PasteParser */ = {
 			isa = PBXGroup;
 			children = (
+				4F49B2562DBFC1C10004ADD3 /* parsed_types.c */,
+				4F49B2552DBFC1A40004ADD3 /* parsed_types.h */,
+				4F49B24C2DBF5D0C0004ADD3 /* ParserAdapter.m */,
+				4F49B24B2DBF5CF30004ADD3 /* ParserAdapter.h */,
+				4F49B2482DBF59AB0004ADD3 /* InputTokeniser.lm */,
+				4F49B2452DBF58820004ADD3 /* InputParser.ym */,
 				4F6C89152DB7B42C00510D75 /* PasteParser.swift */,
 			);
 			path = PasteParser;
@@ -292,9 +315,11 @@
 				TargetAttributes = {
 					4F064C6A27F0314200F33E75 = {
 						CreatedOnToolsVersion = 13.3;
+						LastSwiftMigration = 1630;
 					};
 					4F064C8027F0314300F33E75 = {
 						CreatedOnToolsVersion = 13.3;
+						LastSwiftMigration = 1630;
 						TestTargetID = 4F064C6A27F0314200F33E75;
 					};
 				};
@@ -373,9 +398,12 @@
 				4F337DCB2A4189210021CAE0 /* CalculatorViewController2.swift in Sources */,
 				4FD352E827F0B1C90073534E /* Stack.swift in Sources */,
 				4F1B3BD82D93E58F0022110D /* CalcError.swift in Sources */,
+				4F49B2582DBFC1C80004ADD3 /* parsed_types.c in Sources */,
 				4F0AC5132A41A42100BA68D0 /* InputDisplay2.swift in Sources */,
+				4F49B2462DBF599E0004ADD3 /* InputParser.ym in Sources */,
 				4F1B3BD32D93E4860022110D /* ComplexValue.swift in Sources */,
 				4F064C6F27F0314200F33E75 /* AppDelegate.swift in Sources */,
+				4F49B24E2DBF5D140004ADD3 /* ParserAdapter.m in Sources */,
 				4FC1C0B127F1D55A00794D9E /* MathOps.swift in Sources */,
 				4FB536612AE3EFD1008EC8BD /* HelpView.swift in Sources */,
 				4F256BBC27F20B1400123DA8 /* NumericalValues.swift in Sources */,
@@ -388,6 +416,7 @@
 				4F337DC82A4188EC0021CAE0 /* CalculatorMain.swift in Sources */,
 				4F1B3BD52D93E51F0022110D /* RationalValue.swift in Sources */,
 				4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */,
+				4F49B2492DBF59C00004ADD3 /* InputTokeniser.lm in Sources */,
 				4FD352EC27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4FD352E327F0B0980073534E /* KeypadModel.swift in Sources */,
 			);
@@ -414,6 +443,7 @@
 				4F483DD129FE6E0F00A34E28 /* TestNumberInput.swift in Sources */,
 				4FB536622AE3EFD1008EC8BD /* HelpView.swift in Sources */,
 				4FBE9E242A44784200E3BA7F /* StackDisplay2.swift in Sources */,
+				4F49B2572DBFC1C80004ADD3 /* parsed_types.c in Sources */,
 				4F1B3BD62D93E51F0022110D /* RationalValue.swift in Sources */,
 				4FBE9E272A44785D00E3BA7F /* KeypadView2.swift in Sources */,
 				4F3C51412A495FB1006366EF /* TestStack.swift in Sources */,
@@ -423,6 +453,8 @@
 				4F483DD429FE6F0800A34E28 /* TestNumericalValues.swift in Sources */,
 				4F337DCC2A4189210021CAE0 /* CalculatorViewController2.swift in Sources */,
 				4FBE9E232A44783F00E3BA7F /* CalculatorMain.swift in Sources */,
+				4F49B24A2DBF59C00004ADD3 /* InputTokeniser.lm in Sources */,
+				4F49B2472DBF599E0004ADD3 /* InputParser.ym in Sources */,
 				4F37926227F0D05C007B013E /* Extensions.swift in Sources */,
 				4F256BBD27F20B1400123DA8 /* NumericalValues.swift in Sources */,
 			);
@@ -569,6 +601,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = L3BYPUKWJN;
@@ -592,6 +625,8 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "calculatrice/calculatrice-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -602,6 +637,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = L3BYPUKWJN;
@@ -625,6 +661,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "calculatrice/calculatrice-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -635,6 +672,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -643,6 +681,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jukkaa.calculatriceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "calculatrice/calculatriceTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/calculatrice.app/calculatrice";
@@ -654,6 +694,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -662,6 +703,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jukkaa.calculatriceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "calculatrice/calculatriceTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/calculatrice.app/calculatrice";

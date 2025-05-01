@@ -1,0 +1,96 @@
+%{
+
+#import "ParserAdapter.h"
+#import "parsed_types.h"
+
+int yylex(void);
+void yyerror(char *);
+
+%}
+
+%union {
+    int sign;
+    expression_t* expression;
+};
+
+%token <expression> UNSIGNED_INTEGER
+%token <expression> UNSIGNED_DOUBLE
+%token <sign> MINUS PLUS
+%token IMAG DASH
+
+%type <expression> expr
+%type <expression> scalar_value integer_value double_value
+%type <expression> fraction_value true_fraction_value mixed_fraction_value
+%type <expression> cartesian_complex_value
+%type <sign> sign maybesign
+
+%%
+
+program: expr {
+    if (parserAdapter != nil) {
+        [parserAdapter setParseResult:$1];
+    } else {
+        NSLog(@"Parser adapter not defined");
+    }
+    expression_free($1);
+}
+;
+
+expr: scalar_value | cartesian_complex_value;
+
+scalar_value: integer_value | double_value | fraction_value;
+
+integer_value: maybesign UNSIGNED_INTEGER {
+    $$ = expression_neg($1, $2);
+}
+;
+
+double_value: maybesign UNSIGNED_DOUBLE {
+    $$ = expression_neg($1, $2);
+}
+;
+
+fraction_value: true_fraction_value | mixed_fraction_value;
+
+true_fraction_value: maybesign UNSIGNED_INTEGER DASH UNSIGNED_INTEGER {
+    $$ = expression_fraction(expression_neg($1, $2), $4, NULL);
+}
+;
+
+mixed_fraction_value: maybesign UNSIGNED_INTEGER UNSIGNED_INTEGER DASH UNSIGNED_INTEGER {
+    $$ = expression_fraction(expression_neg($1, $2), $3, $5);
+}
+;
+
+cartesian_complex_value:
+scalar_value sign scalar_value IMAG {
+    $$ = expression_complex_cart($1, expression_neg($2, $3));
+}
+| scalar_value sign IMAG {
+    $$ = expression_complex_cart($1, expression_one($2));
+}
+| scalar_value IMAG {
+    $$ = expression_complex_cart(expression_zero(), $1);
+}
+| maybesign IMAG {
+    $$ = expression_complex_cart(expression_zero(), expression_one($1));
+}
+;
+
+sign: PLUS | MINUS;
+
+maybesign:
+sign { $$ = $1; }
+| { $$ = 1; }
+
+%%
+
+void yyerror(char *s)
+{
+    if (parserAdapter != nil) {
+        NSLog(@"Parsing failed: %s", s);
+        [parserAdapter setParseError:s];
+    } else {
+        NSLog(@"Parsing failed: %s", s);
+    }
+}
