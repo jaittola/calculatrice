@@ -53,18 +53,18 @@ expression_t *expression_neg(int sign, expression_t *expression) {
     expression_t *new_exp = calloc(sizeof(expression_t), 1);
     if (new_exp == NULL) {
         fprintf(stderr, "Memory allocation failed: %s", strerror(errno));
-        free(expression);
+        expression_free(expression);
         return NULL;
     }
     if (expression->text != NULL) {
         char *buf = calloc(strlen(expression->text) + 2, 1);
         if (buf != NULL) {
             sprintf(buf, "-%s", expression->text);
+            new_exp->text = buf;
         }
-        new_exp->text = buf;
     }
     new_exp->kind = expression->kind;
-    free(expression);
+    expression_free(expression);
 
     return new_exp;
 }
