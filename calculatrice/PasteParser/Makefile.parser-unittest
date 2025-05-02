@@ -1,0 +1,48 @@
+# -*- mode: Makefile -*-
+
+test: parser_unittest
+	./parser_unittest
+
+vgtest: parser_unittest
+	valgrind --leak-check=full ./parser_unittest
+
+PLATFORM=$(shell uname)
+
+CFLAGS=-DPARSER_UNITTEST -g -Wall
+OCWARN=-Wno-objc-root-class
+
+ifeq ($(PLATFORM),Darwin)
+OCFLAG = -ObjC
+else
+CC = gcc
+OCFLAG = -x objective-c
+endif
+
+parser_unittest: InputTokeniser.o y.tab.o parser_unittest.o parsed_types.o
+	$(CC) $(CFLAGS) -o parser_unittest $^ -lobjc
+
+parser_unittest.o: parser_unittest.m parser_unittest.h
+
+y.tab.c: InputParser.ym
+	yacc -d $<
+
+y.tab.h: y.tab.c
+
+%.m: %.lm y.tab.h
+	flex -o $@ $<
+
+y.tab.o: y.tab.c
+	$(CC) $(CFLAGS) $(OCFLAG) $(OCWARN) -c $<
+
+%.o: %.m %.h
+	$(CC) $(CFLAGS) $(OCWARN) -c $<
+
+%.o: %.c %.h
+	$(CC) $(CFLAGS) -c $<
+
+clean:
+	$(RM) *.o y.tab.* parser_unittest InputTokeniser.m
+
+.PRECIOUS: %.m %.c
+
+.PHONY: clean

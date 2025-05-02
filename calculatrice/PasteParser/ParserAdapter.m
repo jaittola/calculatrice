@@ -41,6 +41,7 @@ NSString *identifier;
 
 
 - (void)setParseError:(const char *)parseError {
+    NSLog(@"Parsing failed: %s", parseError);
     if (parseError == NULL) {
         return;
     }
