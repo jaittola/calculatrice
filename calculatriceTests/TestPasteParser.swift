@@ -55,12 +55,24 @@ class TestPasteParser: XCTestCase {
         XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
     }
 
-    func testPasteComplexNumberEng() {
-        let input = "123.456E1 + 789.012E-2i"
+    func testPasteComplexNumber3() {
+        let input = "2 - 3i"
         let v = pasteParser.parsePastedInput(input)
         XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+    }
+
+    func testPasteComplexNumberEng() {
+        let input = "123.456E1 + 7.89012E-2i"
+        let v = pasteParser.parsePastedInput(input)
+        XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456E1 + 0.0789012i")
         XCTAssertEqual(v?.asComplex.real.floatingPoint, 1234.56)
-        XCTAssertEqual(v?.asComplex.imag.floatingPoint, 7.89012)
+        XCTAssertEqual(v?.asComplex.imag.floatingPoint, 0.0789012)
+    }
+
+    func testPasteComplexNumberEng2() {
+        let input = "123.456 - 7.89012E8i"
+        let v = pasteParser.parsePastedInput(input)
+        XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456 - 7.8901200e+08i")  // This format is really weird, it should be fixed.
     }
 
     func testParseImaginaryNumber() {

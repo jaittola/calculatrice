@@ -191,8 +191,9 @@ class NumericalValue: NSObject, Num {
                      minAutoDecimalFormat: Double = 1E-4,
                      withSign: Bool = true) -> String {
         let absv = abs(value)
+        let format: ValueNumberFormat = numberFormat == .fromInput && !withSign ? .auto : numberFormat
 
-        switch numberFormat {
+        switch format {
         case .fromInput:
             return originalStringValue
         case .auto:

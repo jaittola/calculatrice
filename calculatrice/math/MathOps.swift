@@ -399,10 +399,7 @@ class Complex: Calculation, NumTypeConversionCalculation {
     let arity: Int = 2
 
     func convert(_ inputs: [Num], _ calculatorMode: CalculatorMode) throws -> Value {
-        return Value(
-            ComplexValue(
-                realValue: inputs[0].withDefaultPresentation,
-                imagValue: inputs[1].withDefaultPresentation))
+        return Value(ComplexValue(realValue: inputs[0], imagValue: inputs[1]))
     }
 }
 
