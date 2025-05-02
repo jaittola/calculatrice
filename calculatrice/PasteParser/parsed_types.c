@@ -6,6 +6,22 @@
 
 #include "parsed_types.h"
 
+
+static expression_t *expression_alloc() {
+    expression_t *expr = calloc(sizeof(expression_t), 1);
+    if (expr == NULL) {
+        fprintf(stderr, "Memory allocation failed: %s", strerror(errno));
+        return NULL;
+    }
+    return expr;
+}
+
+#define EXPRESSION_ALLOC(varname) \
+    expression_t *varname = expression_alloc(); \
+    if (varname == NULL) { \
+        return NULL;       \
+    }
+
 expression_t *expression_zero(void) {
     return expression_scalar("0", e_int);
 }
@@ -50,12 +66,8 @@ expression_t *expression_neg(int sign, expression_t *expression) {
         return expression;
     }
 
-    expression_t *new_exp = calloc(sizeof(expression_t), 1);
-    if (new_exp == NULL) {
-        fprintf(stderr, "Memory allocation failed: %s", strerror(errno));
-        expression_free(expression);
-        return NULL;
-    }
+    EXPRESSION_ALLOC(new_exp);
+
     if (expression->text != NULL) {
         char *buf = calloc(strlen(expression->text) + 2, 1);
         if (buf != NULL) {
@@ -74,11 +86,7 @@ expression_t *expression_scalar(const char *text, expression_kind kind) {
         return NULL;
     }
 
-    expression_t *expr = calloc(sizeof(expression_t), 1);
-    if (expr == NULL) {
-        fprintf(stderr, "Memory allocation failed: %s", strerror(errno));
-        return NULL;
-    }
+    EXPRESSION_ALLOC(expr);
     expr->text = strdup(text);
     expr->kind = e_double;
 
@@ -88,11 +96,7 @@ expression_t *expression_scalar(const char *text, expression_kind kind) {
 expression_t *expression_multicomponent(expression_t *c1,
                                         expression_t *c2, expression_t *c3,
                                         expression_kind kind) {
-    expression_t *expr = calloc(sizeof(expression_t), 1);
-    if (expr == NULL) {
-        fprintf(stderr, "Memory allocation failed: %s", strerror(errno));
-        return NULL;
-    }
+    EXPRESSION_ALLOC(expr);
     expr->kind = kind;
     expr->siblings[0] = c1;
     expr->siblings[1] = c2;
