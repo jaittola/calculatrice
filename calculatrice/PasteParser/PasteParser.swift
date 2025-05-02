@@ -7,17 +7,13 @@ func handlePaste(_ text: String, _ stack: Stack) -> Bool {
         return false
     }
 
-    switch pasted {
-    case .number:
+    if case .number = pasted {
         stack.input.paste(text)
         return true
-    case .complex(let value):
-        stack.push(Value(value))
+    } else {
+        stack.push(Value(pasted))
         return true
-    default:
-        break
     }
-    return false
 }
 
 class PasteParser {
