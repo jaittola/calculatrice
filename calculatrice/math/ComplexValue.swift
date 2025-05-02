@@ -152,7 +152,15 @@ class ComplexValue: NSObject {
             throw CalcError.invalidComplexDimension()
         }
 
-        self.originalComponents = components
+        if originalFormat == .polar && components[0].asNumericalValue.floatingPoint < 0 {
+            self.originalComponents = [
+                NumericalValue(-components[0].asNumericalValue.floatingPoint),
+                components[1]
+            ]
+        } else {
+            self.originalComponents = components
+        }
+
         self.originalFormat = originalFormat
         self.presentationFormat = presentationFormat
     }

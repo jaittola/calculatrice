@@ -156,6 +156,11 @@ class TestNumericalValues: XCTestCase {
         checkPolarComplexToCartesian(ComplexValue(absolute: 1, argument: Double.pi / 2), 0, 1)
     }
 
+    func testComplexPolarWithNegativeAbsValue() {
+        let complex = ComplexValue(absolute: -2, argument: Double.pi / 4)
+        checkPolarComplexToCartesian(complex, 1.4142136, 1.4142136)
+    }
+
     func testComplexPolarFormatting() {
         let v = ComplexValue(absolute: 2, argument: -Double.pi / 4, presentationFormat: .polar)
         XCTAssertEqual(v.stringValue(angleUnit: .Deg), "2 ∠ -45°")
