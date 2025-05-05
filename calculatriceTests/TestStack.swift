@@ -354,6 +354,26 @@ class TestStack: XCTestCase {
         XCTAssertEqual(s.content[0].asComplex.imag.floatingPoint, -3.0)
     }
 
+    func testCalcInvWithIntegerValue() {
+        // Special case to make sure that preferComplexCalculationWith is used correctly
+        // with Inv.
+        let s = Stack()
+
+        assertNoThrow {
+            s.push(Value(NumericalValue(4)))
+            try s.calculate(Inv(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content.count, 1)
+
+        let result = s.content[0]
+        let numResult = s.content[0].asNum
+
+        XCTAssertNotNil(numResult)
+        XCTAssertEqual(numResult?.floatingPoint, 0.25)
+        XCTAssertEqual(result.stringValue(CalculatorMode()), "0.25")
+    }
+
     private func threeValueStack() -> Stack {
         let s = Stack()
 

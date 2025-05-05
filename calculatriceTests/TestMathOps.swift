@@ -608,6 +608,14 @@ class TestMathOps: XCTestCase {
         let result = assertNoThrow { try Permutations().calculate([num(4), num(4)], calculatorMode) }
         XCTAssertEqual(result?.floatingPoint, 24)
     }
+
+    func testPreferRealCalculationWithWholeNumbersAndInv() {
+        XCTAssertTrue(Inv().preferRealCalculationWith(thisInput: [Value(num(4))]))
+        XCTAssertFalse(Inv().preferRealCalculationWith(thisInput: [Value(num(4.1))]))
+        XCTAssertFalse(Inv().preferRealCalculationWith(thisInput: [Value(rat(3, 2))]))
+        XCTAssertFalse(Inv().preferRealCalculationWith(thisInput: [Value(rat(6, 1))]))
+        XCTAssertFalse(Inv().preferRealCalculationWith(thisInput: [Value(complex(4, 2))]))
+    }
 }
 
 func num(_ value: Double) -> NumericalValue {

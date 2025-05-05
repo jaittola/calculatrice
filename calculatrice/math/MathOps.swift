@@ -393,6 +393,14 @@ class Inv: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
         return try RationalValue(v1.denominator.floatingPoint,
                                  v1.numerator.floatingPoint)
     }
+
+    func preferRealCalculationWith(thisInput: [Value]) -> Bool {
+        return if case .number(let numVal) = thisInput[0].containedValue {
+            numVal.isWholeNumber
+        } else {
+            false
+        }
+    }
 }
 
 class Complex: Calculation, NumTypeConversionCalculation {
