@@ -532,6 +532,23 @@
         }
       }
     },
+    "CopyValue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy the the selected item in the stack, the input buffer content, or the topmost item in the stack to the clipboard"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopio pinon valittu arvo, syötekentän sisältö tai pinon päällimmäinen arvo leikepöydälle. "
+          }
+        }
+      }
+    },
     "DecimalFormat" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -680,6 +697,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tapahtui virhe"
+          }
+        }
+      }
+    },
+    "ErrPasteFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasting failed. Check that the value is in a supported format."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liittäminen epäonnistui. Tarkista, että liitetty arvo on oikeanmuotoinen."
           }
         }
       }
@@ -899,6 +933,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ok"
+          }
+        }
+      }
+    },
+    "PasteValue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paste the value from the clipboard. Pasting will be successful only if Calccis supports the format of the value. All values that appear in the stack of Calccis can be pasted."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liitä arvo leikepöydältä. Arvon pitää olla Calccicsen tuntemassa muodossa. Kaikki arvot, jotka Calccis esittää pinossa, voi liittää Calccicseen."
           }
         }
       }

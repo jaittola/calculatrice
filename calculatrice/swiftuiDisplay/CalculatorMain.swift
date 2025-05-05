@@ -20,7 +20,11 @@ struct CalculatorMain: View {
             StackDisplay2(stack: stack,
                           calculatorMode: calculatorMode,
                           selection: $selection)
-            InputDisplay2(inputBuffer: stack.input, stack: stack)
+            InputDisplay2(inputBuffer: stack.input,
+                          calculatorMode: calculatorMode,
+                          stack: stack,
+                          calcErrorOccurred: $calcErrorOccurred,
+                          calcError: $calcError)
             KeypadView2(model: keypadModel,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the keyboard to the safe area
@@ -62,7 +66,8 @@ struct CalculatorMain: View {
             CalcError.unsupportedValueType(let msgKey),
             CalcError.badCalculationOp(let msgKey),
             CalcError.nonIntegerInputToRational(let msgKey),
-            CalcError.arithmeticOverflow(let msgKey):
+            CalcError.arithmeticOverflow(let msgKey),
+            CalcError.pasteFailed(let msgKey):
             return msgKey
         default:
             return "ErrBadCalculationOp"

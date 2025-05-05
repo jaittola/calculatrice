@@ -109,7 +109,7 @@ struct StackValueView: View {
         .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
         .contextMenu {
             Button {
-                UIPasteboard.general.string = stackVal.value.stringValue(calculatorMode)
+                CopyPaste.copy(stackVal, calculatorMode)
             } label: { Text("Copy") }
         }
     }

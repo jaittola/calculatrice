@@ -13,7 +13,7 @@ struct Key: Identifiable {
 
     enum CalcOp {
         case stackOp(_ symbol: String,
-                     _ op: (_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void,
+                     _ op: (_ stack: Stack, _ calculatorMode: CalculatorMode) throws -> Void,
                      _ helpTextKey: String? = nil)
         case calcOp(_ symbol: String,
                     _ calc: Calculation,
@@ -70,24 +70,20 @@ struct Key: Identifiable {
     func activeOp(_ calculatorMode: CalculatorMode,
                   _ stack: Stack,
                   _ handleUICallbackOp: (_ cb: UICallbackOp) -> Void) throws {
-        do {
-            let op = switch calculatorMode.keypadMode {
-            case .Normal:
-                op
-            case .Mod1:
-                opMod1
-            case .Mod2:
-                opMod2
-            }
+        let op = switch calculatorMode.keypadMode {
+        case .Normal:
+            op
+        case .Mod1:
+            opMod1
+        case .Mod2:
+            opMod2
+        }
 
-            switch op {
-            case .stackOp(_, let stackOp, _): stackOp(stack, calculatorMode)
-            case .calcOp(_, let calcOp, _): try stack.calculate(calcOp, calculatorMode)
-            case .uiOp(_, let uiOp, _): handleUICallbackOp(uiOp)
-            case nil: break
-            }
-        } catch {
-            throw error
+        switch op {
+        case .stackOp(_, let stackOp, _): try stackOp(stack, calculatorMode)
+        case .calcOp(_, let calcOp, _): try stack.calculate(calcOp, calculatorMode)
+        case .uiOp(_, let uiOp, _): handleUICallbackOp(uiOp)
+        case nil: break
         }
     }
 
@@ -121,7 +117,12 @@ struct Key: Identifiable {
             opMod1: .stackOp("Clear", { stack, _ in stack.clear() }, "ClearStack"))}
 
     static func backspace() -> Key {
-        Key(op: .stackOp("←", { stack, _ in stack.input.backspace() }, "Backspace")) }
+        Key(op: .stackOp("←", { stack, _ in stack.input.backspace() }, "Backspace"),
+            opMod1: .stackOp("Paste", { stack, _ throws in
+            if !CopyPaste.paste(stack) {
+                throw CalcError.pasteFailed()
+            }
+        }, "PasteValue")) }
 
     static func pick() -> Key {
         Key(op: .stackOp("Pick", { stack, _ in stack.pickSelected() }, "PickSelected"),
@@ -129,7 +130,11 @@ struct Key: Identifiable {
             opMod2: .stackOp("↻", { stack, _ in stack.redo() }, "Redo")) }
 
     static func swap() -> Key {
-        Key(op: .stackOp("x⇄y", { stack, _ in stack.swapTop2() }, "SwapTop2")) }
+        Key(op: .stackOp("x⇄y", { stack, _ in stack.swapTop2() }, "SwapTop2"),
+            opMod1: .stackOp("Copy", { stack, calculatorMode in
+            CopyPaste.copy(stack, calculatorMode, inputOnly: false)
+        },
+                             "CopyValue")) }
 
     static func zero() -> Key { numkey(0) }
     static func one() -> Key { numkey(1) }

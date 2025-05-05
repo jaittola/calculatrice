@@ -374,6 +374,44 @@ class TestStack: XCTestCase {
         XCTAssertEqual(result.stringValue(CalculatorMode()), "0.25")
     }
 
+    func testCopyWithInputBufferContent() {
+        let s = Stack()
+
+        s.push(v(3))
+        s.input.addNum(2)
+        s.input.addNum(4)
+
+        XCTAssertEqual(s.copy(CalculatorMode(), inputOnly: false), "24")
+    }
+
+    func testCopyInputBufferOnly() {
+        let s = Stack()
+
+        s.push(v(3))
+        s.input.addNum(2)
+        s.input.addNum(4)
+
+        XCTAssertEqual(s.copy(CalculatorMode(), inputOnly: true), "24")
+    }
+
+    func testCopyInputBufferOnlyWhenInputEmpty() {
+        let s = Stack()
+
+        s.push(v(4))
+
+        XCTAssertNil(s.copy(CalculatorMode(), inputOnly: true))
+    }
+
+    func testCopySelectedValue() {
+        let s = threeValueStack()
+        s.input.addNum(1)
+        s.input.addNum(2)
+
+        s.selectedId = 0
+
+        XCTAssertEqual(s.copy(CalculatorMode(), inputOnly: false), "3")
+    }
+
     private func threeValueStack() -> Stack {
         let s = Stack()
 

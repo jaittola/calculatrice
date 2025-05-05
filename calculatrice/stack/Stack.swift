@@ -99,6 +99,25 @@ class Stack: ObservableObject {
         content = stackHistory[stackHistoryPointer]
     }
 
+    func copy(
+        _ calculatorMode: CalculatorMode,
+        inputOnly: Bool
+    ) -> String? {
+        if inputOnly {
+            return !input.isEmpty ? input.stringValue : nil
+        }
+
+        return if selectedId != -1, let selectedValue = content.first(where: { $0.id == selectedId }) {
+            selectedValue.stringValue(calculatorMode)
+        } else if !input.isEmpty {
+            input.stringValue
+        } else if !content.isEmpty {
+            content[0].stringValue(calculatorMode)
+        } else {
+            nil
+        }
+    }
+
     private func manipulateStack(manipulator: (_ stackContent: [Value]) -> [Value]?) {
         if let newContent = manipulator(content) {
             content = newContent

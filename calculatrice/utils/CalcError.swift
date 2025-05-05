@@ -8,4 +8,5 @@ enum CalcError: Error {
     case nonIntegerInputToRational(msgKey: String =  "ErrNonIntegerInputToRational")
     case invalidComplexDimension(msgKey: String = "ErrInvalidComplexDimension")
     case arithmeticOverflow(msgKey: String = "ErrArithmeticOverflow")
+    case pasteFailed(msgKey: String = "ErrPasteFailed")
 }

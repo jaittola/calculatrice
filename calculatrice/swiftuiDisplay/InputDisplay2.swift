@@ -4,7 +4,12 @@ struct InputDisplay2: View {
     @ObservedObject
     var inputBuffer: InputBuffer
 
+    var calculatorMode: CalculatorMode
+
     var stack: Stack
+
+    @Binding var calcErrorOccurred: Bool
+    @Binding var calcError: Error?
 
     var body: some View {
         let value = inputBuffer.isEmpty ? " " : inputBuffer.stringValue
@@ -17,36 +22,57 @@ struct InputDisplay2: View {
             .background(.white)
             .contextMenu {
                 Button {
-                    UIPasteboard.general.string = inputBuffer.stringValue
+                    CopyPaste.copy(stack, calculatorMode, inputOnly: true)
                 } label: {
                     Text("Copy")
                 }
-                PasteButton(payloadType: String.self) { strings in
-                    // TODO, add error messaging.
-                    _ = handlePaste(strings[0], stack)
+                PasteButton(payloadType: String.self) { _ in
+                    if !CopyPaste.paste(stack) {
+                        calcError = CalcError.pasteFailed()
+                        calcErrorOccurred = true
+                    }
                 }
             }
     }
 }
 
-struct InputDisplay2_Previews: PreviewProvider {
-    static var previews: some View {
-        let ib = makeInput()
-        HStack {
-            InputDisplay2(inputBuffer: ib, stack: Stack())
-        }.padding(.vertical, 10).background(.red)
-        HStack {
-            InputDisplay2(inputBuffer: InputBuffer(), stack: Stack())
-        }.padding(.vertical, 10).background(.green)
+#Preview {
+    struct Preview: View {
+
+        @State private var calcErrorOccurred = false
+        @State private var calcError: Error?
+
+        var body: some View {
+            let ib = makeInput()
+            HStack {
+                InputDisplay2(
+                    inputBuffer: ib,
+                    calculatorMode: CalculatorMode(),
+                    stack: Stack(),
+                    calcErrorOccurred: $calcErrorOccurred,
+                    calcError: $calcError
+                )
+            }.padding(.vertical, 10).background(.red)
+            HStack {
+                InputDisplay2(
+                    inputBuffer: InputBuffer(),
+                    calculatorMode: CalculatorMode(),
+                    stack: Stack(),
+                    calcErrorOccurred: $calcErrorOccurred,
+                    calcError: $calcError)
+            }.padding(.vertical, 10).background(.green)
+        }
+
+        func makeInput() -> InputBuffer {
+            let ib = InputBuffer()
+            ib.addNum(3)
+            ib.dot()
+            ib.addNum(1)
+            ib.addNum(4)
+
+            return ib
+        }
     }
 
-    static func makeInput() -> InputBuffer {
-        let ib = InputBuffer()
-        ib.addNum(3)
-        ib.dot()
-        ib.addNum(1)
-        ib.addNum(4)
-
-        return ib
-    }
+    return Preview()
 }
