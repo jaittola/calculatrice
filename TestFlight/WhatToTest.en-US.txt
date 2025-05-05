@@ -1,0 +1,3 @@
+- The inverse of an integer is calculated as a floating point, and no longer as a fraction. For example, calculating Inv(2) returns 0.5 and not 1/2
+- The UI logic for copying and pasting numbers has been refactored.
+- Copy and paste operations have been added to the keyboard.

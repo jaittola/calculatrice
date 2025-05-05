@@ -115,6 +115,7 @@
 		4F49B2562DBFC1C10004ADD3 /* parsed_types.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = parsed_types.c; sourceTree = "<group>"; };
 		4F6C89152DB7B42C00510D75 /* PasteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteParser.swift; sourceTree = "<group>"; };
 		4F7100452DC8995200F2611F /* CopyPaste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyPaste.swift; sourceTree = "<group>"; };
+		4F7100492DC8BD6000F2611F /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
 		4FB536602AE3EFD1008EC8BD /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		4FB536632AE3F43A008EC8BD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorMode.swift; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 		4F064C6227F0314200F33E75 = {
 			isa = PBXGroup;
 			children = (
+				4F7100482DC8BD5400F2611F /* TestFlight */,
 				4FB536632AE3F43A008EC8BD /* Localizable.xcstrings */,
 				4F064C6D27F0314200F33E75 /* calculatrice */,
 				4F064C8427F0314300F33E75 /* calculatriceTests */,
@@ -235,6 +237,14 @@
 				4F6C89152DB7B42C00510D75 /* PasteParser.swift */,
 			);
 			path = PasteParser;
+			sourceTree = "<group>";
+		};
+		4F7100482DC8BD5400F2611F /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				4F7100492DC8BD6000F2611F /* WhatToTest.en-US.txt */,
+			);
+			path = TestFlight;
 			sourceTree = "<group>";
 		};
 		4FC1C0AF27F1D52B00794D9E /* math */ = {
