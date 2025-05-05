@@ -178,34 +178,30 @@ class Stack: ObservableObject {
                                   false))
         let preferRealCalc = (allInputsRational && ratCalc?.preferRealCalculationWith(thisInput: inputs) ?? false)
 
-        do {
-            let resultValue: Value
+        let resultValue: Value
 
-            if let ratCalc = ratCalc, allInputsRational, !preferRealCalc {
-                let result = try ratCalc.calcRational(inputsAsRational, calculatorMode)
-                resultValue = Value(result)
-            } else if let realCalc = realCalc,
-                allInputsNum,
-               !preferComplexCalc {
-                let result = try realCalc.calculate(inputsAsNum, calculatorMode)
-                resultValue = Value(result)
-            } else if let conversionCalc = calc as? NumTypeConversionCalculation, allInputsNum {
-                resultValue = try conversionCalc.convert(inputsAsNum,
-                                                         calculatorMode)
-            } else if let complexCalc = complexCalc {
-                let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
-                resultValue = Value(result)
-            } else {
-                throw CalcError.badCalculationOp()
-            }
+        if let ratCalc = ratCalc, allInputsRational, !preferRealCalc {
+            let result = try ratCalc.calcRational(inputsAsRational, calculatorMode)
+            resultValue = Value(result)
+        } else if let realCalc = realCalc,
+                  allInputsNum,
+                  !preferComplexCalc {
+            let result = try realCalc.calculate(inputsAsNum, calculatorMode)
+            resultValue = Value(result)
+        } else if let conversionCalc = calc as? NumTypeConversionCalculation, allInputsNum {
+            resultValue = try conversionCalc.convert(inputsAsNum,
+                                                     calculatorMode)
+        } else if let complexCalc = complexCalc {
+            let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
+            resultValue = Value(result)
+        } else {
+            throw CalcError.badCalculationOp()
+        }
 
-            manipulateStack { _ in
-                var nextStack = calcParams.nextStack
-                nextStack.insert(resultValue.withId(nextId), at: 0)
-                return nextStack
-            }
-        } catch {
-            throw error
+        manipulateStack { _ in
+            var nextStack = calcParams.nextStack
+            nextStack.insert(resultValue.withId(nextId), at: 0)
+            return nextStack
         }
     }
 
