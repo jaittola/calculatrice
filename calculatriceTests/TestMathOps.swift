@@ -102,7 +102,7 @@ class TestMathOps: XCTestCase {
 
         XCTAssertEqual(newComplex, ComplexValue(realValue: rat(1, 3),
                                                 imagValue: rat(2, 5)))
-        XCTAssertEqual(newComplex.stringValue(), "1/3 + 2/5i")
+        XCTAssertEqual(newComplex?.stringValue(), "1/3 + 2/5i")
     }
 
     func testComplexConjugate() {

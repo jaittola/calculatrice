@@ -1,6 +1,6 @@
 import Foundation
 
-class ComplexValue: NSObject {
+class ComplexValue: NSObject, MatrixElement {
     enum Format {
         case polar
         case cartesian
@@ -77,6 +77,11 @@ class ComplexValue: NSObject {
             return polarStringValue(precision, angleUnit)
         }
     }
+
+    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String {
+        return self.stringValue(precision: precision, angleUnit: calculatorMode.angle)
+    }
+
 
     func cartesianStringValue(_ precision: Int) -> String {
         let cart = cartesian

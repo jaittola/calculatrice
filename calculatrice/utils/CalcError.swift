@@ -9,4 +9,5 @@ enum CalcError: Error {
     case invalidComplexDimension(msgKey: String = "ErrInvalidComplexDimension")
     case arithmeticOverflow(msgKey: String = "ErrArithmeticOverflow")
     case pasteFailed(msgKey: String = "ErrPasteFailed")
+    case unequalMatrixRowsCols(msgKey: String = "ErrUnequalMatrixRows")
 }

@@ -6,6 +6,7 @@ enum ContainedValue: Equatable {
     case number(value: NumericalValue)
     case complex(value: ComplexValue)
     case rational(value: RationalValue)
+    case matrix(value: MatrixValue)
 
     var asNumericalValue: NumericalValue? {
         switch self {
@@ -15,10 +16,12 @@ enum ContainedValue: Equatable {
             return n
         case .rational(let r):
             return r.asNumericalValue
+        case .matrix:
+            return nil
         }
     }
 
-    var asComplex: ComplexValue {
+    var asComplex: ComplexValue? {
         switch self {
         case .complex(let c):
             return c
@@ -26,6 +29,8 @@ enum ContainedValue: Equatable {
             return n.asComplex
         case .rational(let r):
             return r.asComplex
+        case .matrix:
+            return nil
         }
     }
 
@@ -37,6 +42,8 @@ enum ContainedValue: Equatable {
             return n
         case .rational(let r):
             return r
+        case .matrix:
+            return nil
         }
     }
 
@@ -48,6 +55,17 @@ enum ContainedValue: Equatable {
             return n.asRational
         case .rational(let r):
             return r
+        case .matrix:
+            return nil
+        }
+    }
+
+    var asMatrix: MatrixValue? {
+        switch self {
+        case .matrix(let m):
+            return m
+        default:
+            return nil
         }
     }
 
@@ -61,6 +79,9 @@ enum ContainedValue: Equatable {
 
         case .rational(let r):
             return r.stringValue(precision: realDefaultPrecision)
+
+        case .matrix(let m):
+            return m.stringValue(precision: realDefaultPrecision)
         }
     }
 
@@ -72,6 +93,8 @@ enum ContainedValue: Equatable {
             return self
         case .rational(let r):
             return ContainedValue.rational(value: r.duplicateForStack())
+        case .matrix(let m):
+            return ContainedValue.matrix(value: m.duplicateForStack())
         }
     }
 }
@@ -84,7 +107,7 @@ struct Value: Identifiable, Equatable {
         containedValue.asNum?.asNumericalValue
     }
 
-    var asComplex: ComplexValue {
+    var asComplex: ComplexValue? {
         containedValue.asComplex
     }
 
@@ -94,6 +117,10 @@ struct Value: Identifiable, Equatable {
 
     var asRational: RationalValue? {
         containedValue.asRational
+    }
+
+    var asMatrix: MatrixValue? {
+        containedValue.asMatrix
     }
 
     init(_ containedValue: ContainedValue, id: Int = 0) {
@@ -113,6 +140,10 @@ struct Value: Identifiable, Equatable {
         self.init(ContainedValue.rational(value: value), id: id)
     }
 
+    init(_ value: MatrixValue, id: Int = 0) {
+        self.init(ContainedValue.matrix(value: value), id: id)
+    }
+
     func withId(_ newId: Int) -> Value {
         return Value(containedValue, id: newId)
     }
@@ -130,7 +161,13 @@ struct Value: Identifiable, Equatable {
     }
 }
 
-protocol Num {
+protocol MatrixCalcValue { }
+
+protocol MatrixElement: MatrixCalcValue {
+    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String
+}
+
+protocol Num: MatrixElement {
     var floatingPoint: Double { get }
     var asComplex: ComplexValue { get }
     var asRational: RationalValue? { get }
@@ -143,7 +180,7 @@ protocol Num {
     func isEqual(_ to: Any?) -> Bool
 }
 
-class NumericalValue: NSObject, Num {
+class NumericalValue: NSObject, Num, MatrixElement {
     private(set) var value: Double
     private(set) var originalStringValue: String
     private(set) var numberFormat: ValueNumberFormat
@@ -197,7 +234,7 @@ class NumericalValue: NSObject, Num {
         case .fromInput:
             return originalStringValue
         case .auto:
-            if absv >= maxAutoDecimalFormat || absv < minAutoDecimalFormat {
+            if absv != 0 && (absv >= maxAutoDecimalFormat || absv < minAutoDecimalFormat) {
                 return stringEngValue(precision: precision,
                                       engDecimalPlaces: engDecimalPlaces,
                                       withSign: withSign)
@@ -213,6 +250,10 @@ class NumericalValue: NSObject, Num {
                                   engDecimalPlaces: engDecimalPlaces,
                                   withSign: withSign)
         }
+    }
+
+    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String {
+        return self.stringValue(precision: precision, withSign: true)
     }
 
     func withFloatingPointNumberFormat(_ format: ValueNumberFormat) -> Num {

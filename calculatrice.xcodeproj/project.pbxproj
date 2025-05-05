@@ -44,6 +44,9 @@
 		4F6C89172DB7B43000510D75 /* PasteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C89152DB7B42C00510D75 /* PasteParser.swift */; };
 		4F7100462DC8995200F2611F /* CopyPaste.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7100452DC8995200F2611F /* CopyPaste.swift */; };
 		4F7100472DC8995200F2611F /* CopyPaste.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7100452DC8995200F2611F /* CopyPaste.swift */; };
+		4F71004C2DC8D83700F2611F /* MatrixValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71004B2DC8D83100F2611F /* MatrixValue.swift */; };
+		4F71004D2DC8D83700F2611F /* MatrixValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71004B2DC8D83100F2611F /* MatrixValue.swift */; };
+		4F71004F2DC8D86200F2611F /* TestNumericalValuesMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71004E2DC8D85D00F2611F /* TestNumericalValuesMatrix.swift */; };
 		4F975F5529FE48A300BF57A8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C7027F0314200F33E75 /* SceneDelegate.swift */; };
 		4F975F5629FE48A600BF57A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C6E27F0314200F33E75 /* AppDelegate.swift */; };
 		4FB536612AE3EFD1008EC8BD /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB536602AE3EFD1008EC8BD /* HelpView.swift */; };
@@ -116,6 +119,8 @@
 		4F6C89152DB7B42C00510D75 /* PasteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteParser.swift; sourceTree = "<group>"; };
 		4F7100452DC8995200F2611F /* CopyPaste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyPaste.swift; sourceTree = "<group>"; };
 		4F7100492DC8BD6000F2611F /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
+		4F71004B2DC8D83100F2611F /* MatrixValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixValue.swift; sourceTree = "<group>"; };
+		4F71004E2DC8D85D00F2611F /* TestNumericalValuesMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNumericalValuesMatrix.swift; sourceTree = "<group>"; };
 		4FB536602AE3EFD1008EC8BD /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		4FB536632AE3F43A008EC8BD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorMode.swift; sourceTree = "<group>"; };
@@ -190,6 +195,7 @@
 		4F064C8427F0314300F33E75 /* calculatriceTests */ = {
 			isa = PBXGroup;
 			children = (
+				4F71004E2DC8D85D00F2611F /* TestNumericalValuesMatrix.swift */,
 				4FE641C92D90696B0036946C /* TestMathOpsRational.swift */,
 				4FC245F72D8FDCDB006DA625 /* TestNumericalValuesRational.swift */,
 				4F483DD029FE6E0F00A34E28 /* TestMathOps.swift */,
@@ -250,6 +256,7 @@
 		4FC1C0AF27F1D52B00794D9E /* math */ = {
 			isa = PBXGroup;
 			children = (
+				4F71004B2DC8D83100F2611F /* MatrixValue.swift */,
 				4F1B3BD42D93E51C0022110D /* RationalValue.swift */,
 				4F1B3BD12D93E4810022110D /* ComplexValue.swift */,
 				4FC1C0B027F1D55A00794D9E /* MathOps.swift */,
@@ -430,6 +437,7 @@
 				4F0AC50F2A41A3DF00BA68D0 /* StatusRow2.swift in Sources */,
 				4F337DC82A4188EC0021CAE0 /* CalculatorMain.swift in Sources */,
 				4F1B3BD52D93E51F0022110D /* RationalValue.swift in Sources */,
+				4F71004C2DC8D83700F2611F /* MatrixValue.swift in Sources */,
 				4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */,
 				4F49B2492DBF59C00004ADD3 /* InputTokeniser.lm in Sources */,
 				4FD352EC27F0B5120073534E /* InputBuffer.swift in Sources */,
@@ -450,10 +458,12 @@
 				4FBE9E262A44785A00E3BA7F /* InputDisplay2.swift in Sources */,
 				4FBE9E252A44785600E3BA7F /* StatusRow2.swift in Sources */,
 				4F1B3BD92D93E58F0022110D /* CalcError.swift in Sources */,
+				4F71004F2DC8D86200F2611F /* TestNumericalValuesMatrix.swift in Sources */,
 				4FE641CA2D9069760036946C /* TestMathOpsRational.swift in Sources */,
 				4FD352E927F0B1C90073534E /* Stack.swift in Sources */,
 				4FD352ED27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4F1B3BD22D93E4860022110D /* ComplexValue.swift in Sources */,
+				4F71004D2DC8D83700F2611F /* MatrixValue.swift in Sources */,
 				4F322B692DB8F00F001AB8DD /* TestPasteParser.swift in Sources */,
 				4FC1C0B227F1D55A00794D9E /* MathOps.swift in Sources */,
 				4F483DD129FE6E0F00A34E28 /* TestNumberInput.swift in Sources */,

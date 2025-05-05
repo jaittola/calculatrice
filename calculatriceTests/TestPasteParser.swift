@@ -65,8 +65,8 @@ class TestPasteParser: XCTestCase {
         let input = "123.456E1 + 7.89012E-2i"
         let v = pasteParser.parsePastedInput(input)
         XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456E1 + 0.0789012i")
-        XCTAssertEqual(v?.asComplex.real.floatingPoint, 1234.56)
-        XCTAssertEqual(v?.asComplex.imag.floatingPoint, 0.0789012)
+        XCTAssertEqual(v?.asComplex?.real.floatingPoint, 1234.56)
+        XCTAssertEqual(v?.asComplex?.imag.floatingPoint, 0.0789012)
     }
 
     func testPasteComplexNumberEng2() {
@@ -129,16 +129,16 @@ class TestPasteParser: XCTestCase {
         let input = "3/4 - 2/5i"
         let v = pasteParser.parsePastedInput(input)
         XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
-        XCTAssertEqual(v?.asComplex.real.asRational?.stringValue(), "3/4")
-        XCTAssertEqual(v?.asComplex.imag.asRational?.stringValue(), "-2/5")
+        XCTAssertEqual(v?.asComplex?.real.asRational?.stringValue(), "3/4")
+        XCTAssertEqual(v?.asComplex?.imag.asRational?.stringValue(), "-2/5")
     }
 
     func testPastePolarComplexDeg() {
         let input = "2 ∠ 32°"
         let v = pasteParser.parsePastedInput(input)
         XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
-        XCTAssertEqual(v?.asComplex.polarAbsolute.floatingPoint, 2)
-        XCTAssertEqual(v?.asComplex.polarArgument.floatingPoint,
+        XCTAssertEqual(v?.asComplex?.polarAbsolute.floatingPoint, 2)
+        XCTAssertEqual(v?.asComplex?.polarArgument.floatingPoint,
                        Utils.deg2Rad([NumericalValue(32)], CalculatorMode())[0])
     }
 
@@ -149,10 +149,10 @@ class TestPasteParser: XCTestCase {
         let input = "2 ∠ 0.7853982"
         let v = pasteParser.parsePastedInput(input)
         XCTAssertEqual(v?.stringValue(radMode), input)
-        XCTAssertEqual(v?.asComplex.polarAbsolute.floatingPoint, 2)
-        XCTAssertEqual(v?.asComplex.polarArgument.floatingPoint,
+        XCTAssertEqual(v?.asComplex?.polarAbsolute.floatingPoint, 2)
+        XCTAssertEqual(v?.asComplex?.polarArgument.floatingPoint,
                        0.7853982)
-        XCTAssertEqual(v?.asComplex.polarArgument.floatingPoint ?? -1,
+        XCTAssertEqual(v?.asComplex?.polarArgument.floatingPoint ?? -1,
                        Utils.deg2Rad([NumericalValue(45)], CalculatorMode())[0],
                        accuracy: NumericalValue.epsilon)
     }

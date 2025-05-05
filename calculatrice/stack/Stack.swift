@@ -181,12 +181,13 @@ class Stack: ObservableObject {
 
         let inputs = calcParams.calcInputs
 
-        let complexInputs = inputs.map { v in v.asComplex }
+        let complexInputs = inputs.compactMap { v in v.asComplex }
         let inputsAsNum = inputs.compactMap { n in n.asNum }
         let inputsAsRational = inputs.compactMap { r in r.asRational }
 
         let allInputsNum = inputsAsNum.count == inputs.count
         let allInputsRational = inputsAsRational.count == inputs.count
+        let allInputsConvertableToComplex = complexInputs.count == inputs.count
 
         let realCalc = calc as? ScalarCalculation
         let complexCalc = calc as? ComplexCalculation
@@ -210,7 +211,7 @@ class Stack: ObservableObject {
         } else if let conversionCalc = calc as? NumTypeConversionCalculation, allInputsNum {
             resultValue = try conversionCalc.convert(inputsAsNum,
                                                      calculatorMode)
-        } else if let complexCalc = complexCalc {
+        } else if let complexCalc = complexCalc, allInputsConvertableToComplex {
             let result = try complexCalc.calcComplex(complexInputs, calculatorMode)
             resultValue = Value(result)
         } else {
@@ -283,6 +284,10 @@ extension RationalCalculation {
     }
 }
 
+protocol MatrixCalculation {
+    func calcMatrix(_ inputs: [MatrixCalcValue],
+                    _ calculatorMode: CalculatorMode) throws -> ContainedValue
+}
 
 enum ValueNumberFormat {
     case fromInput

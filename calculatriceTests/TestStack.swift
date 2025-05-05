@@ -349,9 +349,9 @@ class TestStack: XCTestCase {
             try s.calculate(Complex(), CalculatorMode())
         }
 
-        XCTAssertEqual(s.content[0].asComplex.stringValue(), "2 - 3i")
-        XCTAssertEqual(s.content[0].asComplex.real.floatingPoint, 2.0)
-        XCTAssertEqual(s.content[0].asComplex.imag.floatingPoint, -3.0)
+        XCTAssertEqual(s.content[0].asComplex?.stringValue(), "2 - 3i")
+        XCTAssertEqual(s.content[0].asComplex?.real.floatingPoint, 2.0)
+        XCTAssertEqual(s.content[0].asComplex?.imag.floatingPoint, -3.0)
     }
 
     func testCalcInvWithIntegerValue() {
