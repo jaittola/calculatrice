@@ -718,6 +718,23 @@
         }
       }
     },
+    "ErrUnequalMatrixRows" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All matrix rows must have the same number of columns."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matriisin kaikilla riveillä pitää olla yhtä monta saraketta."
+          }
+        }
+      }
+    },
     "ErrUnsupportedValueType" : {
       "extractionState" : "manual",
       "localizations" : {

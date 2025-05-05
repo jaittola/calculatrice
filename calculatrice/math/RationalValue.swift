@@ -1,6 +1,6 @@
 import Foundation
 
-class RationalValue: NSObject, Num {
+class RationalValue: NSObject, Num, MatrixElement {
     enum DisplayFormat {
         case mixed
         case fractionalOnly
@@ -102,6 +102,10 @@ class RationalValue: NSObject, Num {
                                                 engDecimalPlaces: precision,
                                                 withSign: withSign)
         }
+    }
+
+    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String {
+        return self.stringValue(precision: precision)
     }
 
     init(numerator: Num,
