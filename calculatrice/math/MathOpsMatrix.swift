@@ -42,7 +42,38 @@ extension Mult: MatrixCalculation {
             return scalarTimesMatrix
         }
 
-        throw CalcError.badCalculationOp()
+        guard let m1 = inputs[0] as? MatrixValue,
+            let m2 = inputs[1] as? MatrixValue
+        else {
+            throw CalcError.errInputsMustBeMatrixes()
+        }
+
+        guard m1.cols == m2.rows else {
+            throw CalcError.errBadMatrixDimensionsForMult()
+        }
+
+        let plus = Plus()
+
+        // Using row and column indexes for the multiplication might be clearer, but going with map & reduce
+        // avoids the using of mutable data structures, which is the norm in this codebase.
+        let result = try m1.values.enumerated().map { rowIndex, row in
+            return try m2.values[rowIndex].enumerated().map { colIndex, _ in
+                return try row.enumerated().reduce(ComplexValue(0, 0)) {
+                    partialResult, rowIterParams in
+                    let (rowIterIdx, value) = rowIterParams
+                    let v1Complex = value.asComplex
+                    let v2Complex = m2.values[rowIterIdx][colIndex].asComplex
+
+                    let elemProduct = calcComplex([v1Complex, v2Complex], calculatorMode)
+                    let totalSum = try plus.calcComplex(
+                        [partialResult, elemProduct], calculatorMode)
+
+                    return totalSum
+                }
+            }
+        }
+
+        return .matrix(value: try MatrixValue(result))
     }
 
     func calcScalarTimesMatrix(

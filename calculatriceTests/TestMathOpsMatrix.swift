@@ -102,6 +102,77 @@ class TestMathOpsMatrix: XCTestCase {
         XCTAssertEqual(r?.asMatrix, r2?.asMatrix)
     }
 
+    func testMatrixMult() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2)],
+            [num(3), num(4)],
+        ])
+        let m2 = try! MatrixValue([
+            [num(5), num(6)],
+            [num(7), num(8)],
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [num(19), num(22)],
+            [num(43), num(50)],
+        ])
+
+        let r = assertNoThrow { try Mult().calcMatrix([m1, m2], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
+    func testMatrixMult2() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2), num(3)],
+            [num(4), num(5), num(6)],
+        ])
+        let m2 = try! MatrixValue([
+            [num(5), num(6)],
+            [num(7), num(8)],
+            [num(9), num(10)]
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [num(46), num(52)],
+            [num(109), num(124)]
+        ])
+
+        let r = assertNoThrow { try Mult().calcMatrix([m1, m2], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
+    func testMatrixVectorMult() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2)],
+            [num(3), num(4)],
+        ])
+        let m2 = try! MatrixValue([
+            [num(5)],
+            [num(6)],
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [num(17)],
+            [num(39)],
+        ])
+
+        let r = assertNoThrow { try Mult().calcMatrix([m1, m2], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
+    func testMatrixMultBadDimensions() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2), rat(2, 3)],
+            [num(3), num(4), num(5)],
+        ])
+        let m2 = try! MatrixValue([
+            [num(5), num(6), num(7)],
+            [num(7), num(8), num(9)],
+        ])
+
+        XCTAssertThrowsError(try Mult().calcMatrix([m1, m2], CalculatorMode()))
+    }
+
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
         let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
         let v2 = num(3)
