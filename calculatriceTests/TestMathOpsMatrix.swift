@@ -45,6 +45,38 @@ class TestMathOpsMatrix: XCTestCase {
         verifyMatrixCalcSameDimensionsRequired(Plus())
     }
 
+    func testMatrixMinus() {
+        let m1 = try! MatrixValue([
+            [
+                ComplexValue(
+                    realValue: rat(1, 2),
+                    imagValue: num(2)),
+                num(2),
+            ],
+            [num(5), rat(1, 3)],
+        ])
+        let m2 = try! MatrixValue([[num(3), num(6)], [num(3), num(1)]])
+
+        let expectedResult = try! MatrixValue([
+            [
+                ComplexValue(
+                    realValue: rat(-5, 2),
+                    imagValue: num(2)),
+                num(-4),
+            ],
+            [num(2), rat(-2, 3)],
+        ])
+
+        let r = assertNoThrow { try Minus().calcMatrix([m1, m2], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+        XCTAssertEqual(r?.stringValue(CalculatorMode()), "[-2 1/2 + 2i  -4\n2  -2/3]")
+    }
+
+    func testMatrixMinusCalculationTypes() {
+        verifyCalcMatrixAndNumNotAllowed(Minus())
+        verifyMatrixCalcSameDimensionsRequired(Minus())
+    }
+
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
         let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
         let v2 = num(3)
