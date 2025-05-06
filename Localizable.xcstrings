@@ -651,6 +651,23 @@
         }
       }
     },
+    "ErrInputsMustBeMatrixes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Values used in this calculation must be matrixes"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laskutoimitukseen tarvitaan matriisit"
+          }
+        }
+      }
+    },
     "ErrInvalidComplexDimension" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -714,6 +731,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liittäminen epäonnistui. Tarkista, että liitetty arvo on oikeanmuotoinen."
+          }
+        }
+      }
+    },
+    "ErrUnequalMatrixDimensions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matrixes must have the same dimensions for this calculation."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matriisien pitää olla samankokoisia tätä laskutoimitusta varten."
           }
         }
       }

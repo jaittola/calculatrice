@@ -10,4 +10,5 @@ enum CalcError: Error {
     case arithmeticOverflow(msgKey: String = "ErrArithmeticOverflow")
     case pasteFailed(msgKey: String = "ErrPasteFailed")
     case unequalMatrixRowsCols(msgKey: String = "ErrUnequalMatrixRows")
+    case errInputsMustBeMatrixes(msgKey: String = "ErrInputsMustBeMatrixes")
 }
