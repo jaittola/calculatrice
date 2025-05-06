@@ -67,7 +67,9 @@ struct CalculatorMain: View {
             CalcError.badCalculationOp(let msgKey),
             CalcError.nonIntegerInputToRational(let msgKey),
             CalcError.arithmeticOverflow(let msgKey),
-            CalcError.pasteFailed(let msgKey):
+            CalcError.pasteFailed(let msgKey),
+            CalcError.unequalMatrixRowsCols(let msgKey),
+            CalcError.errInputsMustBeMatrixes(let msgKey):
             return msgKey
         default:
             return "ErrBadCalculationOp"

@@ -164,7 +164,9 @@ struct Value: Identifiable, Equatable {
 protocol MatrixCalcValue { }
 
 protocol MatrixElement: MatrixCalcValue {
+    var asComplex: ComplexValue { get }
     func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String
+    func isEqual(_ to: (Any)?) -> Bool
 }
 
 protocol Num: MatrixElement {

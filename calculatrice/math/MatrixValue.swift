@@ -51,4 +51,26 @@ class MatrixValue: NSObject, MatrixCalcValue {
 
         super.init()
     }
+
+    override func isEqual(_ to: (Any)?) -> Bool {
+        guard let other = to as? MatrixValue,
+            other.dimensions == self.dimensions
+        else {
+            return false
+        }
+
+        return values.enumerated().reduce(true) { soFarEqual, rowParams in
+            let (rowIndex, row) = rowParams
+            return soFarEqual
+                && row.enumerated().reduce(true) { soFarEqual2, colParams in
+                    let (colIndex, item) = colParams
+                    let v = other.values[rowIndex][colIndex]
+                    return soFarEqual2 && item.isEqual(v)
+                }
+        }
+    }
+
+    static func == (lhs: MatrixValue, rhs: MatrixValue) -> Bool {
+        return lhs.isEqual(rhs)
+    }
 }
