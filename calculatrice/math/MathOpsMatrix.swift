@@ -34,6 +34,38 @@ extension Minus: MatrixCalculation {
     }
 }
 
+extension Mult: MatrixCalculation {
+    func calcMatrix(_ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode) throws
+        -> ContainedValue
+    {
+        if let scalarTimesMatrix = try? calcScalarTimesMatrix(inputs, calculatorMode) {
+            return scalarTimesMatrix
+        }
+
+        throw CalcError.badCalculationOp()
+    }
+
+    func calcScalarTimesMatrix(
+        _ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode
+    ) throws -> ContainedValue {
+        let scalar =
+            (inputs[0] as? MatrixElement)?.asComplex ?? (inputs[1] as? MatrixElement)?.asComplex
+        let matrix = inputs[0] as? MatrixValue ?? inputs[1] as? MatrixValue
+
+        guard let scalar = scalar?.asComplex, let matrix = matrix else {
+            throw CalcError.badInput()
+        }
+
+        let result = matrix.values.enumerated().map { rowIndex, row in
+            return row.enumerated().map { colIndex, value in
+                let v1Complex = value.asComplex
+                return calcComplex([scalar, v1Complex], calculatorMode)
+            }
+        }
+        return .matrix(value: try MatrixValue(result))
+    }
+}
+
 private func obtainEquallyDimensionedMatrixes(_ inputs: [MatrixCalcValue]) throws -> (
     MatrixValue, MatrixValue
 ) {
