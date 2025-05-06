@@ -66,6 +66,8 @@ class ComplexValue: NSObject {
         originalComponents[1].floatingPoint.isNaN
     }
 
+    var asComplex: ComplexValue { self }
+
     func stringValue(precision: Int = realDefaultPrecision,
                      angleUnit: CalculatorMode.Angle = .Deg) -> String {
         switch presentationFormat {
@@ -142,7 +144,7 @@ class ComplexValue: NSObject {
     }
 
     override var description: String {
-        return "ComplexValue (\(stringValue(precision: realDefaultPrecision))"
+        return "ComplexValue \(stringValue(precision: realDefaultPrecision))"
     }
 
     init(_ components: [Num],
@@ -241,7 +243,8 @@ class ComplexValue: NSObject {
     }
 
     override func isEqual(_ to: Any?) -> Bool {
-        guard let other = to as? ComplexValue else {
+        guard let other = to as? ComplexValue ??
+            (to as? Num)?.asComplex  else {
             return false
         }
 

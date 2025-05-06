@@ -257,7 +257,8 @@ class NumericalValue: NSObject, Num {
     }
 
     override func isEqual(_ to: (Any)?) -> Bool {
-        guard let other = to as? Num else {
+        guard let other = to as? Num ??
+                (to as? ComplexValue)?.asReal else {
             return false
         }
         return abs(floatingPoint.distance(to: other.floatingPoint)) < NumericalValue.epsilon
