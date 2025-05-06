@@ -77,6 +77,31 @@ class TestMathOpsMatrix: XCTestCase {
         verifyMatrixCalcSameDimensionsRequired(Minus())
     }
 
+    func testNumTimesMatrix() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2)],
+            [num(3), num(4)],
+        ])
+        let scalar = ComplexValue(realValue: rat(1, 2), imagValue: rat(2, 3))
+
+        let expectedResult = try! MatrixValue([
+            [
+                scalar,
+                ComplexValue(realValue: num(1), imagValue: rat(4, 3)),
+            ],
+            [
+                ComplexValue(realValue: rat(3, 2), imagValue: num(2)),
+                ComplexValue(realValue: num(2), imagValue: rat(8, 3)),
+            ],
+        ])
+
+        let r = assertNoThrow { try Mult().calcMatrix([m1, scalar], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+
+        let r2 = assertNoThrow { try Mult().calcMatrix([scalar, m1], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, r2?.asMatrix)
+    }
+
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
         let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
         let v2 = num(3)
