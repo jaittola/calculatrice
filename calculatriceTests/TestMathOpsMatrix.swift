@@ -321,6 +321,68 @@ class TestMathOpsMatrix: XCTestCase {
         XCTAssertThrowsError(try DotProduct().calcMatrix([m1, m2], CalculatorMode()))
     }
 
+    func testMatrixInverse() {
+        let m = try! MatrixValue([
+            [num(1), num(2), num(3)],
+            [num(1), num(0), num(1)],
+            [num(2), rat(1, 2), num(3)],
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [rat(1, 2), rat(9, 2), num(-2)],
+            [num(1), num(3), num(-2)],
+            [rat(-1, 2), rat(-7, 2), num(2)],
+        ])
+
+        let r = assertNoThrow { try Inv().calcMatrix([m], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
+    func testMatrixInverseComplex() {
+        let m = try! MatrixValue([
+            [ComplexValue(0, 1), num(1), num(1)],
+            [num(1), num(0), num(1)],
+            [num(2), num(1), num(1)],
+        ])
+        let expectedResult = try! MatrixValue([
+            [ComplexValue(-0.4, -0.2), num(0), ComplexValue(0.4, 0.2)],
+            [ComplexValue(0.4, 0.2), num(-1), ComplexValue(0.6, -0.2)],
+            [ComplexValue(0.4, 0.2), num(1), ComplexValue(-0.4, -0.2)],
+        ])
+
+        let r = assertNoThrow { try Inv().calcMatrix([m], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
+    func testMatrixInverseComplexRational() {
+        let m = try! MatrixValue([
+            [ComplexValue(realValue: rat(1, 2), imagValue: num(1)), rat(1, 2), num(1)],
+            [complex(1, 2), num(0), num(1)],
+            [complex(0, 2), num(1), num(1)],
+        ])
+        let expectedResult = try! MatrixValue([
+            [
+                complex(0, 1),
+                ComplexValue(realValue: num(0), imagValue: rat(-1, 2)),
+                ComplexValue(realValue: num(0), imagValue: rat(-1, 2)),
+            ],
+            [
+                complex(0, 1),
+                ComplexValue(realValue: num(-1), imagValue: rat(-1, 2)),
+                ComplexValue(realValue: num(1), imagValue: rat(-1, 2)),
+            ],
+            [
+                complex(2, -1),
+                ComplexValue(realValue: num(0), imagValue: rat(1, 2)),
+                ComplexValue(realValue: num(-1), imagValue: rat(1, 2)),
+            ],
+        ])
+
+        let r = assertNoThrow { try Inv().calcMatrix([m], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+
+    }
+
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
         let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
         let v2 = num(3)
