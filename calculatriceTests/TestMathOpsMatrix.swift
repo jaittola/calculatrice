@@ -280,6 +280,47 @@ class TestMathOpsMatrix: XCTestCase {
         XCTAssertThrowsError(try Determinant().calcMatrix([m], CalculatorMode()))
     }
 
+    func testDotProduct() {
+        let m1 = try! MatrixValue([[num(1), num(2), num(3)]])
+        let m2 = try! MatrixValue([[num(4), num(5), num(6)]])
+
+        let r = assertNoThrow { try DotProduct().calcMatrix([m1, m2], CalculatorMode()) }
+        if case .number(let value)? = r {
+            XCTAssertEqual(value, num(32))
+        } else {
+            XCTFail("Expected single-dimensional numerical value, got \(String(describing: r))")
+        }
+    }
+
+    func testDotProductComplex() {
+        let m1 = try! MatrixValue([[complex(1, 2)], [num(2)], [num(3)]])
+        let m2 = try! MatrixValue([[num(4)], [complex(4, 5)], [num(6)]])
+
+        let r = assertNoThrow { try DotProduct().calcMatrix([m1, m2], CalculatorMode()) }
+        XCTAssertEqual(r?.asComplex, ComplexValue(30, 18))
+    }
+
+    func testDotProductEmpty() {
+        let m1 = try! MatrixValue([])
+        let m2 = try! MatrixValue([])
+
+        XCTAssertThrowsError(try DotProduct().calcMatrix([m1, m2], CalculatorMode()))
+    }
+
+    func testDotProductBadDimensions() {
+        let m1 = try! MatrixValue([[num(1)], [num(2)], [num(3)]])
+        let m2 = try! MatrixValue([[num(4)], [num(5)]])
+
+        XCTAssertThrowsError(try DotProduct().calcMatrix([m1, m2], CalculatorMode()))
+    }
+
+    func testDotProductNotVector() {
+        let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
+        let m2 = try! MatrixValue([[num(4)], [num(5)]])
+
+        XCTAssertThrowsError(try DotProduct().calcMatrix([m1, m2], CalculatorMode()))
+    }
+
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
         let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
         let v2 = num(3)
