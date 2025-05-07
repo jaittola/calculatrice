@@ -230,6 +230,100 @@ class DotProduct: Calculation, MatrixCalculation {
     }
 }
 
+extension Inv: MatrixCalculation {
+    func calcMatrix(_ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode) throws
+        -> ContainedValue
+    {
+        guard let matrix = inputs[0] as? MatrixValue else {
+            throw CalcError.errInputsMustBeMatrixes()
+        }
+
+        guard matrix.rows == matrix.cols, matrix.rows > 0 else {
+            throw CalcError.errMatrixMustBeSquare()
+        }
+
+        guard let determinant = try Determinant().calcMatrix([matrix], calculatorMode).asComplex,
+            determinant != ComplexValue(0, 0)
+        else {
+            throw CalcError.badInput()
+        }
+
+        let mult = Mult()
+        let minus = Minus()
+        let div = Div()
+
+        var augmentedMatrix = try createAugmentedMatrix(matrix)
+
+        let dimension = matrix.rows
+        for i in 0..<dimension {
+            // Find pivot
+            let pivot = augmentedMatrix[i][i]
+            if pivot == ComplexValue(0, 0) {
+                // Swap with row below
+                var swapped = false
+                for j in (i + 1)..<dimension {
+                    if augmentedMatrix[j][i] != ComplexValue(0, 0) {
+                        augmentedMatrix.swapAt(i, j)
+                        swapped = true
+                        break
+                    }
+                }
+
+                if !swapped {
+                    throw CalcError.badInput()
+                }
+            }
+
+            augmentedMatrix[i] = try augmentedMatrix[i].enumerated().map { idx, value in
+                let d = try div.calcComplex([value, pivot], calculatorMode)
+                return d
+            }
+
+            // Eliminate other entries in the column
+            for j in 0..<dimension {
+                if j != i {
+                    let factor = augmentedMatrix[j][i]
+                    for k in 0..<(2 * dimension) {
+                        let multipliedByFactor = mult.calcComplex(
+                            [factor, augmentedMatrix[i][k]], calculatorMode)
+                        augmentedMatrix[j][k] = try minus.calcComplex(
+                            [augmentedMatrix[j][k], multipliedByFactor], calculatorMode)
+                    }
+                }
+            }
+        }
+
+        // Extract the inverse matrix
+        let inverseValues = augmentedMatrix.map { Array($0[dimension..<(2 * dimension)]) }
+        return .matrix(value: try MatrixValue(inverseValues))
+    }
+
+    private func createAugmentedMatrix(_ matrix: MatrixValue) throws -> [[ComplexValue]] {
+        let n = matrix.cols
+        var augmentedMatrix = matrix.values.map { row in
+            row.map { $0.asComplex }
+        }
+
+        // Add the identity matrix to the right of the original matrix
+        for i in 0..<n {
+            augmentedMatrix[i].append(
+                contentsOf: (0..<n).map { $0 == i ? ComplexValue(1, 0) : ComplexValue(0, 0) })
+        }
+
+        return augmentedMatrix
+    }
+
+    private func findPivotRow(_ matrix: [[ComplexValue]], _ col: Int) -> Int? {
+        let n = matrix.count
+        for i in col..<n {
+            if matrix[i][col] != ComplexValue(0, 0) {
+                return i
+            }
+        }
+        return nil
+    }
+}
+
 private func complexOrNumber(_ value: ComplexValue) -> ContainedValue {
     if let numValue = value.asReal?.asNumericalValue {
         return .number(value: numValue)
