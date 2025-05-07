@@ -58,4 +58,14 @@ class TestNumericalValuesMatrix: XCTestCase {
         XCTAssertEqual(emptyMatrix.rows, 0)
         XCTAssertEqual(emptyMatrix.cols, 0)
     }
+
+    func testIsVector() {
+        let v1 = try! MatrixValue([[num(1), num(2), num(3)]])
+        let v2 = try! MatrixValue([[num(1)], [num(2)], [num(3)]])
+        let m1 = try! MatrixValue(input1)
+
+        XCTAssertTrue(v1.isVector)
+        XCTAssertTrue(v2.isVector)
+        XCTAssertFalse(m1.isVector)
+    }
 }

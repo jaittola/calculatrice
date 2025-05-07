@@ -13,6 +13,10 @@ class MatrixValue: NSObject, MatrixCalcValue {
         (rows, cols)
     }
 
+    var isVector: Bool {
+        rows == 1 || cols == 1
+    }
+
     func stringValue(
         precision: Int = realDefaultPrecision, calculatorMode: CalculatorMode = CalculatorMode()
     ) -> String {
