@@ -129,12 +129,12 @@ class TestMathOpsMatrix: XCTestCase {
         let m2 = try! MatrixValue([
             [num(5), num(6)],
             [num(7), num(8)],
-            [num(9), num(10)]
+            [num(9), num(10)],
         ])
 
         let expectedResult = try! MatrixValue([
             [num(46), num(52)],
-            [num(109), num(124)]
+            [num(109), num(124)],
         ])
 
         let r = assertNoThrow { try Mult().calcMatrix([m1, m2], CalculatorMode()) }
@@ -171,6 +171,44 @@ class TestMathOpsMatrix: XCTestCase {
         ])
 
         XCTAssertThrowsError(try Mult().calcMatrix([m1, m2], CalculatorMode()))
+    }
+
+    func testMatrixTranspose() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2), num(3)],
+            [num(4), num(5), num(6)],
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [num(1), num(4)],
+            [num(2), num(5)],
+            [num(3), num(6)],
+        ])
+
+        let r = assertNoThrow { try Transpose().calcMatrix([m1], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
+    func testVectorTranspose() {
+        let v1 = try! MatrixValue([[num(1), num(2)]])
+        let transposed = try! MatrixValue([[num(1)], [num(2)]])
+
+        let transpose = Transpose()
+
+        let r = assertNoThrow { try transpose.calcMatrix([v1], CalculatorMode()) }
+        let r2 =
+            if let resultVector = r?.asMatrix {
+                assertNoThrow { try transpose.calcMatrix([resultVector], CalculatorMode()) }
+            } else { nil as ContainedValue? }
+
+        XCTAssertEqual(r?.asMatrix, transposed)
+        XCTAssertEqual(r2?.asMatrix, v1)
+    }
+
+    func testMatrixTransposeEmpty() {
+        let m = try! MatrixValue([])
+        let r = assertNoThrow { try Transpose().calcMatrix([m], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, try! MatrixValue([]))
     }
 
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
