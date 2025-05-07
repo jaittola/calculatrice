@@ -12,4 +12,5 @@ enum CalcError: Error {
     case unequalMatrixRowsCols(msgKey: String = "ErrUnequalMatrixRows")
     case errInputsMustBeMatrixes(msgKey: String = "ErrInputsMustBeMatrixes")
     case errBadMatrixDimensionsForMult(msgKey: String = "ErrBadMatrixDimensionsForMult")
+    case errMatrixMustBeSquare(msgKey: String = "ErrMatrixMustBeSquare")
 }

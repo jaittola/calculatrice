@@ -211,6 +211,75 @@ class TestMathOpsMatrix: XCTestCase {
         XCTAssertEqual(r?.asMatrix, try! MatrixValue([]))
     }
 
+    func testMatrixDeterminant() {
+        let m = try! MatrixValue([
+            [num(1), num(2)],
+            [num(3), num(4)],
+        ])
+
+        let r = assertNoThrow { try Determinant().calcMatrix([m], CalculatorMode()) }
+        if case .number(let value)? = r {
+            XCTAssertEqual(value, num(-2))
+        } else {
+            XCTFail("Result \(String(describing: r)) should be a single-dimension number")
+        }
+    }
+
+    func testComplexMatrixDeterminant() {
+        let m = try! MatrixValue([
+            [
+                ComplexValue(realValue: num(1), imagValue: num(2)),
+                ComplexValue(realValue: num(3), imagValue: num(4)),
+                NumericalValue(3),
+            ],
+            [
+                ComplexValue(realValue: num(5), imagValue: num(6)),
+                ComplexValue(realValue: num(7), imagValue: num(8)),
+                ComplexValue(realValue: num(1), imagValue: num(-1)),
+            ],
+            [
+                num(1), num(2), num(2),
+            ],
+        ])
+
+        let r = assertNoThrow { try Determinant().calcMatrix([m], CalculatorMode()) }
+        XCTAssertEqual(r?.asComplex, complex(10, -21))
+    }
+
+    func testMatrixDeterminantOneElementAndEmpty() {
+        let emptyMatrix = try! MatrixValue([])
+        let oneElementMatrix = try! MatrixValue([[complex(1, 2)]])
+        let oneElementRealMatrix = try! MatrixValue([[num(2)]])
+
+        let emptyDeterminant = assertNoThrow {
+            try Determinant().calcMatrix([emptyMatrix], CalculatorMode())
+        }
+        XCTAssertEqual(emptyDeterminant?.asNumericalValue, num(0))
+
+        let oneElementDeterminant = assertNoThrow {
+            try Determinant().calcMatrix([oneElementMatrix], CalculatorMode())
+        }
+        XCTAssertEqual(oneElementDeterminant?.asComplex, complex(1, 2))
+
+        let oneElementRealDeterminant = assertNoThrow {
+            try Determinant().calcMatrix([oneElementRealMatrix], CalculatorMode())
+        }
+
+        if case .number(let value)? = oneElementRealDeterminant {
+            XCTAssertEqual(value, num(2))
+        } else {
+            XCTFail(
+                "Result \(String(describing: oneElementDeterminant)) should be a single-dimension number"
+            )
+        }
+    }
+
+    func testMatrixDeterminantBadDimensions() {
+        let m = try! MatrixValue([[num(1), num(2)], [num(3), num(4)], [num(5), num(6)]])
+
+        XCTAssertThrowsError(try Determinant().calcMatrix([m], CalculatorMode()))
+    }
+
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
         let m1 = try! MatrixValue([[num(1), num(2)], [num(3), num(4)]])
         let v2 = num(3)

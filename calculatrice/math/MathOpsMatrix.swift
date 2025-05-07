@@ -121,6 +121,85 @@ class Transpose: Calculation, MatrixCalculation {
     }
 }
 
+class Determinant: Calculation, MatrixCalculation {
+    let arity = 1
+
+    func calcMatrix(_ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode) throws
+        -> ContainedValue
+    {
+        guard let m = inputs[0] as? MatrixValue else {
+            throw CalcError.errInputsMustBeMatrixes()
+        }
+
+        guard m.rows == m.cols else {
+            throw CalcError.errMatrixMustBeSquare()
+        }
+
+        switch m.rows {
+        case 0:  // empty
+            return .number(value: NumericalValue(0))
+
+        case 1:  // 1x1
+            return complexOrNumber(m.values[0][0].asComplex)
+
+        case 2:  // 2x2 => calculate determinant directly
+            let mult = Mult()
+            let v1 = mult.calcComplex(
+                [m.values[0][0].asComplex, m.values[1][1].asComplex], CalculatorMode())
+            let v2 = mult.calcComplex(
+                [m.values[0][1].asComplex, m.values[1][0].asComplex], CalculatorMode())
+            let determinant = try Minus().calcComplex([v1, v2], calculatorMode).asComplex
+            return complexOrNumber(determinant)
+
+        default:  // larger => use submatrixes
+            let mult = Mult()
+            let plus = Plus()
+            var determinant = ComplexValue(0, 0)
+            for col in 0..<m.cols {
+                let subMatrix = try createSubMatrix(matrix: m, excludingRow: 0, excludingCol: col)
+                let cofactor = mult.calcComplex(
+                    [
+                        m.values[0][col].asComplex,
+                        ComplexValue((col % 2 == 0 ? 1 : -1), 0),
+                    ],
+                    calculatorMode)
+                guard let subDeterminant = try calcMatrix([subMatrix], calculatorMode).asComplex
+                else {
+                    throw CalcError.badCalculationOp()
+                }
+                determinant =
+                    try plus.calcComplex(
+                        [
+                            determinant,
+                            mult.calcComplex([cofactor, subDeterminant], calculatorMode),
+                        ], calculatorMode)
+            }
+            return complexOrNumber(determinant)
+        }
+    }
+
+    private func complexOrNumber(_ value: ComplexValue) -> ContainedValue {
+        if let numValue = value.asReal?.asNumericalValue {
+            return .number(value: numValue)
+        } else {
+            return .complex(value: value)
+        }
+    }
+
+    private func createSubMatrix(matrix: MatrixValue, excludingRow: Int, excludingCol: Int) throws
+        -> MatrixValue
+    {
+        let subMatrixValues = matrix.values.enumerated().compactMap {
+            rowIndex, row -> [MatrixElement]? in
+            guard rowIndex != excludingRow else { return nil }
+            return row.enumerated().compactMap { colIndex, value -> MatrixElement? in
+                colIndex != excludingCol ? value : nil
+            }
+        }
+        return try MatrixValue(subMatrixValues)
+    }
+}
+
 private func obtainEquallyDimensionedMatrixes(_ inputs: [MatrixCalcValue]) throws -> (
     MatrixValue, MatrixValue
 ) {
