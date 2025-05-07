@@ -97,6 +97,30 @@ extension Mult: MatrixCalculation {
     }
 }
 
+class Transpose: Calculation, MatrixCalculation {
+    let arity = 1
+
+    func calcMatrix(_ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode) throws
+        -> ContainedValue
+    {
+        guard let m = inputs[0] as? MatrixValue else {
+            throw CalcError.errInputsMustBeMatrixes()
+        }
+
+        guard m.rows > 0, m.cols > 0 else {
+            return try .matrix(value: MatrixValue([]))
+        }
+
+        let result = (0..<m.cols).map { colIndex in
+            (0..<m.rows).map { rowIndex in
+                m.values[rowIndex][colIndex]
+            }
+        }
+
+        return .matrix(value: try MatrixValue(result))
+    }
+}
+
 private func obtainEquallyDimensionedMatrixes(_ inputs: [MatrixCalcValue]) throws -> (
     MatrixValue, MatrixValue
 ) {
