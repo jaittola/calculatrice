@@ -752,6 +752,23 @@
         }
       }
     },
+    "ErrSameDimensionVectorsRequired" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dot product can be calculated only for two vectors that have the same dimensions."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistetulon laskemiseen vaaditaan kaksi samankokoista vektoria."
+          }
+        }
+      }
+    },
     "ErrUnequalMatrixDimensions" : {
       "extractionState" : "manual",
       "localizations" : {

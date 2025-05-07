@@ -178,14 +178,6 @@ class Determinant: Calculation, MatrixCalculation {
         }
     }
 
-    private func complexOrNumber(_ value: ComplexValue) -> ContainedValue {
-        if let numValue = value.asReal?.asNumericalValue {
-            return .number(value: numValue)
-        } else {
-            return .complex(value: value)
-        }
-    }
-
     private func createSubMatrix(matrix: MatrixValue, excludingRow: Int, excludingCol: Int) throws
         -> MatrixValue
     {
@@ -197,6 +189,52 @@ class Determinant: Calculation, MatrixCalculation {
             }
         }
         return try MatrixValue(subMatrixValues)
+    }
+}
+
+class DotProduct: Calculation, MatrixCalculation {
+    let arity = 2
+
+    func calcMatrix(_ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode) throws
+        -> ContainedValue
+    {
+        let transpose = Transpose()
+        let plus = Plus()
+        let mult = Mult()
+
+        guard inputs.count == 2,
+            let v1 = inputs[0] as? MatrixValue,
+            let v2 = inputs[1] as? MatrixValue,
+            v1.isVector, v2.isVector,
+            v1.dimensions == v2.dimensions,
+            let v1r = v1.rows == 1 ? v1 : try transpose.calcMatrix([v1], calculatorMode).asMatrix,
+            let v2r = v2.rows == 1 ? v2 : try transpose.calcMatrix([v2], calculatorMode).asMatrix
+        else {
+            throw CalcError.sameDimensionVectorsRequired()
+        }
+
+        let result = try v1r.values[0].enumerated().reduce(ComplexValue(0, 0)) {
+            partialResult, iterParams in
+            let (idx, value) = iterParams
+
+            let val1 = value.asComplex
+            let val2 = v2r.values[0][idx].asComplex
+            let elemProduct = mult.calcComplex([val1, val2], calculatorMode)
+            let totalSum = try plus.calcComplex(
+                [partialResult, elemProduct], calculatorMode)
+
+            return totalSum
+        }
+
+        return complexOrNumber(result)
+    }
+}
+
+private func complexOrNumber(_ value: ComplexValue) -> ContainedValue {
+    if let numValue = value.asReal?.asNumericalValue {
+        return .number(value: numValue)
+    } else {
+        return .complex(value: value)
     }
 }
 
