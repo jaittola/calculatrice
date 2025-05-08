@@ -142,7 +142,7 @@ class TestNumericalValues: XCTestCase {
     }
 
     func testComplexZeroToPolar() {
-        checkComplexToPolar(ComplexValue(0.0, 0.0), 0, Double.nan)
+        checkComplexToPolar(ComplexValue(0.0, 0.0), 0, 0)
     }
 
     func testComplexNegToPolar() {

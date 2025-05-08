@@ -492,6 +492,24 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(result.asComplex, complex(sqrt(2), sqrt(2)))
     }
 
+    func testComplexPolarZeroConversion() {
+        let c = ComplexValue(0, 0)
+        let c2 = assertNoThrow { try ComplexValue([c.polarAbsolute, c.polarArgument],
+                                                  originalFormat: .polar, presentationFormat: .polar) }
+        XCTAssertEqual(c2?.cartesian[0].floatingPoint, 0)
+        XCTAssertEqual(c2?.cartesian[1].floatingPoint, 0)
+    }
+
+    func testComplexDivZero() {
+        let result = assertNoThrow { try Div().calcComplex([ComplexValue(0, 0), ComplexValue(2, 0)],
+                                                           CalculatorMode()) }
+        let result2 = assertNoThrow { try Div().calcComplex([ComplexValue(0, 0), ComplexValue(0, 2)],
+                                                            CalculatorMode()) }
+
+        XCTAssertEqual(result, ComplexValue(0, 0))
+        XCTAssertEqual(result2, ComplexValue(0, 0))
+    }
+
     func testComplexInv() {
         let result = Inv().calcComplex([complex(1, 1)],
                                        calculatorMode)

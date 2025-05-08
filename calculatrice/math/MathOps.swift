@@ -144,11 +144,14 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
             return try calculate([v1r, v2r], calculatorMode).asComplex
         } else {
             let r = v1.polarAbsolute.floatingPoint / v2.polarAbsolute.floatingPoint
-            let arg = Utils.clampComplexArg(v1.polarArgument.floatingPoint - v2.polarArgument.floatingPoint)
-
-            return ComplexValue(absolute: r,
-                                argument: arg,
-                                presentationFormat: v2.presentationFormat)
+            if r == 0 {
+                return ComplexValue(0, 0, presentationFormat: v2.presentationFormat)
+            } else {
+                let arg = Utils.clampComplexArg(v1.polarArgument.floatingPoint - v2.polarArgument.floatingPoint)
+                return ComplexValue(absolute: r,
+                                    argument: arg,
+                                    presentationFormat: v2.presentationFormat)
+            }
         }
     }
 
