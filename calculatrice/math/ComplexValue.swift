@@ -45,7 +45,7 @@ class ComplexValue: NSObject, MatrixElement {
             // Based on https://en.wikipedia.org/wiki/Complex_number#Modulus_and_argument,
             // referred on May 1st 2023.
             if y == 0 && x == 0 {
-                return NumericalValue(Double.nan)
+                return NumericalValue(0)
             } else if x < 0 && y == 0 {
                 return NumericalValue(Double.pi)
             } else { // y != 0 || x > 0 {
