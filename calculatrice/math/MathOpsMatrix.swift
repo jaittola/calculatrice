@@ -97,6 +97,20 @@ extension Mult: MatrixCalculation {
     }
 }
 
+extension Neg: MatrixCalculation {
+    func calcMatrix(_ inputs: [any MatrixCalcValue], _ calculatorMode: CalculatorMode) throws
+        -> ContainedValue
+    {
+        guard let m = inputs[0] as? MatrixValue else {
+            throw CalcError.errInputsMustBeMatrixes()
+        }
+
+        let result = try Mult().calcMatrix([NumericalValue(-1), m], calculatorMode)
+
+        return result
+    }
+}
+
 class Transpose: Calculation, MatrixCalculation {
     let arity = 1
 
