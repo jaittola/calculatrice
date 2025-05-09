@@ -22,12 +22,13 @@ void yyerror(char *);
 %token <expression> UNSIGNED_INTEGER
 %token <expression> UNSIGNED_DOUBLE
 %token <sign> MINUS PLUS
-%token IMAG DASH ANGLE DEGREE
+%token IMAG DASH ANGLE DEGREE BRACKET_L BRACKET_R NEWLINE DOUBLESPACE
 
 %type <expression> expr
-%type <expression> scalar_value integer_value double_value
+%type <expression> scalar_value integer_value double_value imaginary_or_real_value
 %type <expression> fraction_value true_fraction_value mixed_fraction_value
 %type <expression> complex_value cartesian_complex_value cartesian_polar_value
+%type <expression> matrix_row_elements matrix_rows matrix_value
 %type <sign> sign maybesign
 
 %%
@@ -46,7 +47,9 @@ program: expr {
 }
 ;
 
-expr: scalar_value | complex_value;
+expr: imaginary_or_real_value | matrix_value;
+
+imaginary_or_real_value: scalar_value | complex_value;
 
 complex_value: cartesian_complex_value | cartesian_polar_value;
 
@@ -95,6 +98,29 @@ scalar_value ANGLE scalar_value DEGREE {
 }
 | scalar_value ANGLE scalar_value {
     $$ = expression_complex_polar($1, $3, e_au_rad);
+}
+;
+
+matrix_value:
+BRACKET_L matrix_rows BRACKET_R {
+    $$ = $2;
+};
+
+matrix_rows: matrix_rows NEWLINE matrix_row_elements {
+    $$ = expression_append_sibling($1, $3);
+}
+| matrix_row_elements {
+    expression_t *expressions[] = {$1, NULL};
+    $$ = expression_matrix(expressions);
+}
+;
+
+matrix_row_elements: matrix_row_elements DOUBLESPACE imaginary_or_real_value {
+    $$ = expression_append_sibling($1, $3);
+}
+| imaginary_or_real_value {
+    expression_t *expressions[] = {$1, NULL};
+    $$ = expression_matrix_row(expressions);
 }
 ;
 

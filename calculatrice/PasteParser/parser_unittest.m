@@ -1,4 +1,5 @@
 
+#include "parsed_types.h"
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
@@ -7,13 +8,11 @@
 
 #import "parser_unittest.h"
 
-
-typedef void* YY_BUFFER_STATE;
+typedef void *YY_BUFFER_STATE;
 
 extern YY_BUFFER_STATE yy_scan_string(const char *str);
 extern void yyparse(void);
 extern void yy_delete_buffer(YY_BUFFER_STATE *buf);
-
 
 static expression_t *parseResult = NULL;
 static char *parseError = NULL;
@@ -47,6 +46,8 @@ static int test_parse_mixed_fract(const char *input,
                                   const char *whole,
                                   const char *num,
                                   const char *den);
+static int check_matrix_row(expression_t *parsed_row, const char *row[]);
+static int test_parse_matrix(const char *input, const char *row1[], const char *row2[]);
 static int test_parse_err(const char *input);
 static void run_parse(const char *input);
 static void test_cleanup(void);
@@ -66,6 +67,10 @@ int main(int argc, char *argv[]) {
     T(test_basic_success_parsing("-4.1", e_double));
     T(test_parse_mixed_fract("1 3/4", "1", "3", "4"));
     T(test_parse_mixed_fract("-1 3/4", "-1", "3", "4"));
+    T(test_parse_matrix("[1  2  3]", (const char *[]) {"1", "2", "3", NULL}, NULL));
+    T(test_parse_matrix("[1  2  3\n4  5  6]",
+                        (const char *[]) {"1", "2", "3", NULL},
+                        (const char *[]) {"4", "5", "6", NULL}));
     T(test_parse_err("BOOM"));
     T(test_parse_err("123 BOOM"));
     T(test_parse_err("123 ∠ 89A"));
@@ -77,10 +82,21 @@ int main(int argc, char *argv[]) {
     return errors;
 }
 
-#define ASSERT(expr) if (!(expr)) { fprintf(stderr, "Assertion for '%s' failed\n", #expr); \
-        errors += 1; }
+#define ASSERT(expr)                                            \
+    if (!(expr)) {                                              \
+        fprintf(stderr, "Assertion for '%s' failed (%s:%d)\n", #expr, __FILE__, __LINE__); \
+        errors += 1;                                            \
+    }
 
-int test_basic_success_parsing(const char *input, expression_kind expected_kind) {
+#define ASSERT_STOP(expr)                                       \
+    if (!(expr)) {                                              \
+        fprintf(stderr, "Assertion for '%s' failed (%s:%d)\n", #expr, __FILE__, __LINE__); \
+        errors += 1;                                            \
+        goto test_end;                                          \
+    }
+
+int test_basic_success_parsing(const char *input,
+                               expression_kind expected_kind) {
     int errors = 0;
 
     run_parse(input);
@@ -122,6 +138,34 @@ int test_parse_mixed_fract(const char *input,
     return errors;
 }
 
+int test_parse_matrix(const char *input,
+                      const char *row1[],
+                      const char *row2[]) {
+    int errors = 0;
+
+    run_parse(input);
+
+    ASSERT(parseError == NULL);
+    ASSERT(parseResult != NULL);
+    if (parseResult != NULL) {
+        ASSERT(parseResult->kind == e_matrix);
+
+        ASSERT_STOP(parseResult->siblings[0] != NULL);
+        errors += check_matrix_row(parseResult->siblings[0], row1);
+
+        if (row2 != NULL) {
+            ASSERT_STOP(parseResult->siblings[1] != NULL);
+            errors += check_matrix_row(parseResult->siblings[1], row2);
+        }
+    }
+
+ test_end:
+
+    test_cleanup();
+
+    return errors;
+}
+
 int test_parse_err(const char *input) {
     int errors = 0;
 
@@ -143,4 +187,23 @@ void run_parse(const char *input) {
 void test_cleanup() {
     expression_free(parseResult); parseResult = NULL;
     free(parseError); parseError = NULL;
+}
+
+int check_matrix_row(expression_t *parsed_row, const char *row[]) {
+    int errors = 0;
+    int i = 0;
+
+    ASSERT_STOP(parsed_row->kind == e_matrix_row);
+    ASSERT_STOP(parsed_row->siblings != NULL);
+
+    for (i = 0; row[i] != NULL; ++i) {
+        ASSERT_STOP(parsed_row->siblings[i] != NULL);
+        ASSERT(parsed_row->siblings[i]->kind == e_double);
+        ASSERT_STOP(parsed_row->siblings[i]->text != NULL);
+        ASSERT(strcmp(parsed_row->siblings[i]->text, row[i]) == 0);
+    }
+
+ test_end:
+
+    return errors;
 }

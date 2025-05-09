@@ -74,6 +74,14 @@ expression_t *expression_fraction(expression_t *v1, expression_t *v2, expression
     return expression_multicomponent(siblings, e_fraction);
 }
 
+expression_t *expression_matrix(expression_t *rows[]) {
+    return expression_multicomponent(rows, e_matrix);
+}
+
+expression_t *expression_matrix_row(expression_t *elements[]) {
+    return expression_multicomponent(elements, e_matrix_row);
+}
+
 expression_t *expression_neg(int sign, expression_t *expression) {
     if (sign > 0 || (expression->text != NULL && expression->text[0] == '-')) {
         return expression;
@@ -128,6 +136,30 @@ expression_t *expression_multicomponent(expression_t *expressions[],
     for (int i = 0; i < count; i++) {
         expr->siblings[i] = expressions[i];
     }
+
+    return expr;
+}
+
+expression_t *expression_append_sibling(expression_t *expr, expression_t *sibling) {
+    if (expr->siblings == NULL) {
+        return expr;
+    }
+
+    int count = 0;
+    while (expr->siblings[count] != NULL) {
+        count++;
+    }
+
+    expression_t **new_siblings = realloc(expr->siblings, (count + 2) * sizeof(expression_t *));
+    if (new_siblings == NULL) {
+        expression_free(expr);
+        return NULL;
+    }
+
+    new_siblings[count] = sibling;
+    new_siblings[count + 1] = NULL;
+
+    expr->siblings = new_siblings;
 
     return expr;
 }
