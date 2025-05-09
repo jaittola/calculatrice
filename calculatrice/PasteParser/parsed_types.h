@@ -10,7 +10,7 @@ struct expression {
     expression_angle_unit angle_unit;
     char *text;
 
-    struct expression *siblings[3];
+    struct expression **siblings;
 };
 
 typedef struct expression expression_t;
@@ -28,7 +28,7 @@ expression_t *expression_fraction(expression_t *whole, expression_t *numerator, 
 expression_t *expression_neg(int sign, expression_t *expression);
 
 expression_t *expression_scalar(const char *text, expression_kind kind);
-expression_t *expression_multicomponent(expression_t *c1, expression_t *c2, expression_t *c3, expression_kind kind);
+expression_t *expression_multicomponent(expression_t *expressions[], expression_kind kind);
 
 void expression_free(expression_t *expression);
 
