@@ -173,6 +173,21 @@ class TestMathOpsMatrix: XCTestCase {
         XCTAssertThrowsError(try Mult().calcMatrix([m1, m2], CalculatorMode()))
     }
 
+    func testMatrixNegative() {
+        let m1 = try! MatrixValue([
+            [num(1), num(2)],
+            [num(3), num(4)],
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [num(-1), num(-2)],
+            [num(-3), num(-4)],
+        ])
+
+        let r = assertNoThrow { try Neg().calcMatrix([m1], CalculatorMode()) }
+        XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
+
     func testMatrixTranspose() {
         let m1 = try! MatrixValue([
             [num(1), num(2), num(3)],
