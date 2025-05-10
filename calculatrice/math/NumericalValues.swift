@@ -69,6 +69,19 @@ enum ContainedValue: Equatable {
         }
     }
 
+    var asMatrixElement: MatrixElement? {
+        switch self {
+        case .complex(let c):
+            return c
+        case .number(let n):
+            return n
+        case .rational(let r):
+            return r
+        case .matrix:
+            return nil
+        }
+    }
+
     func stringValue(_ calculatorMode: CalculatorMode) -> String {
         switch self {
         case .complex(let c):

@@ -28,7 +28,7 @@ class PasteParser {
         }
 
         guard let parsedExpression = parserAdapter.parsedExpression else {
-            NSLog("No parsed value found");
+            NSLog("No parsed value found")
             return nil
         }
 
@@ -90,6 +90,53 @@ class PasteParser {
                 return nil
             }
             return ContainedValue.rational(value: rational)
+
+        case e_matrix:
+            let matrixElements =
+                typedSiblings
+                .compactMap { sib in sib.asMatrix }
+                .compactMap { row in
+                    if row.rows == 1 {
+                        return row.values[0]
+                    } else {
+                        return nil
+                    }
+                }
+
+            guard typedSiblings.count >= 1,
+                matrixElements.count == typedSiblings.count
+            else {
+                NSLog(
+                    "Invalid pasted matrix: it must have at least one row and number of rows must match contained values. Found \(matrixElements.count) rows."
+                )
+                return nil
+            }
+
+            guard let matrix = try? MatrixValue(matrixElements) else {
+                NSLog("Invalid matrix")
+                return nil
+            }
+            return ContainedValue.matrix(value: matrix)
+
+        case e_matrix_row:
+            let rowContent =
+                typedSiblings
+                .compactMap { $0.asMatrixElement }
+
+            guard typedSiblings.count >= 1,
+                rowContent.count == typedSiblings.count
+            else {
+                NSLog(
+                    "Invalid row in pasted matrix. It must have at least one column and number of columns must match contained values. Found \(rowContent.count) columns, input was \(typedSiblings.count)."
+                )
+                return nil
+            }
+
+            guard let matrix = try? MatrixValue([rowContent]) else {
+                NSLog("Invalid matrix row")
+                return nil
+            }
+            return ContainedValue.matrix(value: matrix)
 
         default:
             return nil

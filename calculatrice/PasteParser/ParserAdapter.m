@@ -65,11 +65,9 @@ NSString *identifier;
 
 + (ParsedExpression *)create:(expression_t *)expr {
     NSArray *siblings = [[NSArray alloc] init];
-    for (int i = 0; i < 3; ++i) {
-        if (expr->siblings[i] != NULL) {
-            ParsedExpression *sibling = [ParsedExpression create:expr->siblings[i]];
-            siblings = [siblings arrayByAddingObject:sibling];
-        }
+    for (int i = 0; expr->siblings != NULL && expr->siblings[i] != NULL; ++i) {
+        ParsedExpression *sibling = [ParsedExpression create:expr->siblings[i]];
+        siblings = [siblings arrayByAddingObject:sibling];
     }
 
     ParsedExpression *pe = [ParsedExpression create:expr->kind angle_unit:expr->angle_unit text:expr->text siblings:siblings];
