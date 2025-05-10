@@ -187,6 +187,21 @@ class TestPasteParser: XCTestCase {
         XCTAssertEqual(v?.stringValue(CalculatorMode()), "-1 3/4")
     }
 
+    func testParseSimpleMatrix() {
+        let input = "[1  0  0\n0  1  0\n0  0  1]"
+        let expectedResult = try! MatrixValue(
+            [
+                [NumericalValue(1), NumericalValue(0), NumericalValue(0)],
+                [NumericalValue(0), NumericalValue(1), NumericalValue(0)],
+                [NumericalValue(0), NumericalValue(0), NumericalValue(1)],
+            ]
+        )
+        let v = pasteParser.parsePastedInput(input)
+        let matrix = v?.asMatrix
+        XCTAssertNotNil(matrix)
+        XCTAssertEqual(matrix, expectedResult)
+    }
+
     func testPasteGarbage() {
         XCTAssertNil(pasteParser.parsePastedInput("asdf123.456"))
         XCTAssertNil(pasteParser.parsePastedInput("123.456asdf"))
