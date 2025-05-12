@@ -82,6 +82,19 @@ enum ContainedValue: Equatable {
         }
     }
 
+    var asMatrixCalcValue: MatrixCalcValue {
+        switch self {
+        case .complex(let c):
+            return c
+        case .number(let n):
+            return n
+        case .rational(let r):
+            return r
+        case .matrix(let m):
+            return m
+        }
+    }
+
     func stringValue(_ calculatorMode: CalculatorMode) -> String {
         switch self {
         case .complex(let c):
@@ -134,6 +147,10 @@ struct Value: Identifiable, Equatable {
 
     var asMatrix: MatrixValue? {
         containedValue.asMatrix
+    }
+
+    var asMatrixCalcValue: MatrixCalcValue {
+        containedValue.asMatrixCalcValue
     }
 
     init(_ containedValue: ContainedValue, id: Int = 0) {

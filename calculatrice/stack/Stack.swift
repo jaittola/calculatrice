@@ -184,14 +184,18 @@ class Stack: ObservableObject {
         let complexInputs = inputs.compactMap { v in v.asComplex }
         let inputsAsNum = inputs.compactMap { n in n.asNum }
         let inputsAsRational = inputs.compactMap { r in r.asRational }
+        let inputsAsMatrix = inputs.compactMap { m in m.asMatrix }
+        let inputsAsMatrixCalcValue = inputs.compactMap { v in v.asMatrixCalcValue }
 
         let allInputsNum = inputsAsNum.count == inputs.count
         let allInputsRational = inputsAsRational.count == inputs.count
         let allInputsConvertableToComplex = complexInputs.count == inputs.count
+        let haveMatrixInput = inputsAsMatrix.count > 0
 
         let realCalc = calc as? ScalarCalculation
         let complexCalc = calc as? ComplexCalculation
         let ratCalc = calc as? RationalCalculation
+        let matrixCalc = calc as? MatrixCalculation
 
         let preferComplexCalc = (allInputsNum &&
                                  (complexCalc?.preferComplexCalculationWith(thisInput: inputsAsNum) ??
@@ -200,7 +204,11 @@ class Stack: ObservableObject {
 
         let resultValue: Value
 
-        if let ratCalc = ratCalc, allInputsRational, !preferRealCalc {
+        if let matrixCalc = matrixCalc, haveMatrixInput {
+            let result = try matrixCalc.calcMatrix(inputsAsMatrixCalcValue, calculatorMode)
+            resultValue = Value(result)
+        }
+        else if let ratCalc = ratCalc, allInputsRational, !preferRealCalc {
             let result = try ratCalc.calcRational(inputsAsRational, calculatorMode)
             resultValue = Value(result)
         } else if let realCalc = realCalc,

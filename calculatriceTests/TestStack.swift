@@ -374,6 +374,43 @@ class TestStack: XCTestCase {
         XCTAssertEqual(result.stringValue(CalculatorMode()), "0.25")
     }
 
+    func testCalcWithMatrixes() {
+        let s = Stack()
+
+        assertNoThrow {
+            let m1 = try MatrixValue([[num(1), num(2)], [num(3), num(4)]])
+            let m2 = try MatrixValue([[num(5), num(6)], [num(7), num(8)]])
+
+            s.push(Value(m1))
+            s.push(Value(m2))
+
+            try s.calculate(Plus(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content.count, 1)
+
+        let result = s.content[0]
+        XCTAssertEqual(result.stringValue(CalculatorMode()), "[6  8\n10  12]")
+    }
+
+    func testCalcScalarMatrix() {
+        let s = Stack()
+
+        assertNoThrow {
+            let m = try MatrixValue([[num(1), num(1)], [num(2), num(5)]])
+
+            s.push(Value(num(2)))
+            s.push(Value(m))
+
+            try s.calculate(Mult(), CalculatorMode())
+        }
+
+        XCTAssertEqual(s.content.count, 1)
+
+        let result = s.content[0]
+        XCTAssertEqual(result.stringValue(CalculatorMode()), "[2  2\n4  10]")
+    }
+
     func testCopyWithInputBufferContent() {
         let s = Stack()
 

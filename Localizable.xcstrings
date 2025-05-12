@@ -634,6 +634,23 @@
         }
       }
     },
+    "ErrBadMatrixDimensionsForMult" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The dimensions of these matrixes are incompatible for multiplication"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näitä matriiseja ei voi kertoa keskenään"
+          }
+        }
+      }
+    },
     "ErrDivByZero" : {
       "extractionState" : "manual",
       "localizations" : {
