@@ -153,7 +153,7 @@ class TestStack: XCTestCase {
         let s = threeValueStack()
 
         assertNoThrow {
-            try s.calculate( Plus(), CalculatorMode())
+            try s.calculate(Plus(), CalculatorMode())
         }
 
         s.input.addNum(9)
