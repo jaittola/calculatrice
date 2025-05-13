@@ -6,12 +6,14 @@ struct Key: Identifiable {
         case showHelp
         case inputMatrix
         case dismissMatrix
+        case editMatrix(matrix: MatrixValue)
     }
 
     enum ResetModAfterClick {
         case keep
         case reset
     }
+
     enum CalcOp {
         case ui(
             _ symbol: String,
@@ -282,7 +284,8 @@ struct Key: Identifiable {
 
     static func mult() -> Key { Key(op: .calc("×", Mult(), "CalcMultiply")) }
 
-    static func div() -> Key { Key(op: .calc("÷", Div(), "CalcDivision")) }
+    static func div() -> Key { Key(op: .calc("÷", Div(), "CalcDivision"),
+                                   opMod1: .ui("Edit", { stack, _, _ in Self.editStackItem(stack) }, "Edit")) }
 
     static func sin() -> Key {
         Key(

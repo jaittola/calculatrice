@@ -37,6 +37,8 @@ struct MatrixEntryView: View {
             showingHelp = true
         case .inputMatrix:
             fatalError("MatrixEntryView: Unsupported UI keyboard op: .inputMatrix")
+        case .editMatrix:
+            fatalError("MatrixEntryView: Unsupported UI keyboard op: .editMatrix")
         case .dismissMatrix:
             showingMatrixUi = false
         }

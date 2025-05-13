@@ -12,7 +12,9 @@ struct CalculatorMain: View {
     @State private var selection: StackDisplayValueId?
 
     @State private var showingHelp = false
+
     @State private var showingMatrixUi = false
+    @State private var matrixToEdit: MatrixValue?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -92,6 +94,10 @@ struct CalculatorMain: View {
         case .showHelp:
             showingHelp = true
         case .inputMatrix:
+            matrixToEdit = nil
+            showingMatrixUi = true
+        case .editMatrix(let matrix):
+            matrixToEdit = matrix
             showingMatrixUi = true
         case .dismissMatrix:
             fatalError("CalculatorMain: Unsupported UI keybaord op .dismissMatrix")
