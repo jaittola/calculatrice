@@ -87,25 +87,6 @@ struct Key: Identifiable {
         }
     }
 
-    static func makeOp (_ symbol: String?,
-                        _ op: ((_ stack: Stack, _ calculatorMode: CalculatorMode) -> Void)?,
-                        _ calcOp: Calculation?,
-                        _ uiOp: UICallbackOp?) -> CalcOp? {
-        guard let symbol = symbol else {
-            return nil
-        }
-
-        return if let uiOp = uiOp {
-            .uiOp(symbol, uiOp)
-        } else if let op = op {
-            .stackOp(symbol, op)
-        } else if let calcOP = calcOp {
-            .calcOp(symbol, calcOP)
-        } else {
-            nil
-        }
-    }
-
     static func empty() -> Key { Key() }
 
     static func enter() -> Key {
