@@ -10,7 +10,7 @@ class InputBuffer: ObservableObject {
     }
 
     var isEmpty: Bool {
-        stringValue.isEmpty
+        stringValue.isEmpty || stringValue == "0"
     }
 
     var isFull: Bool {
@@ -27,7 +27,11 @@ class InputBuffer: ObservableObject {
     private(set) var doubleValue: Double = 0
 
     func addNum(_ number: Int) {
-        let nextInput = stringValue + String(number)
+        let nextInput = if stringValue == "0" {
+            String(number)
+        } else {
+            stringValue + String(number)
+        }
         parseInput(nextInput)
     }
 
@@ -82,9 +86,9 @@ class InputBuffer: ObservableObject {
     }
 
     func clear() {
+        doubleValue = 0
         stringValue = ""
         cleanedStringValue = ""
-        doubleValue = 0
     }
 
     @discardableResult
@@ -122,9 +126,9 @@ class InputBuffer: ObservableObject {
             return false
         }
 
+        doubleValue = parsedValue
         stringValue = input
         cleanedStringValue = withLeadingZero
-        doubleValue = parsedValue
 
         return true
     }
