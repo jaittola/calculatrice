@@ -4,6 +4,8 @@ import UIKit
 struct Key: Identifiable {
     enum UICallbackOp {
         case showHelp
+        case inputMatrix
+        case dismissMatrix
     }
 
     enum ResetModAfterClick {
@@ -50,21 +52,25 @@ struct Key: Identifiable {
     let isTightLayout: Bool
 
     var id: String {
-        "\(op?.symbol ?? "")_\(opMod1?.symbol ?? "")_\(opMod2?.symbol ?? "")"
+        overriddenId ?? "\(op?.symbol ?? "")_\(opMod1?.symbol ?? "")_\(opMod2?.symbol ?? "")"
     }
+
+    let overriddenId: String?
 
     init (op: CalcOp? = nil,
           opMod1: CalcOp? = nil,
           opMod2: CalcOp? = nil,
           resetModAfterClick: ResetModAfterClick = .reset,
           mainTextColor: UIColor? = nil,
-          isTightLayout: Bool = false) {
+          isTightLayout: Bool = false,
+          overriddenId: String? = nil) {
         self.op = op
         self.opMod1 = opMod1
         self.opMod2 = opMod2
         self.resetModAfterClick = resetModAfterClick
         self.mainTextColor = mainTextColor
         self.isTightLayout = isTightLayout
+        self.overriddenId = overriddenId
     }
 
     func activeOp(_ calculatorMode: CalculatorMode,
@@ -87,7 +93,7 @@ struct Key: Identifiable {
         }
     }
 
-    static func empty() -> Key { Key() }
+    static func empty(id: String? = nil) -> Key { Key(overriddenId: id) }
 
     static func enter() -> Key {
         Key(op: .stackOp("Enter", { stack, _ in stack.pushInput() }, "StackEnter"),
@@ -117,7 +123,8 @@ struct Key: Identifiable {
         },
                              "CopyValue")) }
 
-    static func zero() -> Key { numkey(0) }
+    static func zero() -> Key { numkey(0,
+                                       opMod1: .uiOp("Matrix", .inputMatrix, "EnterMatrix")) }
     static func one() -> Key { numkey(1) }
     static func two() -> Key { numkey(2) }
     static func three() -> Key { numkey(3) }
@@ -215,9 +222,56 @@ struct Key: Identifiable {
             isTightLayout: true)
     }
 
-    static func numkey(_ num: Int) -> Key {
-        return Key(op: .stackOp(String(num), { stack, _ in stack.input.addNum(num) }))
+    static func numkey(_ num: Int,
+                       opMod1: CalcOp? = nil) -> Key {
+        return Key(op: .stackOp(String(num), { stack, _ in stack.input.addNum(num) }),
+                   opMod1: opMod1)
     }
+
+    // TODO, all matrix keys need a reimplementation.
+
+    static func matrixPi() -> Key {  // TODO
+        Key(op: .stackOp("π", { stack, _ in
+            if stack.input.isEmpty {
+                stack.push(Value(NumericalValue.pi))
+            }
+        })) }
+
+    static func matrixDot() -> Key {
+        Key(op: .stackOp(".", { stack, _ in stack.input.dot() }))
+    }
+
+    static func matrixEnter() -> Key {
+        Key(op: .stackOp("Enter", { /* stack */ _ , _ in  }, "StackEnter"),
+            opMod1: .uiOp("Help", .showHelp, "Help")) }
+
+    static func matrixCancel() -> Key {
+        Key(op: .uiOp("Back", .dismissMatrix, "MatrixCancel")) }
+
+    static func matrixE() -> Key {
+        Key(op: .stackOp("E", { stack, _ in stack.input.E() }, "InputExponent")) }
+
+    static func matrixZero() -> Key { numkey(0) }
+
+    static func matrixPlusminus() -> Key {
+        Key(op: .stackOp("±", { stack, calculatorMode in
+            if !stack.input.isEmpty {
+                stack.input.plusminus()
+            } else {
+                _ = try? stack.calculate(Neg(), calculatorMode)
+            }
+        }))
+    }
+
+    static func matrixPaste() -> Key {
+        Key(op: .stackOp("Paste", { stack, _ throws in
+            if !CopyPaste.paste(stack) {
+                throw CalcError.pasteFailed()
+            }
+        }, "PasteValue")) }
+
+    static func matrixBackspace() -> Key {
+        Key(op: .stackOp("←", { stack, _ in stack.input.backspace() }, "Backspace")) }
 
     static func angleMode() -> Key {
         Key(op: .stackOp("⦠", { _, calculatorMode in calculatorMode.swapAngle() },
@@ -272,6 +326,32 @@ struct BasicKeypadModel: KeypadModel {
                        Key.plus(), Key.minus() ]),
         KeyRow(keys: [ Key.zero(), Key.dot(), Key.E(),
                        Key.plusminus(), Key.enter() ])
+    ]
+
+    var rowCount: Int {
+        keyRows.count
+    }
+
+    var columnCount: Int {
+        keyRows
+            .map { row in row.keys.count }
+            .reduce(0) { (res, count) in max(res, count) }
+    }
+}
+
+struct MatrixKeypadModel: KeypadModel {
+
+    let keyRows: [KeyRow] = [
+        KeyRow(keys: [Key.mod1(), Key.empty(id: "empty1"), Key.empty(id: "empty2") ,
+                      Key.empty(id: "empty3"), Key.empty(id: "empty4")]),
+        KeyRow(keys: [ Key.seven(), Key.eight(), Key.nine(),
+                       Key.empty(id: "empty5"), Key.matrixBackspace() ]),
+        KeyRow(keys: [ Key.four(), Key.five(), Key.six(),
+                       Key.empty(id: "empty6"), Key.matrixPaste() ]),
+        KeyRow(keys: [ Key.one(), Key.two(), Key.three(),
+                       Key.matrixPi(), Key.matrixCancel() ]),
+        KeyRow(keys: [ Key.matrixZero(), Key.matrixDot(), Key.matrixE(),
+                       Key.matrixPlusminus(), Key.matrixEnter() ])
     ]
 
     var rowCount: Int {
