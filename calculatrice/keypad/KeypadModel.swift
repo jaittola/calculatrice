@@ -23,12 +23,16 @@ struct Key: Identifiable {
         case uiOp(_ symbol: String,
                   _ uiCallback: UICallbackOp,
                   _ helpTextKey: String? = nil)
+        case uiOpWithStack(_ symbol: String,
+                           _ stackOpForCallback: (_ stack: Stack) -> UICallbackOp?,
+                           _ helpTextKey: String? = nil)
 
         var helpTextKey: String? {
             switch self {
             case .stackOp(_, _, let helpTextKey): helpTextKey
             case .calcOp(_, _, let helpTextKey): helpTextKey
             case .uiOp(_, _, let helpTextKey): helpTextKey
+            case .uiOpWithStack(_, _, let helpTextKey): helpTextKey
             }
         }
 
@@ -37,6 +41,7 @@ struct Key: Identifiable {
             case .stackOp(let symbol, _, _): symbol
             case .calcOp(let symbol, _, _): symbol
             case .uiOp(let symbol, _, _): symbol
+            case .uiOpWithStack(let symbol, _, _): symbol
             }
         }
     }
@@ -89,6 +94,10 @@ struct Key: Identifiable {
         case .stackOp(_, let stackOp, _): try stackOp(stack, calculatorMode)
         case .calcOp(_, let calcOp, _): try stack.calculate(calcOp, calculatorMode)
         case .uiOp(_, let uiOp, _): handleUICallbackOp(uiOp)
+        case .uiOpWithStack(_, let stackOpForCallback, _):
+            if let callbackOp = stackOpForCallback(stack) {
+                handleUICallbackOp(callbackOp)
+            }
         case nil: break
         }
     }
