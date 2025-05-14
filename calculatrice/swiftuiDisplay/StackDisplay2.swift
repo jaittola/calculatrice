@@ -99,11 +99,8 @@ struct StackValueView: View {
                 .multilineTextAlignment(.trailing)
                 .background(.clear)
             Spacer()
-            Text(stackVal.value.stringValue(calculatorMode))
-                .font(Styles2.stackFont)
-                .foregroundColor(Styles2.stackTextColor)
-                .multilineTextAlignment(.trailing)
-                .background(.clear)
+            StackNumberView(value: stackVal.value.stringValue(calculatorMode))
+
         }
         .listRowBackground(isSelected ? Styles2.selectedRowBackgroundColor : Color.white)
         .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
@@ -111,6 +108,29 @@ struct StackValueView: View {
             Button {
                 CopyPaste.copy(stackVal, calculatorMode)
             } label: { Text("Copy") }
+        }
+    }
+}
+
+struct StackNumberView: View {
+    var value: String
+
+    var body: some View {
+        Text(value)
+            .font(Styles2.stackFont)
+            .foregroundColor(Styles2.stackTextColor)
+            .multilineTextAlignment(.trailing)
+            .background(.clear)
+    }
+}
+
+struct StackNumberView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            Spacer()
+            StackNumberView(value: "123.345")
+                .frame(maxWidth: .infinity)
+            Spacer()
         }
     }
 }
