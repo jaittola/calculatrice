@@ -18,7 +18,10 @@ struct Key: Identifiable {
         case ui(
             _ symbol: String,
             _ calcOp: (
-                (_ stack: Stack, _ input: InputBuffer, _ calculatorMode: CalculatorMode) throws ->
+                (
+                    _ stack: Stack, _ input: InputBuffer,
+                    _ matrixEditController: MatrixEditController?, _ calculatorMode: CalculatorMode
+                ) throws ->
                     UICallbackOp?
             )? = nil,
             _ helpTextKey: String? = nil)
@@ -80,6 +83,7 @@ struct Key: Identifiable {
         _ calculatorMode: CalculatorMode,
         _ stack: Stack,
         _ input: InputBuffer,
+        _ matrixEditController: MatrixEditController?,
         _ handleUICallbackOp: (_ cb: UICallbackOp) -> Void
     ) throws {
         let op =
@@ -96,7 +100,7 @@ struct Key: Identifiable {
         case .calc(_, let calc, _):
             try stack.calculate(calc, calculatorMode)
         case .ui(_, let calcOp, _):
-            if let uiCallback = try calcOp?(stack, input, calculatorMode) {
+            if let uiCallback = try calcOp?(stack, input, matrixEditController, calculatorMode) {
                 handleUICallbackOp(uiCallback)
             }
         case nil:
@@ -110,14 +114,14 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Enter",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.pushInput()
                     return nil
                 },
                 "StackEnter"),
             opMod1: .ui(
                 "Help",
-                { _, _, _ in .showHelp },
+                { _, _, _, _ in .showHelp },
                 "Help"))
     }
 
@@ -125,14 +129,14 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Pop",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.pop()
                     return nil
                 },
                 "PopStack"),
             opMod1: .ui(
                 "Clear",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.clear()
                     return nil
                 },
@@ -143,14 +147,14 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "←",
-                { _, input, _ in
+                { _, input, _, _ in
                     input.backspace()
                     return nil
                 },
                 "Backspace"),
             opMod1: .ui(
                 "Paste",
-                { stack, _, _ throws in
+                { stack, _, _, _ throws in
                     if !CopyPaste.paste(stack) {
                         throw CalcError.pasteFailed()
                     }
@@ -163,21 +167,21 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Pick",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.pickSelected()
                     return nil
                 },
                 "PickSelected"),
             opMod1: .ui(
                 "↺",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.undo()
                     return nil
                 },
                 "Undo"),
             opMod2: .ui(
                 "↻",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.redo()
                     return nil
                 },
@@ -188,14 +192,14 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "x⇄y",
-                { stack, _, _ in
+                { stack, _, _, _ in
                     stack.swapTop2()
                     return nil
                 },
                 "SwapTop2"),
             opMod1: .ui(
                 "Copy",
-                { stack, _, calculatorMode in
+                { stack, _, _, calculatorMode in
                     CopyPaste.copy(stack, calculatorMode, inputOnly: false)
                     return nil
                 },
@@ -208,7 +212,7 @@ struct Key: Identifiable {
             0,
             opMod1: .ui(
                 "Matrix",
-                { _, _, _ in .inputMatrix },
+                { _, _, _, _ in .inputMatrix },
                 "EnterMatrix"))
     }
     static func one() -> Key { numkey(1) }
@@ -225,13 +229,13 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 ".",
-                { _, input, _ in
+                { _, input, _, _ in
                     input.dot()
                     return nil
                 }),
             opMod1: .ui(
                 "π",
-                { stack, input, _ in
+                { stack, input, _, _ in
                     if input.isEmpty {
                         stack.push(Value(NumericalValue.pi))
                     }
@@ -243,7 +247,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "±",
-                { stack, input, calculatorMode in
+                { stack, input, _, calculatorMode in
                     if !input.isEmpty {
                         input.plusminus()
                     } else {
@@ -259,7 +263,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "E",
-                { _, input, _ in
+                { _, input, _, _ in
                     input.E()
                     return nil
                 },
@@ -284,8 +288,11 @@ struct Key: Identifiable {
 
     static func mult() -> Key { Key(op: .calc("×", Mult(), "CalcMultiply")) }
 
-    static func div() -> Key { Key(op: .calc("÷", Div(), "CalcDivision"),
-                                   opMod1: .ui("Edit", { stack, _, _ in Self.editStackItem(stack) }, "Edit")) }
+    static func div() -> Key {
+        Key(
+            op: .calc("÷", Div(), "CalcDivision"),
+            opMod1: .ui("Edit", { stack, _, _, _ in Self.editStackItem(stack) }, "Edit"))
+    }
 
     static func sin() -> Key {
         Key(
@@ -363,18 +370,18 @@ struct Key: Identifiable {
         return Key(
             op: .ui(
                 String(num),
-                { _, input, _ in
+                { _, input, _, _ in
                     input.addNum(num)
                     return nil
                 }),
             opMod1: opMod1)
     }
 
-    static func matrixPi() -> Key {  // TODO
+    static func matrixPi() -> Key {
         Key(
             op: .ui(
                 "π",
-                { _, input, _ in
+                { _, input, _, _ in
                     if input.isEmpty {
                         input.paste(NumericalValue.pi.stringValue())
                     }
@@ -386,7 +393,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 ".",
-                { _, input, _ in
+                { _, input, _, _ in
                     input.dot()
                     return nil
                 }))
@@ -394,19 +401,24 @@ struct Key: Identifiable {
 
     static func matrixEnter() -> Key {
         Key(
-            op: .ui("Enter", { _, _, _ in nil /* TODO */ }, "StackEnter"),
-            opMod1: .ui("Help", { _, _, _ in .showHelp }, "Help"))
+            op: .ui(
+                "Enter",
+                { stack, _, matrixEditController, _ in
+                    Self.addMatrixToStack(stack, matrixEditController)
+                },
+                "StackEnter"),
+            opMod1: .ui("Help", { _, _, _, _ in .showHelp }, "Help"))
     }
 
     static func matrixCancel() -> Key {
-        Key(op: .ui("Back", { _, _, _ in .dismissMatrix }, "MatrixCancel"))
+        Key(op: .ui("Back", { _, _, _, _ in .dismissMatrix }, "MatrixCancel"))
     }
 
     static func matrixE() -> Key {
         Key(
             op: .ui(
                 "E",
-                { _, input, _ in
+                { _, input, _, _ in
                     input.E()
                     return nil
                 }, "InputExponent"))
@@ -418,7 +430,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "±",
-                { _, input, calculatorMode in
+                { _, input, _, calculatorMode in
                     if !input.isEmpty {
                         input.plusminus()
                     }
@@ -430,7 +442,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Paste",
-                {stack, input, _ throws in
+                { stack, input, _, _ throws in
                     if !CopyPaste.paste(stack) {
                         throw CalcError.pasteFailed()
                     }
@@ -443,7 +455,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "←",
-                { _, input, _ in
+                { _, input, _, _ in
                     input.backspace()
                     return nil
                 },
@@ -454,7 +466,7 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "⦠",
-                { _, _, calculatorMode in
+                { _, _, _, calculatorMode in
                     calculatorMode.swapAngle()
                     return nil
                 },
@@ -464,9 +476,14 @@ struct Key: Identifiable {
     static func mod1() -> Key {
         let op:
             (
-                (_ stack: Stack, _ input: InputBuffer, _ calculatorMode: CalculatorMode) ->
+                (
+                    _ stack: Stack,
+                    _ input: InputBuffer,
+                    _ matrixEditController: MatrixEditController?,
+                    _ calculatorMode: CalculatorMode
+                ) ->
                     UICallbackOp?
-            ) = { _, _, calculatorMode in
+            ) = { _, _, _, calculatorMode in
                 calculatorMode.toggleMod1()
                 return nil
             }
@@ -482,9 +499,14 @@ struct Key: Identifiable {
     static func mod2() -> Key {
         let op:
             (
-                (_ stack: Stack, _ input: InputBuffer, _ calculatorMode: CalculatorMode) ->
+                (
+                    _ stack: Stack,
+                    _ input: InputBuffer,
+                    _ matrixEditController: MatrixEditController?,
+                    _ calculatorMode: CalculatorMode
+                ) ->
                     UICallbackOp?
-            ) = { _, _, calculatorMode in
+            ) = { _, _, _, calculatorMode in
                 calculatorMode.toggleMod2()
                 return nil
             }
@@ -502,6 +524,17 @@ struct Key: Identifiable {
             return .editMatrix(matrix: selectedMatrix)
         }
         return nil
+    }
+
+    static private func addMatrixToStack(
+        _ stack: Stack, _ matrixEditController: MatrixEditController?
+    ) -> UICallbackOp? {
+        guard let matrixEditController = matrixEditController else {
+            return nil
+        }
+
+        stack.push(Value(matrixEditController.matrixValue))
+        return .dismissMatrix
     }
 }
 

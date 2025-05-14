@@ -60,7 +60,7 @@ struct CalculatorMain: View {
     private func onKeyPressed(_ key: Key) {
         stack.selectedId = selection?.valueId ?? -1 // This is a kind of a hack, maybe clean up.
         do {
-            try key.activeOp(calculatorMode, stack, stack.input, { op in self.handleUIKeyboardOp(op) })
+            try key.activeOp(calculatorMode, stack, stack.input, nil, { op in self.handleUIKeyboardOp(op) })
             if key.resetModAfterClick == .reset {
                 calculatorMode.resetMods()
                 selection = nil
