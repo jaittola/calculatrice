@@ -7,17 +7,29 @@ struct MatrixEntryView: View {
     private let matrixKeypadModel = MatrixKeypadModel()
 
     @Binding var showingMatrixUi: Bool
+    @Binding var matrixToEdit: MatrixValue?
 
     @Binding var calcErrorOccurred: Bool
     @Binding var calcError: Error?
     @Binding var showingHelp: Bool
 
+    @State private var selectedCell: (Int, Int) = (-1, -1)
+
     var body: some View {
-        VStack {
-            VStack {}
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack(spacing: 16) {
+            ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
+            MatrixContentView(values: matrixToEdit?.asMatrixRows ?? [],
+                              calculatorMode: calculatorMode,
+                              selectedCell: $selectedCell).padding(.top, 16)
             KeypadView2(model: matrixKeypadModel,
                         onKeyPressed: { key in onKeyPressed(key) })
+            ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
+        }
+        .background(Styles2.windowBackgroundColor)
+        .onAppear {
+            if let matrixToEdit = matrixToEdit {
+                NSLog("matrix to edit \(matrixToEdit)")
+            }
         }
     }
 
@@ -51,11 +63,19 @@ struct MatrixEntryView: View {
         @State var calcErrorOccurred: Bool = false
         @State var calcError: Error? = nil
         @State var showingHelp: Bool = false
+        @State var matrixToEdit: MatrixValue? = try! MatrixValue([[
+            ComplexValue(1, -3),
+            NumericalValue(2),
+        ], [
+            NumericalValue(3),
+            NumericalValue(4),
+        ]])
 
         var body: some View {
             return MatrixEntryView(stack: Stack(),
                                    calculatorMode: CalculatorMode(),
                                    showingMatrixUi: $showingMatrixUi,
+                                   matrixToEdit: $matrixToEdit,
                                    calcErrorOccurred: $calcErrorOccurred,
                                    calcError: $calcError,
                                    showingHelp: $showingHelp)

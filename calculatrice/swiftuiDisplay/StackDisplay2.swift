@@ -114,6 +114,8 @@ struct StackValueView: View {
 
 struct StackNumberView: View {
     var value: String
+    var isSelected: Bool = false
+    var onClick: (() -> Void)? = nil
 
     var body: some View {
         Text(value)
@@ -121,6 +123,9 @@ struct StackNumberView: View {
             .foregroundColor(Styles2.stackTextColor)
             .multilineTextAlignment(.trailing)
             .background(.clear)
+            .padding(4)
+            .border(isSelected ? Styles2.matrixSelectedCellBorder : .clear, width: 2)
+            .onTapGesture { self.onClick?() }
     }
 }
 
@@ -129,6 +134,17 @@ struct StackNumberView_Previews: PreviewProvider {
         VStack {
             Spacer()
             StackNumberView(value: "123.345")
+                .frame(maxWidth: .infinity)
+            Spacer()
+        }
+    }
+}
+
+struct SelectedStackNumberView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            Spacer()
+            StackNumberView(value: "123.345", isSelected: true)
                 .frame(maxWidth: .infinity)
             Spacer()
         }

@@ -37,6 +37,10 @@ class MatrixValue: NSObject, MatrixCalcValue {
         "Matrix \(stringValue())"
     }
 
+    var asMatrixRows: [MatrixRow] {
+        values.enumerated().map { MatrixRow($0.offset, $0.element) }
+    }
+
     func duplicateForStack() -> MatrixValue {
         return self
     }
@@ -77,4 +81,38 @@ class MatrixValue: NSObject, MatrixCalcValue {
     static func == (lhs: MatrixValue, rhs: MatrixValue) -> Bool {
         return lhs.isEqual(rhs)
     }
+}
+
+// Needed for the matrix content view's Grid, which requires
+// identifiable values.
+struct MatrixRow: Identifiable {
+    let id: UInt64
+    let rowIndex: Int
+    let values: [MatrixRowElement]
+
+    init(_ rowIndex: Int,_ values: [MatrixElement]) {
+        // Note, not thread safe at all but used for UIs only.
+        MatrixRow.idSequence += 1
+        self.id = MatrixRow.idSequence
+        self.rowIndex = rowIndex
+        self.values = values.enumerated().map { MatrixRowElement($0.offset, $0.element) }
+    }
+
+    private static var idSequence: UInt64 = 0
+}
+
+struct MatrixRowElement: Identifiable {
+    let id: UInt64
+    let columnIndex: Int
+    let value: MatrixElement
+
+    init(_ columnIndex: Int, _ value: MatrixElement) {
+        // Note, not thread safe at all but used for UIs only.
+        MatrixRowElement.idSequence += 1
+        self.id = MatrixRowElement.idSequence
+        self.columnIndex = columnIndex
+        self.value = value
+    }
+
+    private static var idSequence: UInt64 = 0
 }

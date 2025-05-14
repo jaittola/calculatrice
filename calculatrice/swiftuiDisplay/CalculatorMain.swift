@@ -47,6 +47,7 @@ struct CalculatorMain: View {
             MatrixEntryView(stack: stack,
                             calculatorMode: calculatorMode,
                             showingMatrixUi: $showingMatrixUi,
+                            matrixToEdit: $matrixToEdit,
                             calcErrorOccurred: $calcErrorOccurred,
                             calcError: $calcError,
                             showingHelp: $showingHelp)
