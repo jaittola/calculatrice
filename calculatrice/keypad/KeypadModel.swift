@@ -493,6 +493,13 @@ struct Key: Identifiable {
             resetModAfterClick: .keep,
             mainTextColor: Styles.mod2TextColor)
     }
+
+    static private func editStackItem(_ stack: Stack) -> UICallbackOp? {
+        if let selectedMatrix = stack.valueForEdit?.asMatrix {
+            return .editMatrix(matrix: selectedMatrix)
+        }
+        return nil
+    }
 }
 
 struct KeyRow: Identifiable {

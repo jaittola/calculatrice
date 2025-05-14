@@ -21,6 +21,16 @@ class Stack: ObservableObject {
     @Published
     var selectedId: Int = -1
 
+    var valueForEdit: Value? {
+        if selectedId >= 0 {
+            content.first { v in v.id == selectedId }
+        } else if !content.isEmpty {
+            content[0]
+        } else {
+            nil
+        }
+    }
+
     func push(_ value: Value) {
         manipulateStack { content in
             var newStack = content
