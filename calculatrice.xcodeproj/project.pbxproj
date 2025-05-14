@@ -50,6 +50,8 @@
 		4F71004C2DC8D83700F2611F /* MatrixValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71004B2DC8D83100F2611F /* MatrixValue.swift */; };
 		4F71004D2DC8D83700F2611F /* MatrixValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71004B2DC8D83100F2611F /* MatrixValue.swift */; };
 		4F71004F2DC8D86200F2611F /* TestNumericalValuesMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F71004E2DC8D85D00F2611F /* TestNumericalValuesMatrix.swift */; };
+		4F7A36B92DD33066000CDAE5 /* MatrixEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A36B82DD33062000CDAE5 /* MatrixEntryView.swift */; };
+		4F7A36BA2DD33066000CDAE5 /* MatrixEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A36B82DD33062000CDAE5 /* MatrixEntryView.swift */; };
 		4F975F5529FE48A300BF57A8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C7027F0314200F33E75 /* SceneDelegate.swift */; };
 		4F975F5629FE48A600BF57A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F064C6E27F0314200F33E75 /* AppDelegate.swift */; };
 		4FB536612AE3EFD1008EC8BD /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB536602AE3EFD1008EC8BD /* HelpView.swift */; };
@@ -126,6 +128,7 @@
 		4F7100492DC8BD6000F2611F /* WhatToTest.en-US.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "WhatToTest.en-US.txt"; sourceTree = "<group>"; };
 		4F71004B2DC8D83100F2611F /* MatrixValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixValue.swift; sourceTree = "<group>"; };
 		4F71004E2DC8D85D00F2611F /* TestNumericalValuesMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNumericalValuesMatrix.swift; sourceTree = "<group>"; };
+		4F7A36B82DD33062000CDAE5 /* MatrixEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixEntryView.swift; sourceTree = "<group>"; };
 		4FB536602AE3EFD1008EC8BD /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		4FB536632AE3F43A008EC8BD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4FBFC06D27F32F7600DAB444 /* CalculatorMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorMode.swift; sourceTree = "<group>"; };
@@ -216,6 +219,7 @@
 		4F337DC62A4188AF0021CAE0 /* swiftuiDisplay */ = {
 			isa = PBXGroup;
 			children = (
+				4F7A36B82DD33062000CDAE5 /* MatrixEntryView.swift */,
 				4F7100452DC8995200F2611F /* CopyPaste.swift */,
 				4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */,
 				4F0AC50E2A41A3DF00BA68D0 /* StatusRow2.swift */,
@@ -448,6 +452,7 @@
 				4F71004C2DC8D83700F2611F /* MatrixValue.swift in Sources */,
 				4FCA884A27F37B3D00E95424 /* Styles.swift in Sources */,
 				4F49B2492DBF59C00004ADD3 /* InputTokeniser.lm in Sources */,
+				4F7A36BA2DD33066000CDAE5 /* MatrixEntryView.swift in Sources */,
 				4FD352EC27F0B5120073534E /* InputBuffer.swift in Sources */,
 				4FD352E327F0B0980073534E /* KeypadModel.swift in Sources */,
 			);
@@ -462,6 +467,7 @@
 				4F7100462DC8995200F2611F /* CopyPaste.swift in Sources */,
 				4F975F5529FE48A300BF57A8 /* SceneDelegate.swift in Sources */,
 				4FCA884B27F37B3D00E95424 /* Styles.swift in Sources */,
+				4F7A36B92DD33066000CDAE5 /* MatrixEntryView.swift in Sources */,
 				4FC245F82D8FDCEB006DA625 /* TestNumericalValuesRational.swift in Sources */,
 				4FBE9E262A44785A00E3BA7F /* InputDisplay2.swift in Sources */,
 				4FBE9E252A44785600E3BA7F /* StatusRow2.swift in Sources */,

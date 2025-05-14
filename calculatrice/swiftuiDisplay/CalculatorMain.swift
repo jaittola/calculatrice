@@ -12,6 +12,7 @@ struct CalculatorMain: View {
     @State private var selection: StackDisplayValueId?
 
     @State private var showingHelp = false
+    @State private var showingMatrixUi = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -39,6 +40,14 @@ struct CalculatorMain: View {
                         label: { Text("Ok") })
         } message: { details in
             Text(LocalizedStringKey(errorMessage(for: details)))
+        }
+        .sheet(isPresented: $showingMatrixUi) {
+            MatrixEntryView(stack: stack,
+                            calculatorMode: calculatorMode,
+                            showingMatrixUi: $showingMatrixUi,
+                            calcErrorOccurred: $calcErrorOccurred,
+                            calcError: $calcError,
+                            showingHelp: $showingHelp)
         }
         .sheet(isPresented: $showingHelp) {
             HelpView(showingHelp: $showingHelp, keypadModel: keypadModel)
@@ -82,6 +91,10 @@ struct CalculatorMain: View {
         switch op {
         case .showHelp:
             showingHelp = true
+        case .inputMatrix:
+            showingMatrixUi = true
+        case .dismissMatrix:
+            fatalError("CalculatorMain: Unsupported UI keybaord op .dismissMatrix")
         }
     }
 }

@@ -583,6 +583,23 @@
         }
       }
     },
+    "EnterMatrix" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Input a matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syötä matriisi"
+          }
+        }
+      }
+    },
     "ErrArithmeticOverflow" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1019,6 +1036,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Luo murtoluku"
+          }
+        }
+      }
+    },
+    "MatrixCancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel the inputting of a matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peruuta matriisin syöttäminen"
           }
         }
       }
