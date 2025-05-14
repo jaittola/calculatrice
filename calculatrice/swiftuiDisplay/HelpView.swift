@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HelpView: View {
-    @Environment(\.dismiss) var dismiss
+    @Binding var showingHelp: Bool
 
     var keypadModel: KeypadModel
 
@@ -10,7 +10,7 @@ struct HelpView: View {
             VStack {
                 HStack {
                     Spacer()
-                    Button("Close") { dismiss() }
+                    Button("Close") { showingHelp = false }
                 }
                 HelpTitle(title: "HelpTitle")
                 HelpParagraph(bodyText: "GenericHelpBody")
@@ -129,5 +129,14 @@ private func keyFuncToHelpItem(_ symbol: String?,
 }
 
 #Preview("HelpView") {
-    HelpView(keypadModel: BasicKeypadModel())
+    struct HelpViewPreview: View {
+
+        @State var showingHelp: Bool = false
+
+        var body: some View {
+            HelpView(showingHelp: $showingHelp, keypadModel: BasicKeypadModel())
+        }
+    }
+
+    return HelpViewPreview()
 }

@@ -41,7 +41,7 @@ struct CalculatorMain: View {
             Text(LocalizedStringKey(errorMessage(for: details)))
         }
         .sheet(isPresented: $showingHelp) {
-            HelpView(keypadModel: keypadModel)
+            HelpView(showingHelp: $showingHelp, keypadModel: keypadModel)
         }
     }
 
