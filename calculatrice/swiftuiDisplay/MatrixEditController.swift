@@ -55,6 +55,60 @@ class MatrixEditController: ObservableObject {
         }
     }
 
+    func adjustColumns(_ delta: Int) {
+        guard delta == 1 || delta == -1,
+            matrix.count > 0
+        else {
+            return
+        }
+
+        let newColumnCount = matrix[0].values.count + delta
+
+        guard newColumnCount > 0 else {
+            return
+        }
+
+        let newMatrix = matrix.map { row in
+            let columnCount = row.values.count
+            let columns = (0..<newColumnCount).map { columnIndex in
+                if columnIndex < columnCount {
+                    row.values[columnIndex].value
+                } else {
+                    NumericalValue(0)
+                }
+            }
+            return MatrixRow(row.rowIndex, columns)
+        }
+
+        matrix = newMatrix
+    }
+
+    func adjustRows(_ delta: Int) {
+        guard delta == 1 || delta == -1, matrix.count > 0
+        else {
+            return
+        }
+
+        let newRowCount = matrix.count + delta
+        guard newRowCount > 0 else {
+            return
+        }
+
+        let columnCount = matrix[0].values.count
+        let newMatrix = (0..<newRowCount).map { rowIndex in
+            if rowIndex < matrix.count {
+                return matrix[rowIndex]
+            } else {
+                let columns = (0..<columnCount).map { columnIndex in
+                    NumericalValue(0)
+                }
+                return MatrixRow(rowIndex, columns)
+            }
+        }
+
+        matrix = newMatrix
+    }
+
     private func getValidSelectedCell() -> (Int, Int)? {
         guard areIndexesValid(selectedCell.0, selectedCell.1) else {
             return nil

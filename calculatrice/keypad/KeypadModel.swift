@@ -468,6 +468,50 @@ struct Key: Identifiable {
                 "Backspace"))
     }
 
+    static func matrixRowMinus() -> Key {
+        Key(
+            op: .ui(
+                "Row -",
+                { _, _, matrixEditController, _ in
+                    matrixEditController?.adjustRows(-1)
+                    return nil
+                },
+                "MatrixRowMinus"))
+    }
+
+    static func matrixRowPlus() -> Key {
+        Key(
+            op: .ui(
+                "Row +",
+                { _, _, matrixEditController, _ in
+                    matrixEditController?.adjustRows(1)
+                    return nil
+                },
+                "MatrixRowPlus"))
+    }
+
+    static func matrixColMinus() -> Key {
+        Key(
+            op: .ui(
+                "Col -",
+                { _, _, matrixEditController, _ in
+                    matrixEditController?.adjustColumns(-1)
+                    return nil
+                },
+                "MatrixColMinus"))
+    }
+
+    static func matrixColPlus() -> Key {
+        Key(
+            op: .ui(
+                "Col +",
+                { _, _, matrixEditController, _ in
+                    matrixEditController?.adjustColumns(1)
+                    return nil
+                },
+                "MatrixColPlus"))
+    }
+
     static func angleMode() -> Key {
         Key(
             op: .ui(
@@ -590,16 +634,26 @@ struct BasicKeypadModel: KeypadModel {
 struct MatrixKeypadModel: KeypadModel {
 
     let keyRows: [KeyRow] = [
-        KeyRow(keys: [Key.mod1(), Key.empty(id: "empty1"), Key.empty(id: "empty2") ,
-                      Key.empty(id: "empty3"), Key.empty(id: "empty4")]),
-        KeyRow(keys: [ Key.seven(), Key.eight(), Key.nine(),
-                       Key.empty(id: "empty5"), Key.matrixBackspace() ]),
-        KeyRow(keys: [ Key.four(), Key.five(), Key.six(),
-                       Key.empty(id: "empty6"), Key.matrixPaste() ]),
-        KeyRow(keys: [ Key.one(), Key.two(), Key.three(),
-                       Key.matrixPi(), Key.matrixCancel() ]),
-        KeyRow(keys: [ Key.matrixZero(), Key.matrixDot(), Key.matrixE(),
-                       Key.matrixPlusminus(), Key.matrixEnter() ])
+        KeyRow(keys: [
+            Key.mod1(), Key.matrixRowMinus(), Key.matrixRowPlus(),
+            Key.matrixColMinus(), Key.matrixColPlus(),
+        ]),
+        KeyRow(keys: [
+            Key.seven(), Key.eight(), Key.nine(),
+            Key.empty(id: "empty5"), Key.matrixBackspace(),
+        ]),
+        KeyRow(keys: [
+            Key.four(), Key.five(), Key.six(),
+            Key.empty(id: "empty6"), Key.matrixPaste(),
+        ]),
+        KeyRow(keys: [
+            Key.one(), Key.two(), Key.three(),
+            Key.matrixPi(), Key.matrixCancel(),
+        ]),
+        KeyRow(keys: [
+            Key.matrixZero(), Key.matrixDot(), Key.matrixE(),
+            Key.matrixPlusminus(), Key.matrixEnter(),
+        ]),
     ]
 
     var rowCount: Int {

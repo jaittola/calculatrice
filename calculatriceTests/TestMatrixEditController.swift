@@ -55,4 +55,101 @@ class TestMatrixEditController: XCTestCase {
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(0), num(0)], [num(0), num(3)]]))
     }
+
+    func testAddColumn() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustColumns(1)
+        let expectedMatrix = try! MatrixValue([
+            [ComplexValue(1, -3), NumericalValue(2), NumericalValue(0)],
+            [NumericalValue(3), NumericalValue(4), NumericalValue(0)],
+        ])
+        XCTAssertEqual(
+            controller.matrixValue,
+            expectedMatrix)
+    }
+
+    func testRemoveColumn() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustColumns(-1)
+        let expectedMatrix = try! MatrixValue([
+            [ComplexValue(1, -3)],
+            [NumericalValue(3)],
+        ])
+        XCTAssertEqual(
+            controller.matrixValue,
+            expectedMatrix)
+    }
+
+    func testRemoveColumnUntilZero() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustColumns(-1)
+        controller.adjustColumns(-1)
+        let expectedMatrix = try! MatrixValue([
+            [ComplexValue(1, -3)],
+            [NumericalValue(3)],
+        ])
+        XCTAssertEqual(
+            controller.matrixValue,
+            expectedMatrix)
+    }
+
+    func testRemoveSeveralColumnsAtTimeFails() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustColumns(-2)
+        XCTAssertEqual(
+            controller.matrixValue,
+            sampleMatrix)
+    }
+
+    func testAddRow() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustRows(1)
+        let expectedMatrix = try! MatrixValue([
+            [ComplexValue(1, -3), NumericalValue(2)],
+            [NumericalValue(3), NumericalValue(4)],
+            [NumericalValue(0), NumericalValue(0)],
+        ])
+        XCTAssertEqual(
+            controller.matrixValue,
+            expectedMatrix)
+    }
+
+    func testRemoveRow() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustRows(-1)
+        let expectedMatrix = try! MatrixValue([
+            [ComplexValue(1, -3), NumericalValue(2)],
+        ])
+        XCTAssertEqual(
+            controller.matrixValue,
+            expectedMatrix)
+    }
+
+    func testRemoveRowUntilZero() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustRows(-1)
+        controller.adjustRows(-1)
+        let expectedMatrix = try! MatrixValue([
+            [ComplexValue(1, -3), NumericalValue(2)],
+        ])
+        XCTAssertEqual(
+            controller.matrixValue,
+            expectedMatrix)
+    }
+
+    func testRemoveSeveralRowsFails() {
+        let controller = MatrixEditController()
+        controller.setInputMatrix(sampleMatrix)
+        controller.adjustRows(-2)
+        XCTAssertEqual(
+            controller.matrixValue,
+            sampleMatrix)
+    }
 }
