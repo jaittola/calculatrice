@@ -3,7 +3,7 @@ import Foundation
 
 class MatrixEditController: ObservableObject {
     @Published
-    private(set) var matrix: [MatrixRow] = []
+    private(set) var matrix: [MatrixRow] = MatrixEditController.defaultMatrix()
 
     @Published
     var selectedCell: (Int, Int) = (0, 0) {
@@ -34,8 +34,9 @@ class MatrixEditController: ObservableObject {
                 matrix = matrix.map { row in
                     let newRow = row.values.map { column in
                         if column.columnIndex == selectedColumn && row.rowIndex == selectedRow {
-                            NumericalValue(self.inputBuffer.doubleValue,
-                                                    originalStringValue: newStringValue.isEmpty ? nil : newStringValue)
+                            NumericalValue(
+                                self.inputBuffer.doubleValue,
+                                originalStringValue: newStringValue.isEmpty ? nil : newStringValue)
                         } else {
                             column.value
                         }
