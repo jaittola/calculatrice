@@ -286,12 +286,18 @@ struct Key: Identifiable {
             opMod1: .calc("Conj", Conjugate(), "ComplexConjugate"))
     }
 
-    static func mult() -> Key { Key(op: .calc("×", Mult(), "CalcMultiply")) }
+    static func mult() -> Key {
+        Key(
+            op: .calc("×", Mult(), "CalcMultiply"),
+            opMod1: .calc("·", DotProduct(), "MatrixDotProduct"),
+            opMod2: .calc("Det", Determinant(), "MatrixDeterminant"))
+    }
 
     static func div() -> Key {
         Key(
             op: .calc("÷", Div(), "CalcDivision"),
-            opMod1: .ui("Edit", { stack, _, _, _ in Self.editStackItem(stack) }, "Edit"))
+            opMod1: .ui("Edit", { stack, _, _, _ in Self.editStackItem(stack) }, "Edit"),
+            opMod2: .calc("T", Transpose(), "MatrixTranspose"))
     }
 
     static func sin() -> Key {

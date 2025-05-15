@@ -583,6 +583,23 @@
         }
       }
     },
+    "Edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy a value (i.e, the selected row, or the topmost row) from the stack for editing"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopioi pinon valittu arvo tai pinon päällimmäinen arvo muokkausta varten"
+          }
+        }
+      }
+    },
     "EnterMatrix" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1053,6 +1070,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Peruuta matriisin syöttäminen"
+          }
+        }
+      }
+    },
+    "MatrixDeterminant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculate the determinant of a matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laske matriisin determinantti"
+          }
+        }
+      }
+    },
+    "MatrixDotProduct" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculate the dot product of two vectors"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laske kahden vektorin pistetulo"
+          }
+        }
+      }
+    },
+    "MatrixTranspose" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculate the transpose of a matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laske matriisin transpoosi"
           }
         }
       }
