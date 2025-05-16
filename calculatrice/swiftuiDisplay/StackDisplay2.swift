@@ -115,8 +115,17 @@ struct StackValueView: View {
     var value: Value
     var calculatorMode: CalculatorMode
 
+    @State private var selectedCell = (-1, -1)
+
     var body: some View {
-        StackNumberView(value: value.stringValue(calculatorMode))
+        if let matrixRows = value.asMatrix?.asMatrixRows {
+            MatrixContentView(values: matrixRows,
+                              calculatorMode: calculatorMode,
+                              areCellsSelectable: false,
+                              selectedCell: $selectedCell)
+        } else {
+            StackNumberView(value: value.stringValue(calculatorMode))
+        }
     }
 }
 

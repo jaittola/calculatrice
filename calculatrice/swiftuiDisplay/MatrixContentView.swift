@@ -4,6 +4,7 @@ struct MatrixContentView: View {
     var values: [MatrixRow]
     var calculatorMode: CalculatorMode
 
+    var areCellsSelectable: Bool = true
     @Binding var selectedCell: (Int, Int)
 
     var body: some View {
@@ -15,21 +16,21 @@ struct MatrixContentView: View {
                 ForEach(values) { row in
                     GridRow {
                         ForEach(row.values) { value in
-                            let isSelected = (selectedCell.0 == row.rowIndex && selectedCell.1 == value.columnIndex)
+                            let isSelected = (areCellsSelectable &&
+                                              selectedCell.0 == row.rowIndex &&
+                                              selectedCell.1 == value.columnIndex)
                             StackNumberView(value: value.value.stringValue(precision: realDefaultPrecision,
                                                                            calculatorMode: calculatorMode),
                                             isSelected: isSelected,
-                                            onClick: {
+                                            onClick: areCellsSelectable ? {
                                 toggleSelection(row.rowIndex, value.columnIndex)
-                            })
+                            } : nil)
                         }
                     }
                 }
             }
             Spacer()
         }
-        .frame(maxWidth: .infinity)
-        .background(.white)
     }
 
     private func toggleSelection(_ rowIndex: Int, _ columnIndex: Int) {

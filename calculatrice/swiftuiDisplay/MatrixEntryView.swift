@@ -19,12 +19,18 @@ struct MatrixEntryView: View {
     var body: some View {
         VStack(spacing: 16) {
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
-            MatrixContentView(
-                values: matrixEditController.matrix,
-                calculatorMode: calculatorMode,
-                selectedCell: $matrixEditController.selectedCell
-            )
+            HStack {
+                Spacer()
+                MatrixContentView(
+                    values: matrixEditController.matrix,
+                    calculatorMode: calculatorMode,
+                    selectedCell: $matrixEditController.selectedCell
+                )
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
             .padding(.top, 16)
+            .background(.white)
             KeypadView2(model: matrixKeypadModel,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
