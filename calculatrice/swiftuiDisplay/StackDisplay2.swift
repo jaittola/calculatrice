@@ -15,9 +15,9 @@ struct StackDisplay2: View {
         ScrollViewReader { scrollViewProxy in
             List(selection: $selection) {
                 ForEach(values) { stackVal in
-                    StackValueView(stackVal: stackVal,
-                                   isSelected: selection == stackVal.id,
-                                   calculatorMode: self.calculatorMode)
+                    StackRow(stackVal: stackVal,
+                             isSelected: selection == stackVal.id,
+                             calculatorMode: self.calculatorMode)
                 }
             }
             .listStyle(.plain)
@@ -86,7 +86,7 @@ struct StackDisplay2_Previews: PreviewProvider {
     }
 }
 
-struct StackValueView: View {
+struct StackRow: View {
     var stackVal: StackValueWithPosition
     var isSelected: Bool
     var calculatorMode: CalculatorMode
@@ -99,8 +99,7 @@ struct StackValueView: View {
                 .multilineTextAlignment(.trailing)
                 .background(.clear)
             Spacer()
-            StackNumberView(value: stackVal.value.stringValue(calculatorMode))
-
+            StackValueView(value: stackVal.value, calculatorMode: calculatorMode)
         }
         .listRowBackground(isSelected ? Styles2.selectedRowBackgroundColor : Color.white)
         .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
@@ -109,6 +108,15 @@ struct StackValueView: View {
                 CopyPaste.copy(stackVal, calculatorMode)
             } label: { Text("Copy") }
         }
+    }
+}
+
+struct StackValueView: View {
+    var value: Value
+    var calculatorMode: CalculatorMode
+
+    var body: some View {
+        StackNumberView(value: value.stringValue(calculatorMode))
     }
 }
 
