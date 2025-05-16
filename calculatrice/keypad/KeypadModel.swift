@@ -444,19 +444,6 @@ struct Key: Identifiable {
                 }))
     }
 
-    static func matrixPaste() -> Key {
-        Key(
-            op: .ui(
-                "Paste",
-                { stack, input, _, _ throws in
-                    if !CopyPaste.paste(stack) {
-                        throw CalcError.pasteFailed()
-                    }
-                    return nil
-                },
-                "PasteValue"))
-    }
-
     static func matrixBackspace() -> Key {
         Key(
             op: .ui(
@@ -640,11 +627,11 @@ struct MatrixKeypadModel: KeypadModel {
         ]),
         KeyRow(keys: [
             Key.seven(), Key.eight(), Key.nine(),
-            Key.empty(id: "empty5"), Key.matrixBackspace(),
+            Key.empty(id: "empty1"), Key.matrixBackspace(),
         ]),
         KeyRow(keys: [
             Key.four(), Key.five(), Key.six(),
-            Key.empty(id: "empty6"), Key.matrixPaste(),
+            Key.empty(id: "empty2"), Key.empty(id: "empty3"),
         ]),
         KeyRow(keys: [
             Key.one(), Key.two(), Key.three(),
