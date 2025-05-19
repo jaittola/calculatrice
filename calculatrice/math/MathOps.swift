@@ -73,6 +73,8 @@ class Mult: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculat
 
         if let rationalResult = tryCalcComplexPolynomial(v1, v2, calculatorMode) {
             return rationalResult
+        } else if let v1r = v1.asReal, let v2r = v2.asReal {
+            return calculate([v1r, v2r], calculatorMode).asComplex
         } else {
             let r = (v1.polarAbsolute.floatingPoint *
                      v2.polarAbsolute.floatingPoint)
@@ -138,6 +140,8 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
 
         if let rationalResult = tryCalcComplexPolynomial(v1, v2, calculatorMode) {
             return rationalResult
+        } else if let v1r = v1.asReal, let v2r = v2.asReal {
+            return try calculate([v1r, v2r], calculatorMode).asComplex
         } else {
             let r = v1.polarAbsolute.floatingPoint / v2.polarAbsolute.floatingPoint
             let arg = Utils.clampComplexArg(v1.polarArgument.floatingPoint - v2.polarArgument.floatingPoint)
@@ -166,9 +170,9 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
            v2.originalFormat == .cartesian,
            v1.real.asRational != nil,
            v1.imag.asRational != nil,
+           v2.imag.floatingPoint == 0,
            let v2r = v2.real.asRational,
-           let invV2R = try? Inv().calcRational([v2r], calculatorMode),
-           v2.imag.floatingPoint == 0 {
+           let invV2R = try? Inv().calcRational([v2r], calculatorMode) {
             let invV2RComplex = ComplexValue(realValue: invV2R,
                                              imagValue: RationalValue.zero)
             return Mult().tryCalcComplexPolynomial(v1,

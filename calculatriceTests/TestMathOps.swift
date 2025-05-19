@@ -209,6 +209,24 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual("1 1/3 + 1 3/5i", result?.stringValue())
     }
 
+    func testComplexDivWithRealValues() {
+        let v1 = ComplexValue(-0.25, 0)
+        let v2 = ComplexValue(2.69375, 0)
+        let r = assertNoThrow { try Div().calcComplex([v1, v2], CalculatorMode()) }
+
+        XCTAssertEqual(r?.real.floatingPoint ?? 0, -0.092804742, accuracy: NumericalValue.epsilond)
+        XCTAssertEqual(r?.imag.floatingPoint, 0)
+    }
+
+    func testComplexMultWithRealValues() {
+        let v1 = ComplexValue(1.225, 0)
+        let v2 = ComplexValue(-0.0928074, 0)
+        let r = assertNoThrow { Mult().calcComplex([v1, v2], CalculatorMode()) }
+
+        XCTAssertEqual(r?.real.floatingPoint ?? 0, -0.113689065, accuracy: NumericalValue.epsilond)
+        XCTAssertEqual(r?.imag.floatingPoint, 0)
+    }
+
     func testComplexSquare() {
         let values = [complex(3, 2)]
         let result = Square().calcComplex(values, self.calculatorMode)
