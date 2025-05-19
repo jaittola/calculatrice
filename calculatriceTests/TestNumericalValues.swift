@@ -39,7 +39,7 @@ class TestNumericalValues: XCTestCase {
         let v1r = v1.asNumericalValue!
         let v2r = v2.asNumericalValue!
         XCTAssertEqual(v1r.floatingPoint, v2r.floatingPoint)
-        XCTAssertEqual(v2r.stringValue(), "1.2000000e+00")
+        XCTAssertEqual(v2r.stringValue(), "1.2E0")
         XCTAssertEqual(v1r.numberFormat,
                        v2r.numberFormat)
         XCTAssertEqual(v2.id, 4)
@@ -99,7 +99,12 @@ class TestNumericalValues: XCTestCase {
         let ce = ComplexValue(c,
                               numberFormat: .eng,
                               presentationFormat: .cartesian)
-        XCTAssertEqual(ce.stringValue(), "2.1000000e-03 + 9.4000000e-02i")
+        XCTAssertEqual(ce.stringValue(), "2.1E-3 + 9.4E-2i")
+    }
+
+    func testNumericalValueFormatting() {
+        let v = NumericalValue(7.89012E8)
+        XCTAssertEqual(v.stringValue(), "7.89012E8")
     }
 
     func testRealComplexString() {
@@ -186,7 +191,7 @@ class TestNumericalValues: XCTestCase {
 
         XCTAssertEqual("1/3 - 3/7i", c2.stringValue())
         XCTAssertEqual("0.3333333 - 0.4285714i", c3.stringValue())
-        XCTAssertEqual("3.3333333e-01 - 4.2857143e-01i", c4.stringValue())
+        XCTAssertEqual("3.333333E-1 - 4.285714E-1i", c4.stringValue())
         XCTAssertEqual("0.5429407 ∠ -52.1250163°", c5.stringValue())
     }
 

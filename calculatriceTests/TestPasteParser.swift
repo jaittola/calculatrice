@@ -72,7 +72,7 @@ class TestPasteParser: XCTestCase {
     func testPasteComplexNumberEng2() {
         let input = "123.456 - 7.89012E8i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456 - 7.8901200e+08i")  // This format is really weird, it should be fixed.
+        XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456 - 7.89012E8i")
     }
 
     func testParseImaginaryNumber() {

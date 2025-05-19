@@ -245,8 +245,15 @@ class NumericalValue: NSObject, Num {
             return Self.infFormatted
         }
 
-        let format = String(format: "%%%d.%de", precision, engDecimalPlaces)
-        return String(format: format, v)
+        if floatingPoint == 0 {
+            return "0"
+        }
+
+        let style = FloatingPointFormatStyle<Double>(locale: Locale(identifier: "en_US"))
+            .notation(.scientific)
+            .sign(strategy: withSign ? .automatic : .never)
+
+        return floatingPoint.formatted(style)
     }
 
     override func isEqual(_ to: (Any)?) -> Bool {

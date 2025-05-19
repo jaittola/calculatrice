@@ -150,7 +150,7 @@ class TestNumericalValuesRational: XCTestCase {
         let vMixed = vDec.duplicateForStack()
 
         XCTAssertEqual("3.9166667", vDec.stringValue())
-        XCTAssertEqual("3.9166667e+00", vEng.stringValue())
+        XCTAssertEqual("3.916667E0", vEng.stringValue())
         XCTAssertEqual("3 11/12", vMixed.stringValue())
     }
 
