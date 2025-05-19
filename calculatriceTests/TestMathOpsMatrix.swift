@@ -395,7 +395,29 @@ class TestMathOpsMatrix: XCTestCase {
 
         let r = assertNoThrow { try Inv().calcMatrix([m], CalculatorMode()) }
         XCTAssertEqual(r?.asMatrix, expectedResult)
+    }
 
+    func testMatrixInverseCalculatesRealValuesNicely() {
+        let m = try! MatrixValue([
+            [num(1), num(1.225)],
+            [num(0.25), num(3)],
+        ])
+
+        let expectedResult = try! MatrixValue([
+            [num(1.1136891), num(-0.4547564)],
+            [num(-0.0928074), num(0.3712297)],
+        ])
+
+        let r = assertNoThrow { try Inv().calcMatrix([m], CalculatorMode()) }?.asMatrix
+        XCTAssertEqual(r, expectedResult)
+
+        // The whole inverse matrix should be real-valued.
+        r?.values.enumerated().forEach { rowIndex, row in
+            row.enumerated().forEach { columnIndex, item in
+                XCTAssertEqual(item.asComplex.imag.floatingPoint, 0,
+                               "Value in matrix cell (\(rowIndex), \(columnIndex)) is not real. Imaginary part is \(item.asComplex.imag.floatingPoint)")
+            }
+        }
     }
 
     func verifyCalcMatrixAndNumNotAllowed(_ calc: MatrixCalculation) {
