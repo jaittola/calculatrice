@@ -289,7 +289,7 @@ struct Key: Identifiable {
     static func mult() -> Key {
         Key(
             op: .calc("×", Mult(), "CalcMultiply"),
-            opMod1: .calc("·", DotProduct(), "MatrixDotProduct"),
+            opMod1: .calc("Dot", DotProduct(), "MatrixDotProduct"),
             opMod2: .calc("Det", Determinant(), "MatrixDeterminant"))
     }
 
