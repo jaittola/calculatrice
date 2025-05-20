@@ -21,11 +21,13 @@ struct MatrixEntryView: View {
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
             HStack {
                 Spacer()
-                MatrixContentView(
-                    values: matrixEditController.matrix,
-                    calculatorMode: calculatorMode,
-                    selectedCell: $matrixEditController.selectedCell
-                )
+                ScrollView([.horizontal, .vertical]) {
+                    MatrixContentView(
+                        values: matrixEditController.matrix,
+                        calculatorMode: calculatorMode,
+                        selectedCell: $matrixEditController.selectedCell
+                    )
+                }
                 Spacer()
             }
             .frame(maxWidth: .infinity)

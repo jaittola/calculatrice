@@ -119,10 +119,14 @@ struct StackValueView: View {
 
     var body: some View {
         if let matrixRows = value.asMatrix?.asMatrixRows {
-            MatrixContentView(values: matrixRows,
-                              calculatorMode: calculatorMode,
-                              areCellsSelectable: false,
-                              selectedCell: $selectedCell)
+            ScrollView(.horizontal) {
+                MatrixContentView(values: matrixRows,
+                                  calculatorMode: calculatorMode,
+                                  areCellsSelectable: false,
+                                  selectedCell: $selectedCell)
+            }
+            .defaultScrollAnchor(.trailing)
+            .scrollBounceBehavior(.basedOnSize)
         } else {
             StackNumberView(value: value.stringValue(calculatorMode))
         }
