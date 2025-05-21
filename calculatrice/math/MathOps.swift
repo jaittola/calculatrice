@@ -67,7 +67,7 @@ class Mult: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculat
         return NumericalValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue{
         let v1 = inputs[0]
         let v2 = inputs[1]
 
@@ -75,6 +75,10 @@ class Mult: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculat
             return rationalResult
         } else if let v1r = v1.asReal, let v2r = v2.asReal {
             return calculate([v1r, v2r], calculatorMode).asComplex
+        } else if let re = v1.asReal ?? v2.asReal,
+                  let im = v1.asImaginary ?? v2.asImaginary {
+            let result = calculate([re, im], calculatorMode)
+            return try ComplexValue([NumericalValue(0), result], originalFormat: .cartesian, presentationFormat: v1.presentationFormat)
         } else {
             let r = (v1.polarAbsolute.floatingPoint *
                      v2.polarAbsolute.floatingPoint)
@@ -210,8 +214,8 @@ class Neg: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
         return NumericalValue(result)
     }
 
-    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) -> ComplexValue {
-        return Mult().calcComplex([inputs[0], ComplexValue(-1.0, 0)], calculatorMode)
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        return try Mult().calcComplex([inputs[0], ComplexValue(-1.0, 0)], calculatorMode)
     }
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) throws -> RationalValue {
@@ -300,13 +304,13 @@ class ASin: Calculation, ScalarCalculation, ComplexCalculation {
         do {
             let z = inputs[0]
             let i = ComplexValue(0.0, 1.0)
-            let iz = Mult().calcComplex([i, z], calculatorMode)
+            let iz = try Mult().calcComplex([i, z], calculatorMode)
             let z2 = Square().calcComplex([z], calculatorMode)
             let oneMinusZ2 = try Minus().calcComplex([ComplexValue(1.0, 0), z2], calculatorMode)
             let sqrtOneMinusZ2 = Sqrt().calcComplex([oneMinusZ2], calculatorMode)
             let lnArg = try Minus().calcComplex([sqrtOneMinusZ2, iz], calculatorMode)
             let logarithm = Log().calcComplex([lnArg], calculatorMode)
-            let result = Mult().calcComplex([i, logarithm], calculatorMode)
+            let result = try Mult().calcComplex([i, logarithm], calculatorMode)
 
             return ComplexValue(result,
                                 presentationFormat: inputs[0].presentationFormat)
@@ -357,7 +361,7 @@ class ATan: Calculation, ScalarCalculation, ComplexCalculation {
             let iPlusZ = try Plus().calcComplex([i, z], calculatorMode)
             let division = try Div().calcComplex([iMinusZ, iPlusZ], calculatorMode)
             let logarithm = Log().calcComplex([division], calculatorMode)
-            let result = Mult().calcComplex([minuxHalfI, logarithm], calculatorMode)
+            let result = try Mult().calcComplex([minuxHalfI, logarithm], calculatorMode)
 
             return ComplexValue(result,
                                 presentationFormat: inputs[0].presentationFormat)

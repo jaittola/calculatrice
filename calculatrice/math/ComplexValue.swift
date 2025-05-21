@@ -61,6 +61,10 @@ class ComplexValue: NSObject, MatrixElement {
         cartesian[1].floatingPoint == 0 ? cartesian[0] : nil
     }
 
+    var asImaginary: Num? {
+        cartesian[0].floatingPoint == 0 ? cartesian[1] : nil
+    }
+
     var isNan: Bool {
         originalComponents[0].floatingPoint.isNaN ||
         originalComponents[1].floatingPoint.isNaN

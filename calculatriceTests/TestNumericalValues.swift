@@ -161,6 +161,21 @@ class TestNumericalValues: XCTestCase {
         checkPolarComplexToCartesian(ComplexValue(absolute: 1, argument: Double.pi / 2), 0, 1)
     }
 
+    func testComplexAsRealOrImaginary() {
+        let real = ComplexValue(2.0, 0)
+        let imaginary = ComplexValue(0, 2.0)
+        let compl = ComplexValue(2.0, 1.0)
+
+        XCTAssertEqual(real.asReal?.floatingPoint, 2.0)
+        XCTAssertNil(real.asImaginary)
+
+        XCTAssertEqual(imaginary.asImaginary?.floatingPoint, 2.0)
+        XCTAssertNil(imaginary.asReal)
+
+        XCTAssertNil(compl.asReal)
+        XCTAssertNil(compl.asImaginary)
+    }
+
     func testComplexPolarWithNegativeAbsValue() {
         let complex = ComplexValue(absolute: -2, argument: Double.pi / 4)
         checkPolarComplexToCartesian(complex, 1.4142136, 1.4142136)

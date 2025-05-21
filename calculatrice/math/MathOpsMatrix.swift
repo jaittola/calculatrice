@@ -64,7 +64,7 @@ extension Mult: MatrixCalculation {
                     let v1Complex = value.asComplex
                     let v2Complex = m2.values[rowIterIdx][colIndex].asComplex
 
-                    let elemProduct = calcComplex([v1Complex, v2Complex], calculatorMode)
+                    let elemProduct = try calcComplex([v1Complex, v2Complex], calculatorMode)
                     let totalSum = try plus.calcComplex(
                         [partialResult, elemProduct], calculatorMode)
 
@@ -87,10 +87,10 @@ extension Mult: MatrixCalculation {
             throw CalcError.badInput()
         }
 
-        let result = matrix.values.enumerated().map { rowIndex, row in
-            return row.enumerated().map { colIndex, value in
+        let result = try matrix.values.enumerated().map { rowIndex, row in
+            return try row.enumerated().map { colIndex, value in
                 let v1Complex = value.asComplex
-                return calcComplex([scalar, v1Complex], calculatorMode)
+                return try calcComplex([scalar, v1Complex], calculatorMode)
             }
         }
         return .matrix(value: try MatrixValue(result))
@@ -158,9 +158,9 @@ class Determinant: Calculation, MatrixCalculation {
 
         case 2:  // 2x2 => calculate determinant directly
             let mult = Mult()
-            let v1 = mult.calcComplex(
+            let v1 = try mult.calcComplex(
                 [m.values[0][0].asComplex, m.values[1][1].asComplex], CalculatorMode())
-            let v2 = mult.calcComplex(
+            let v2 = try mult.calcComplex(
                 [m.values[0][1].asComplex, m.values[1][0].asComplex], CalculatorMode())
             let determinant = try Minus().calcComplex([v1, v2], calculatorMode).asComplex
             return complexOrNumber(determinant)
@@ -171,7 +171,7 @@ class Determinant: Calculation, MatrixCalculation {
             var determinant = ComplexValue(0, 0)
             for col in 0..<m.cols {
                 let subMatrix = try createSubMatrix(matrix: m, excludingRow: 0, excludingCol: col)
-                let cofactor = mult.calcComplex(
+                let cofactor = try mult.calcComplex(
                     [
                         m.values[0][col].asComplex,
                         ComplexValue((col % 2 == 0 ? 1 : -1), 0),
@@ -233,7 +233,7 @@ class DotProduct: Calculation, MatrixCalculation {
 
             let val1 = value.asComplex
             let val2 = v2r.values[0][idx].asComplex
-            let elemProduct = mult.calcComplex([val1, val2], calculatorMode)
+            let elemProduct = try mult.calcComplex([val1, val2], calculatorMode)
             let totalSum = try plus.calcComplex(
                 [partialResult, elemProduct], calculatorMode)
 
@@ -298,7 +298,7 @@ extension Inv: MatrixCalculation {
                 if j != i {
                     let factor = augmentedMatrix[j][i]
                     for k in 0..<(2 * dimension) {
-                        let multipliedByFactor = mult.calcComplex(
+                        let multipliedByFactor = try mult.calcComplex(
                             [factor, augmentedMatrix[i][k]], calculatorMode)
                         augmentedMatrix[j][k] = try minus.calcComplex(
                             [augmentedMatrix[j][k], multipliedByFactor], calculatorMode)

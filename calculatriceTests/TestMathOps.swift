@@ -151,7 +151,7 @@ class TestMathOps: XCTestCase {
 
     func testComplexNeg() {
         let value = [complex(2, 4)]
-        let result = Neg().calcComplex(value, self.calculatorMode)
+        let result = assertNoThrow { try Neg().calcComplex(value, self.calculatorMode) }
         XCTAssertEqual(result, complex(-2, -4))
     }
 
@@ -162,13 +162,13 @@ class TestMathOps: XCTestCase {
 
     func testComplexMult() {
         let values = [complex(4, 1), complex(2, 2)]
-        let result = Mult().calcComplex(values, self.calculatorMode)
+        let result = assertNoThrow { try Mult().calcComplex(values, self.calculatorMode) }
         XCTAssertEqual(result, complex(6, 10))
     }
 
     func testComplexMultReal() {
         let values = [complex(4, 0), complex(2, 0)]
-        let result = Mult().calcComplex(values, self.calculatorMode)
+        let result = assertNoThrow { try Mult().calcComplex(values, self.calculatorMode) }
         XCTAssertEqual(result, complex(8, 0))
     }
 
@@ -177,10 +177,10 @@ class TestMathOps: XCTestCase {
                                    imagValue: rat(2, 5)),
                       ComplexValue(realValue: rat(4, 7),
                                    imagValue: rat(1, 9))]
-        let result = Mult().calcComplex(values, self.calculatorMode)
+        let result = assertNoThrow { try Mult().calcComplex(values, self.calculatorMode) }
         XCTAssertEqual(result, ComplexValue(realValue: rat(46, 315),
                                             imagValue: rat(251, 945)))
-        XCTAssertEqual("46/315 + 251/945i", result.stringValue())
+        XCTAssertEqual("46/315 + 251/945i", result?.stringValue())
     }
 
     func testDiv() {
@@ -221,9 +221,31 @@ class TestMathOps: XCTestCase {
     func testComplexMultWithRealValues() {
         let v1 = ComplexValue(1.225, 0)
         let v2 = ComplexValue(-0.0928074, 0)
-        let r = assertNoThrow { Mult().calcComplex([v1, v2], CalculatorMode()) }
+        let r = assertNoThrow { try Mult().calcComplex([v1, v2], CalculatorMode()) }
 
         XCTAssertEqual(r?.real.floatingPoint ?? 0, -0.113689065, accuracy: NumericalValue.epsilond)
+        XCTAssertEqual(r?.imag.floatingPoint, 0)
+    }
+
+    func testComplexMultWithRealAndImaginary() {
+        let v1 = ComplexValue(1.225, 0)
+        let v2 = ComplexValue(0, -0.0928074)
+        let r = assertNoThrow { try Mult().calcComplex([v1, v2], CalculatorMode()) }
+        let r2 = assertNoThrow { try Mult().calcComplex([v2, v1], CalculatorMode()) }
+
+        XCTAssertEqual(r?.real.floatingPoint, 0)
+        XCTAssertEqual(r?.imag.floatingPoint ?? 0, -0.113689065, accuracy: NumericalValue.epsilond)
+
+        XCTAssertEqual(r2?.real.floatingPoint, 0)
+        XCTAssertEqual(r2?.imag.floatingPoint ?? 0, -0.113689065, accuracy: NumericalValue.epsilond)
+    }
+
+    func testComplexMultImaginary() {
+        let v1 = ComplexValue(0, 1.225)
+        let v2 = ComplexValue(0, -0.0928074)
+        let r = assertNoThrow { try Mult().calcComplex([v1, v2], CalculatorMode()) }
+
+        XCTAssertEqual(r?.real.floatingPoint ?? 0, 0.113689065, accuracy: NumericalValue.epsilond)
         XCTAssertEqual(r?.imag.floatingPoint, 0)
     }
 
