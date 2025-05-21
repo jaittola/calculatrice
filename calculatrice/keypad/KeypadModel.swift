@@ -406,7 +406,7 @@ struct Key: Identifiable {
                 { stack, _, matrixEditController, _ in
                     Self.addMatrixToStack(stack, matrixEditController)
                 },
-                "StackEnter"),
+                "MatrixEnter"),
             opMod1: .ui("Help", { _, _, _, _ in .showHelp }, "Help"))
     }
 

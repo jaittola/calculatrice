@@ -561,7 +561,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Muunna arvo desimaaliesitykseen"
+            "value" : "Muunna arvo desimaaliesitykseen."
           }
         }
       }
@@ -589,13 +589,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy a value (i.e, the selected row, or the topmost row) from the stack for editing"
+            "value" : "Copy a value (i.e, the selected row, or the topmost row) from the stack for editing. Editing is currently available for matrixes and plain numbers, but not for complex numbers or fractions."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kopioi pinon valittu arvo tai pinon päällimmäinen arvo muokkausta varten"
+            "value" : "Kopioi pinon valittu arvo tai pinon päällimmäinen arvo muokkausta varten. Tämä toiminto on toistaiseksi käytettävissä vain matriiseille ja reaaliluvuille, mutta ei kompleksi- tai murtoluvuille."
           }
         }
       }
@@ -674,13 +674,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The dimensions of these matrixes are incompatible for multiplication"
+            "value" : "These matrixes cannot be multiplied. The matrixes must be square and have the same dimensions."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Näitä matriiseja ei voi kertoa keskenään"
+            "value" : "Näiden matriisien kertolasku ei ole mahdollinen. Matriisien pitää olla samankokoisia neliömatriiseja."
           }
         }
       }
@@ -697,7 +697,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jakaja on nolla"
+            "value" : "Jakaja on nolla."
           }
         }
       }
@@ -714,7 +714,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Laskutoimitukseen tarvitaan matriisit"
+            "value" : "Laskutoimitukseen tarvitaan matriisit."
           }
         }
       }
@@ -731,7 +731,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kompleksilukuun tarvitaan kaksi komponenttia"
+            "value" : "Kompleksilukuun tarvitaan kaksi komponenttia."
           }
         }
       }
@@ -748,7 +748,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tähän laskutoimitukseen tarvitaan neliömatriisi"
+            "value" : "Tähän laskutoimitukseen tarvitaan neliömatriisi."
           }
         }
       }
@@ -866,7 +866,7 @@
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Arvoa ei voi käyttää tässä laskutoimituksessa"
+            "value" : "Arvoa ei voi käyttää tässä laskutoimituksessa."
           }
         }
       }
@@ -1074,6 +1074,40 @@
         }
       }
     },
+    "MatrixColMinus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the last column of the matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poista matriisin viimeinen sarake"
+          }
+        }
+      }
+    },
+    "MatrixColPlus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a column to the matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisää sarake matriisiin"
+          }
+        }
+      }
+    },
     "MatrixDeterminant" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1104,6 +1138,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Laske kahden vektorin pistetulo"
+          }
+        }
+      }
+    },
+    "MatrixEnter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add this matrix to the stack"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisää matriisi pinoon"
+          }
+        }
+      }
+    },
+    "MatrixRowMinus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the last row of the matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poista matriisin viimeinen rivi"
+          }
+        }
+      }
+    },
+    "MatrixRowPlus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a row to the matrix"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisää rivi matriisiin"
           }
         }
       }
