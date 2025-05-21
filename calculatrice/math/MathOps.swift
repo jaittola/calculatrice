@@ -144,8 +144,10 @@ class Div: Calculation, ScalarCalculation, ComplexCalculation, RationalCalculati
 
         if let rationalResult = tryCalcComplexPolynomial(v1, v2, calculatorMode) {
             return rationalResult
-        } else if let v1r = v1.asReal, let v2r = v2.asReal {
-            return try calculate([v1r, v2r], calculatorMode).asComplex
+        } else if let v2r = v2.asReal {
+            let re = try calculate([v1.real, v2r], calculatorMode)
+            let im = try calculate([v1.imag, v2r], calculatorMode)
+            return try ComplexValue([re, im], originalFormat: .cartesian, presentationFormat: v1.presentationFormat)
         } else {
             let r = v1.polarAbsolute.floatingPoint / v2.polarAbsolute.floatingPoint
             if r == 0 {

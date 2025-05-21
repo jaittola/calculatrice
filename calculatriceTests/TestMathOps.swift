@@ -218,6 +218,15 @@ class TestMathOps: XCTestCase {
         XCTAssertEqual(r?.imag.floatingPoint, 0)
     }
 
+    func testImaginaryDivWithRealValue() {
+        let v1 = ComplexValue(0, 1)
+        let v2 = ComplexValue(2.1, 0)
+        let r = assertNoThrow { try Div().calcComplex([v1, v2], CalculatorMode()) }
+
+        XCTAssertEqual(r?.real.floatingPoint, 0)
+        XCTAssertEqual(r?.imag.floatingPoint ?? 0, 0.4761905, accuracy: NumericalValue.epsilond)
+    }
+
     func testComplexMultWithRealValues() {
         let v1 = ComplexValue(1.225, 0)
         let v2 = ComplexValue(-0.0928074, 0)
