@@ -207,14 +207,7 @@ struct Key: Identifiable {
                 "CopyValue"))
     }
 
-    static func zero() -> Key {
-        numkey(
-            0,
-            opMod1: .ui(
-                "Matrix",
-                { _, _, _, _ in .inputMatrix },
-                "EnterMatrix"))
-    }
+    static func zero() -> Key {numkey(0) }
     static func one() -> Key { numkey(1) }
     static func two() -> Key { numkey(2) }
     static func three() -> Key { numkey(3) }
@@ -290,7 +283,8 @@ struct Key: Identifiable {
         Key(
             op: .calc("×", Mult(), "CalcMultiply"),
             opMod1: .calc("Dot", DotProduct(), "MatrixDotProduct"),
-            opMod2: .calc("Det", Determinant(), "MatrixDeterminant"))
+            opMod2: .calc("Det", Determinant(), "MatrixDeterminant"),
+            isTightLayout: true)
     }
 
     static func div() -> Key {
@@ -509,7 +503,11 @@ struct Key: Identifiable {
                     calculatorMode.swapAngle()
                     return nil
                 },
-                "SwapAngleMode"))
+                "SwapAngleMode"),
+            opMod1: .ui(
+                "Matrix",
+                { _, _, _, _ in .inputMatrix },
+                "EnterMatrix"))
     }
 
     static func mod1() -> Key {
