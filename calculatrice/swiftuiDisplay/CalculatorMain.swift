@@ -106,12 +106,20 @@ struct CalculatorMain: View {
         switch op {
         case .showHelp:
             showingHelp = true
+
         case .inputMatrix:
             calculatorMode.mainViewMode = .Matrix
-        case .editMatrix(let matrix):
-            matrixEditController.setInputMatrix(matrix)
-            calculatorMode.mainViewMode = .Matrix
+
+        case .edit(let value):
+            if let matrix = value.asMatrix {
+                matrixEditController.setInputMatrix(matrix)
+                calculatorMode.mainViewMode = .Matrix
+            } else if case .number(let num) = value.containedValue {
+                stack.input.setValue(num)
+                calculatorMode.mainViewMode = .Normal
+            }
             break
+
         case .dismissMatrix:
             calculatorMode.mainViewMode = .Normal
         }

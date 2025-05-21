@@ -6,7 +6,7 @@ struct Key: Identifiable {
         case showHelp
         case inputMatrix
         case dismissMatrix
-        case editMatrix(matrix: MatrixValue)
+        case edit(value: Value)
     }
 
     enum ResetModAfterClick {
@@ -557,8 +557,8 @@ struct Key: Identifiable {
     }
 
     static private func editStackItem(_ stack: Stack) -> UICallbackOp? {
-        if let selectedMatrix = stack.valueForEdit?.asMatrix {
-            return .editMatrix(matrix: selectedMatrix)
+        if let selectedValue = stack.valueForEdit {
+            return .edit(value: selectedValue)
         }
         return nil
     }

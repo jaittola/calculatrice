@@ -67,6 +67,12 @@ class InputBuffer: ObservableObject {
         parseInput(text)
     }
 
+    func setValue(_ v: NumericalValue) {
+        doubleValue = v.value
+        stringValue = v.stringValue()
+        cleanedStringValue = stringValue
+    }
+
     private func swapSign(_ input: String) -> String {
         var swappedSign = input
         if swappedSign.first == "-" {
