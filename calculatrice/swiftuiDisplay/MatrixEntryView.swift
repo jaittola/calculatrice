@@ -33,7 +33,7 @@ struct MatrixEntryView: View {
             .frame(maxWidth: .infinity)
             .padding(.top, 16)
             .background(.white)
-            KeypadView2(model: matrixKeypadModel,
+            KeypadView2(calculatorMode: calculatorMode,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
         }
@@ -85,10 +85,11 @@ struct MatrixEntryView: View {
                 NumericalValue(4),
             ],
         ])
+        @State var calculatorMode = CalculatorMode(initialMainMode: .Matrix)
 
         var body: some View {
             return MatrixEntryView(stack: Stack(),
-                                   calculatorMode: CalculatorMode(),
+                                   calculatorMode: calculatorMode,
                                    showingMatrixUi: $showingMatrixUi,
                                    matrixToEdit: $matrixToEdit,
                                    calcErrorOccurred: $calcErrorOccurred,

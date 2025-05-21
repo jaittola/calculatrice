@@ -53,6 +53,7 @@ class MatrixEditController: ObservableObject {
         } else {
             self.matrix = MatrixEditController.defaultMatrix()
         }
+        selectedCell = (0, 0)
     }
 
     func adjustColumns(_ delta: Int) {

@@ -417,7 +417,9 @@ struct Key: Identifiable {
     }
 
     static func matrixCancel() -> Key {
-        Key(op: .ui("Back", { _, _, _, _ in .dismissMatrix }, "MatrixCancel"))
+        Key(op: .ui("Back", { _, _, matrixEditController, _ in
+            Self.dismissMatrix(matrixEditController)
+        }, "MatrixCancel"))
     }
 
     static func matrixE() -> Key {
@@ -567,10 +569,19 @@ struct Key: Identifiable {
         _ stack: Stack, _ matrixEditController: MatrixEditController?
     ) -> UICallbackOp? {
         guard let matrixEditController = matrixEditController else {
-            return nil
+            return dismissMatrix(nil)
         }
 
         stack.push(Value(matrixEditController.matrixValue))
+
+        return dismissMatrix(matrixEditController)
+    }
+
+    static private func dismissMatrix(_ matrixEditController: MatrixEditController?) -> UICallbackOp {
+        if let matrixEditController = matrixEditController {
+            matrixEditController.setInputMatrix(nil)
+        }
+
         return .dismissMatrix
     }
 }

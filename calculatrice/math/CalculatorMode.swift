@@ -43,6 +43,11 @@ class CalculatorMode: ObservableObject {
     @Published
     private(set) var keypadModel: KeypadModel = BasicKeypadModel()
 
+    convenience init(initialMainMode: MainViewMode) {
+        self.init()
+        self.mainViewMode = initialMainMode
+    }
+
     func swapAngle() {
         if angle == .Deg {
             angle = .Rad

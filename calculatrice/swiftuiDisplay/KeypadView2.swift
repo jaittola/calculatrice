@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct KeypadView2: View {
-    let model: KeypadModel
+    @ObservedObject
+    var calculatorMode: CalculatorMode
+
     var onKeyPressed: (_ key: Key) -> Void
 
     var body: some View {
+        let keypadModel = calculatorMode.keypadModel
+
         Grid(horizontalSpacing: 1, verticalSpacing: 1) {
-            ForEach(model.keyRows) { keyRow in
+            ForEach(keypadModel.keyRows) { keyRow in
                 GridRow {
                     ForEach(keyRow.keys) { key in
                         KeyView2(key: key,
@@ -20,7 +24,7 @@ struct KeypadView2: View {
 
 struct KeypadView2_Previews: PreviewProvider {
     static var previews: some View {
-        KeypadView2(model: BasicKeypadModel(),
+        KeypadView2(calculatorMode: CalculatorMode(),
                     onKeyPressed: { key in print("Pressed key \(key.id)")})
     }
 }

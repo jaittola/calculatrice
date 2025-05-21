@@ -2,7 +2,12 @@ import SwiftUI
 
 struct CalculatorMain: View {
     private let stack = Stack()
-    private let calculatorMode = CalculatorMode()
+
+    @ObservedObject
+    private var calculatorMode = CalculatorMode()
+
+    @ObservedObject
+    private var matrixEditController = MatrixEditController()
 
     @State private var calcErrorOccurred = false
     @State private var calcError: Error?
@@ -11,9 +16,6 @@ struct CalculatorMain: View {
 
     @State private var showingHelp = false
 
-    @State private var showingMatrixUi = false
-    @State private var matrixToEdit: MatrixValue?
-
     var body: some View {
         VStack(spacing: 0) {
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
@@ -21,12 +23,17 @@ struct CalculatorMain: View {
             StackDisplay2(stack: stack,
                           calculatorMode: calculatorMode,
                           selection: $selection)
-            InputDisplay2(inputBuffer: stack.input,
-                          calculatorMode: calculatorMode,
-                          stack: stack,
-                          calcErrorOccurred: $calcErrorOccurred,
-                          calcError: $calcError)
-            KeypadView2(model: calculatorMode.keypadModel,
+            switch calculatorMode.mainViewMode {
+            case .Matrix:
+                MatrixInputView(matrixEditController: matrixEditController, calculatorMode: calculatorMode)
+            case .Normal:
+                InputDisplay2(inputBuffer: stack.input,
+                              calculatorMode: calculatorMode,
+                              stack: stack,
+                              calcErrorOccurred: $calcErrorOccurred,
+                              calcError: $calcError)
+            }
+            KeypadView2(calculatorMode: calculatorMode,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the keyboard to the safe area
         }
@@ -41,15 +48,6 @@ struct CalculatorMain: View {
         } message: { details in
             Text(LocalizedStringKey(errorMessage(for: details)))
         }
-        .sheet(isPresented: $showingMatrixUi) {
-            MatrixEntryView(stack: stack,
-                            calculatorMode: calculatorMode,
-                            showingMatrixUi: $showingMatrixUi,
-                            matrixToEdit: $matrixToEdit,
-                            calcErrorOccurred: $calcErrorOccurred,
-                            calcError: $calcError,
-                            showingHelp: $showingHelp)
-        }
         .sheet(isPresented: $showingHelp) {
             HelpView(showingHelp: $showingHelp, keypadModel: calculatorMode.keypadModel)
         }
@@ -58,7 +56,21 @@ struct CalculatorMain: View {
     private func onKeyPressed(_ key: Key) {
         stack.selectedId = selection?.valueId ?? -1 // This is a kind of a hack, maybe clean up.
         do {
-            try key.activeOp(calculatorMode, stack, stack.input, nil, { op in self.handleUIKeyboardOp(op) })
+            switch (calculatorMode.mainViewMode) {
+            case .Matrix:
+                try key.activeOp(calculatorMode,
+                                 stack,
+                                 matrixEditController.inputBuffer,
+                                 matrixEditController,
+                                 { op in self.handleUIKeyboardOp(op) })
+            case .Normal:
+                try key.activeOp(calculatorMode,
+                                 stack,
+                                 stack.input,
+                                 nil,
+                                 { op in self.handleUIKeyboardOp(op) })
+            }
+
             if key.resetModAfterClick == .reset {
                 calculatorMode.resetMods()
                 selection = nil
@@ -93,18 +105,42 @@ struct CalculatorMain: View {
         case .showHelp:
             showingHelp = true
         case .inputMatrix:
-            matrixToEdit = nil
-            showingMatrixUi = true
+            calculatorMode.mainViewMode = .Matrix
         case .editMatrix(let matrix):
-            matrixToEdit = matrix
-            showingMatrixUi = true
+            matrixEditController.setInputMatrix(matrix)
+            calculatorMode.mainViewMode = .Matrix
+            break
         case .dismissMatrix:
-            fatalError("CalculatorMain: Unsupported UI keybaord op .dismissMatrix")
+            calculatorMode.mainViewMode = .Normal
         }
     }
 }
 
-struct Display2_Previews: PreviewProvider {
+struct MatrixInputView: View {
+    @ObservedObject
+    var matrixEditController: MatrixEditController
+
+    @ObservedObject
+    var calculatorMode: CalculatorMode
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Rectangle()
+                .fill(Styles2.stackSeparatorColor)
+                .frame(height: 1)
+            ScrollView([.horizontal, .vertical]) {
+                MatrixContentView(
+                    values: matrixEditController.matrix,
+                    calculatorMode: calculatorMode,
+                    selectedCell: $matrixEditController.selectedCell
+                )
+            }
+            .background(.white)
+        }
+    }
+}
+
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         CalculatorMain()
     }
