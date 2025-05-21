@@ -17,11 +17,31 @@ class CalculatorMode: ObservableObject {
         case Engineering
     }
 
+    enum MainViewMode {
+        case Normal
+        case Matrix
+    }
+
     @Published
     var angle: Angle = .Deg
 
     @Published
     var keypadMode: KeypadMode = .Normal
+
+    @Published
+    var mainViewMode: MainViewMode = .Normal {
+        didSet {
+            switch mainViewMode {
+            case .Normal:
+                keypadModel = BasicKeypadModel()
+            case .Matrix:
+                keypadModel = MatrixKeypadModel()
+            }
+        }
+    }
+
+    @Published
+    private(set) var keypadModel: KeypadModel = BasicKeypadModel()
 
     func swapAngle() {
         if angle == .Deg {

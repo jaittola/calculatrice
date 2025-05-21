@@ -4,8 +4,6 @@ struct CalculatorMain: View {
     private let stack = Stack()
     private let calculatorMode = CalculatorMode()
 
-    private let keypadModel = BasicKeypadModel()
-
     @State private var calcErrorOccurred = false
     @State private var calcError: Error?
 
@@ -28,7 +26,7 @@ struct CalculatorMain: View {
                           stack: stack,
                           calcErrorOccurred: $calcErrorOccurred,
                           calcError: $calcError)
-            KeypadView2(model: keypadModel,
+            KeypadView2(model: calculatorMode.keypadModel,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the keyboard to the safe area
         }
@@ -53,7 +51,7 @@ struct CalculatorMain: View {
                             showingHelp: $showingHelp)
         }
         .sheet(isPresented: $showingHelp) {
-            HelpView(showingHelp: $showingHelp, keypadModel: keypadModel)
+            HelpView(showingHelp: $showingHelp, keypadModel: calculatorMode.keypadModel)
         }
     }
 
