@@ -22,8 +22,8 @@ struct StackDisplay2: View {
             }
             .listStyle(.plain)
             .background(.white)
-            .onChange(of: stack.content) { _ in
-                if let value = stack.content.first {
+            .onChange(of: stack.content) { _, newContent in
+                if let value = newContent.first {
                     let val = StackValueWithPosition(0, value)
                     scrollViewProxy.scrollTo(val.id)
                 }
