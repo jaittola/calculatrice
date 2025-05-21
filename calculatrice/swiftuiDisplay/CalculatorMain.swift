@@ -49,7 +49,9 @@ struct CalculatorMain: View {
             Text(LocalizedStringKey(errorMessage(for: details)))
         }
         .sheet(isPresented: $showingHelp) {
-            HelpView(showingHelp: $showingHelp, keypadModel: calculatorMode.keypadModel)
+            HelpView(showingHelp: $showingHelp,
+                     showGeneralHelpText: calculatorMode.mainViewMode == .Normal,
+                     keypadModel: calculatorMode.keypadModel)
         }
     }
 

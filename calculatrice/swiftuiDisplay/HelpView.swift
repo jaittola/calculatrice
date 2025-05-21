@@ -3,6 +3,8 @@ import SwiftUI
 struct HelpView: View {
     @Binding var showingHelp: Bool
 
+    var showGeneralHelpText: Bool = true
+
     var keypadModel: KeypadModel
 
     var body: some View {
@@ -12,8 +14,10 @@ struct HelpView: View {
                     Spacer()
                     Button("Close") { showingHelp = false }
                 }
-                HelpTitle(title: "HelpTitle")
-                HelpParagraph(bodyText: "GenericHelpBody")
+                if showGeneralHelpText {
+                    HelpTitle(title: "HelpTitle")
+                    HelpParagraph(bodyText: "GenericHelpBody")
+                }
                 HelpTitle(title: "HelpFunctions")
                 HelpKeypad(keypad: keypadModel)
 
@@ -60,6 +64,7 @@ struct HelpKeypad: View {
                 HelpItemView(item: item)
             }
         }
+        .padding(.top, 4)
     }
 }
 
@@ -135,6 +140,21 @@ private func keyFuncToHelpItem(_ symbol: String?,
 
         var body: some View {
             HelpView(showingHelp: $showingHelp, keypadModel: BasicKeypadModel())
+        }
+    }
+
+    return HelpViewPreview()
+}
+
+#Preview("HelpForMatrixes") {
+    struct HelpViewPreview: View {
+
+        @State var showingHelp: Bool = false
+
+        var body: some View {
+            HelpView(showingHelp: $showingHelp,
+                     showGeneralHelpText: false,
+                     keypadModel: MatrixKeypadModel())
         }
     }
 
