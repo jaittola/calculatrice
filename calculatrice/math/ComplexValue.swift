@@ -171,7 +171,8 @@ class ComplexValue: NSObject, MatrixElement {
     }
 
     convenience init(realValue: Num = NumericalValue(0),
-                     imagValue: Num = NumericalValue(0)) {
+                     imagValue: Num = NumericalValue(0),
+                     presentationFormat: Format = .cartesian) {
         do {
             try self.init([realValue,
                            imagValue],

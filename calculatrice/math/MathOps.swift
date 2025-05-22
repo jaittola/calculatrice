@@ -468,8 +468,17 @@ class MixedRationalNumber: Calculation, NumTypeConversionCalculation {
     }
 }
 
-class OnlyFraction: Calculation, RationalCalculation {
+class OnlyFraction: Calculation, RationalCalculation, ComplexCalculation {
     var arity: Int = 1
+
+    func calcComplex(_ inputs: [ComplexValue], _ calculatorMode: CalculatorMode) throws -> ComplexValue {
+        guard let re = inputs[0].real.asRational?.fracOnly,
+              let im = inputs[0].imag.asRational?.fracOnly else {
+            throw CalcError.unsupportedValueType()
+        }
+
+        return ComplexValue(realValue: re, imagValue: im, presentationFormat: inputs[0].presentationFormat)
+    }
 
     func calcRational(_ inputs: [RationalValue], _ calculatorMode: CalculatorMode) -> RationalValue {
         inputs[0].fracOnly

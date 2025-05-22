@@ -168,4 +168,12 @@ class TestMathOpsRational: XCTestCase {
         XCTAssertFalse(Pow().preferRealCalculationWith(thisInput: [Value(rat(3, 4)), Value(rat(3, 1))]))
         XCTAssertFalse(Pow().preferRealCalculationWith(thisInput: [Value(rat(3, 4)), Value(rat(1, 1))]))
     }
+
+    func testOnlyFractionForComplex() {
+        let v1 = ComplexValue(realValue: rat(3, 2), imagValue: rat(4, 3))
+        XCTAssertEqual(v1.stringValue(), "1 1/2 + 1 1/3i")
+
+        let v2 = assertNoThrow { try OnlyFraction().calcComplex([v1], CalculatorMode()) }
+        XCTAssertEqual(v2?.stringValue(), "3/2 + 4/3i")
+    }
 }
