@@ -37,7 +37,7 @@ class TestMathOpsMatrix: XCTestCase {
 
         let r = assertNoThrow { try Plus().calcMatrix([m1, m2], CalculatorMode()) }
         XCTAssertEqual(r?.asMatrix, expectedResult)
-        XCTAssertEqual(r?.stringValue(CalculatorMode()), "[5 1/2 + 2i  8\n10  1 1/3]")
+        XCTAssertEqual(r?.stringValue(ValueMode()), "[5 1/2 + 2i  8\n10  1 1/3]")
     }
 
     func testMatrixPlusCalculationTypes() {
@@ -69,7 +69,7 @@ class TestMathOpsMatrix: XCTestCase {
 
         let r = assertNoThrow { try Minus().calcMatrix([m1, m2], CalculatorMode()) }
         XCTAssertEqual(r?.asMatrix, expectedResult)
-        XCTAssertEqual(r?.stringValue(CalculatorMode()), "[-2 1/2 + 2i  -4\n2  -2/3]")
+        XCTAssertEqual(r?.stringValue(ValueMode()), "[-2 1/2 + 2i  -4\n2  -2/3]")
     }
 
     func testMatrixMinusCalculationTypes() {

@@ -108,6 +108,10 @@ class RationalValue: NSObject, Num, MatrixElement {
         return self.stringValue(precision: precision)
     }
 
+    func stringValue(precision: Int, valueMode: ValueMode) -> String {
+        return self.stringValue(precision: precision)
+    }
+
     init(numerator: Num,
          denominator: Num,
          displayFormat: DisplayFormat = .mixed,

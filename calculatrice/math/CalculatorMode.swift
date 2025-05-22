@@ -1,5 +1,9 @@
 import Foundation
 
+struct ValueMode {
+    var angle: CalculatorMode.Angle = .Deg
+}
+
 class CalculatorMode: ObservableObject {
     enum Angle {
         case Deg
@@ -12,18 +16,20 @@ class CalculatorMode: ObservableObject {
         case Mod2
     }
 
-    enum NumberMode {
-        case Decimal
-        case Engineering
-    }
-
     enum MainViewMode {
         case Normal
         case Matrix
     }
 
     @Published
-    var angle: Angle = .Deg
+    var valueMode: ValueMode = ValueMode(angle: .Deg)
+
+    @Published
+    var angle: Angle = .Deg {
+        didSet {
+            valueMode = ValueMode(angle: angle)
+        }
+    }
 
     @Published
     var keypadMode: KeypadMode = .Normal

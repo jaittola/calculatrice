@@ -4,7 +4,7 @@ import XCTest
 class TestNumericalValues: XCTestCase {
     func testBasicWithAutoFormat() {
         let v1 = Value(NumericalValue(1.2, numberFormat: .auto), id: 3)
-        XCTAssertEqual("1.2", v1.stringValue(CalculatorMode()))
+        XCTAssertEqual("1.2", v1.stringValue(ValueMode()))
     }
 
     func testWithId() {
@@ -183,8 +183,8 @@ class TestNumericalValues: XCTestCase {
 
     func testComplexPolarFormatting() {
         let v = ComplexValue(absolute: 2, argument: -Double.pi / 4, presentationFormat: .polar)
-        XCTAssertEqual(v.stringValue(angleUnit: .Deg), "2 ∠ -45°")
-        XCTAssertEqual(v.stringValue(angleUnit: .Rad), "2 ∠ -0.7853982")
+        XCTAssertEqual(v.stringValue(valueMode: ValueMode(angle: .Deg)), "2 ∠ -45°")
+        XCTAssertEqual(v.stringValue(valueMode: ValueMode(angle: .Rad)), "2 ∠ -0.7853982")
     }
 
     func testComplexFromRationals() {

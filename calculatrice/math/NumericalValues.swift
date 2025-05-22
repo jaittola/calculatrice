@@ -95,11 +95,11 @@ enum ContainedValue: Equatable {
         }
     }
 
-    func stringValue(_ calculatorMode: CalculatorMode) -> String {
+    func stringValue(_ valueMode: ValueMode) -> String {
         switch self {
         case .complex(let c):
             return c.stringValue(precision: realDefaultPrecision,
-                                 angleUnit: calculatorMode.angle)
+                                  valueMode: valueMode)
         case .number(let n):
             return n.stringValue(precision: realDefaultPrecision)
 
@@ -107,14 +107,16 @@ enum ContainedValue: Equatable {
             return r.stringValue(precision: realDefaultPrecision)
 
         case .matrix(let m):
-            return m.stringValue(precision: realDefaultPrecision)
+            return m.stringValue(precision: realDefaultPrecision,
+                                  valueMode: valueMode)
         }
     }
+
 
     func duplicateForStack() -> ContainedValue {
         switch self {
         case .complex(let c):
-            return ContainedValue.complex(value: c.duplicateForStack()) // TODO
+            return ContainedValue.complex(value: c.duplicateForStack())
         case .number:
             return self
         case .rational(let r):
@@ -182,8 +184,8 @@ struct Value: Identifiable, Equatable {
         return Value(containedValue.duplicateForStack(), id: id)
     }
 
-    func stringValue(_ calculatorMode: CalculatorMode) -> String {
-        containedValue.stringValue(calculatorMode)
+    func stringValue(_ valueMode: ValueMode) -> String {
+        containedValue.stringValue(valueMode)
     }
 
     static func == (lhs: Value, rhs: Value) -> Bool {
@@ -195,7 +197,7 @@ protocol MatrixCalcValue { }
 
 protocol MatrixElement: MatrixCalcValue {
     var asComplex: ComplexValue { get }
-    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String
+    func stringValue(precision: Int, valueMode: ValueMode) -> String
     func isEqual(_ to: (Any)?) -> Bool
 }
 
@@ -284,16 +286,16 @@ class NumericalValue: NSObject, Num, MatrixElement {
         }
     }
 
-    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String {
+    func stringValue(precision: Int, withSign: Bool) -> String {
+        stringValue(precision: precision, engDecimalPlaces: precision, withSign: withSign)
+    }
+
+    func stringValue(precision: Int, valueMode: ValueMode) -> String {
         return self.stringValue(precision: precision, withSign: true)
     }
 
     func withFloatingPointNumberFormat(_ format: ValueNumberFormat) -> Num {
         NumericalValue(floatingPoint, numberFormat: format)
-    }
-
-    func stringValue(precision: Int, withSign: Bool) -> String {
-        stringValue(precision: precision, engDecimalPlaces: precision, withSign: withSign)
     }
 
     func stringDecimalValue(precision: Int, withSign: Bool) -> String {

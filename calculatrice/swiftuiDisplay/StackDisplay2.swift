@@ -17,7 +17,7 @@ struct StackDisplay2: View {
                 ForEach(values) { stackVal in
                     StackRow(stackVal: stackVal,
                              isSelected: selection == stackVal.id,
-                             calculatorMode: self.calculatorMode)
+                             valueMode: calculatorMode.valueMode)
                 }
             }
             .listStyle(.plain)
@@ -89,7 +89,7 @@ struct StackDisplay2_Previews: PreviewProvider {
 struct StackRow: View {
     var stackVal: StackValueWithPosition
     var isSelected: Bool
-    var calculatorMode: CalculatorMode
+    var valueMode: ValueMode
 
     var body: some View {
         HStack {
@@ -99,13 +99,13 @@ struct StackRow: View {
                 .multilineTextAlignment(.trailing)
                 .background(.clear)
             Spacer()
-            StackValueView(value: stackVal.value, calculatorMode: calculatorMode)
+            StackValueView(value: stackVal.value, valueMode: valueMode)
         }
         .listRowBackground(isSelected ? Styles2.selectedRowBackgroundColor : Color.white)
         .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
         .contextMenu {
             Button {
-                CopyPaste.copy(stackVal, calculatorMode)
+                CopyPaste.copy(stackVal, valueMode)
             } label: { Text("Copy") }
         }
     }
@@ -113,7 +113,7 @@ struct StackRow: View {
 
 struct StackValueView: View {
     var value: Value
-    var calculatorMode: CalculatorMode
+    var valueMode: ValueMode
 
     @State private var selectedCell = (-1, -1)
 
@@ -121,14 +121,14 @@ struct StackValueView: View {
         if let matrixRows = value.asMatrix?.asMatrixRows {
             ScrollView(.horizontal) {
                 MatrixContentView(values: matrixRows,
-                                  calculatorMode: calculatorMode,
+                                  valueMode: valueMode,
                                   areCellsSelectable: false,
                                   selectedCell: $selectedCell)
             }
             .defaultScrollAnchor(.trailing)
             .scrollBounceBehavior(.basedOnSize)
         } else {
-            StackNumberView(value: value.stringValue(calculatorMode))
+            StackNumberView(value: value.stringValue(valueMode))
         }
     }
 }

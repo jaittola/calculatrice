@@ -46,25 +46,25 @@ class TestPasteParser: XCTestCase {
     func testPasteComplexNumber() {
         let input = "2 + 3i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testPasteComplexNumber2() {
         let input = "123.456 + 789.012i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testPasteComplexNumber3() {
         let input = "2 - 3i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testPasteComplexNumberEng() {
         let input = "123.456E1 + 7.89012E-2i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456E1 + 0.0789012i")
+        XCTAssertEqual(v?.stringValue(ValueMode()), "123.456E1 + 0.0789012i")
         XCTAssertEqual(v?.asComplex?.real.floatingPoint, 1234.56)
         XCTAssertEqual(v?.asComplex?.imag.floatingPoint, 0.0789012)
     }
@@ -72,7 +72,7 @@ class TestPasteParser: XCTestCase {
     func testPasteComplexNumberEng2() {
         let input = "123.456 - 7.89012E8i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), "123.456 - 7.89012E8i")
+        XCTAssertEqual(v?.stringValue(ValueMode()), "123.456 - 7.89012E8i")
     }
 
     func testParseImaginaryNumber() {
@@ -82,7 +82,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(complex)
         XCTAssertEqual(complex?.real.floatingPoint, 0)
         XCTAssertEqual(complex?.imag.floatingPoint, 123.456)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testParseNegativeImaginaryNumber() {
@@ -92,7 +92,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(complex)
         XCTAssertEqual(complex?.real.floatingPoint, 0)
         XCTAssertEqual(complex?.imag.floatingPoint, -123.456)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), "-123.456i")
+        XCTAssertEqual(v?.stringValue(ValueMode()), "-123.456i")
     }
 
     func testParseComplexWithUnitImag() {
@@ -102,7 +102,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(complex)
         XCTAssertEqual(complex?.real.floatingPoint, 3)
         XCTAssertEqual(complex?.imag.floatingPoint, -1)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testParseI() {
@@ -112,7 +112,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(complex)
         XCTAssertEqual(complex?.real.floatingPoint, 0)
         XCTAssertEqual(complex?.imag.floatingPoint, 1)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testParseMinusI() {
@@ -122,13 +122,13 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(complex)
         XCTAssertEqual(complex?.real.floatingPoint, 0)
         XCTAssertEqual(complex?.imag.floatingPoint, -1)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testParseComplexNumberWithFractionals() {
         let input = "3/4 - 2/5i"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
         XCTAssertEqual(v?.asComplex?.real.asRational?.stringValue(), "3/4")
         XCTAssertEqual(v?.asComplex?.imag.asRational?.stringValue(), "-2/5")
     }
@@ -136,19 +136,16 @@ class TestPasteParser: XCTestCase {
     func testPastePolarComplexDeg() {
         let input = "2 ∠ 32°"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
         XCTAssertEqual(v?.asComplex?.polarAbsolute.floatingPoint, 2)
         XCTAssertEqual(v?.asComplex?.polarArgument.floatingPoint,
                        Utils.deg2Rad([NumericalValue(32)], CalculatorMode())[0])
     }
 
     func testPastePolarComplexRad() {
-        let radMode = CalculatorMode()
-        radMode.angle = .Rad
-
         let input = "2 ∠ 0.7853982"
         let v = pasteParser.parsePastedInput(input)
-        XCTAssertEqual(v?.stringValue(radMode), input)
+        XCTAssertEqual(v?.stringValue(ValueMode(angle: .Rad)), input)
         XCTAssertEqual(v?.asComplex?.polarAbsolute.floatingPoint, 2)
         XCTAssertEqual(v?.asComplex?.polarArgument.floatingPoint,
                        0.7853982)
@@ -164,7 +161,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(rat)
         XCTAssertEqual(rat?.numerator.floatingPoint, 3)
         XCTAssertEqual(rat?.denominator.floatingPoint, 4)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testParseMixedFractional() {
@@ -174,7 +171,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(rat)
         XCTAssertEqual(rat?.numerator.floatingPoint, 7)
         XCTAssertEqual(rat?.denominator.floatingPoint, 4)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), input)
+        XCTAssertEqual(v?.stringValue(ValueMode()), input)
     }
 
     func testParseMixedFractionalNegative() {
@@ -184,7 +181,7 @@ class TestPasteParser: XCTestCase {
         XCTAssertNotNil(rat)
         XCTAssertEqual(rat?.numerator.floatingPoint, -7)
         XCTAssertEqual(rat?.denominator.floatingPoint, 4)
-        XCTAssertEqual(v?.stringValue(CalculatorMode()), "-1 3/4")
+        XCTAssertEqual(v?.stringValue(ValueMode()), "-1 3/4")
     }
 
     func testParseSimpleMatrix() {

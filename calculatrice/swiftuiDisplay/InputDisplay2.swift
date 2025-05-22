@@ -22,7 +22,7 @@ struct InputDisplay2: View {
             .background(.white)
             .contextMenu {
                 Button {
-                    CopyPaste.copy(stack, calculatorMode, inputOnly: true)
+                    CopyPaste.copy(stack, calculatorMode.valueMode, inputOnly: true)
                 } label: {
                     Text("Copy")
                 }

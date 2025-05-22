@@ -121,7 +121,7 @@ class TestMathOps: XCTestCase {
         let values = [ComplexValue(absolute: 1, argument: Double.pi / 6)]
         let result = assertNoThrow { try Conjugate().calcComplex(values, self.calculatorMode) }!
         XCTAssertEqual(result, ComplexValue(absolute: 1, argument: -Double.pi / 6))
-        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: .Deg),
+        XCTAssertEqual(result.stringValue(precision: 6, valueMode: ValueMode()),
                        "1 ∠ -30°")
     }
 
@@ -362,7 +362,7 @@ class TestMathOps: XCTestCase {
         let values = [complex(1, 2)]
         let result = Sin().calcComplex(values, self.calculatorMode)
         XCTAssertEqual(result, complex(3.16578, 1.95960))
-        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: calculatorMode.angle), "3.165779 + 1.959601i")
+        XCTAssertEqual(result.stringValue(precision: 6), "3.165779 + 1.959601i")
     }
 
     func testComplexSin2() {
@@ -370,7 +370,7 @@ class TestMathOps: XCTestCase {
         let result = Sin().calcComplex(values, self.calculatorMode)
 
         XCTAssertEqual(result, ComplexValue(absolute: 6.755768, argument: 0.0700191))
-        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: .Rad),
+        XCTAssertEqual(result.stringValue(precision: 6, valueMode: ValueMode(angle: .Rad)),
                        "6.755769 ∠ 0.070019")
     }
 
@@ -378,7 +378,7 @@ class TestMathOps: XCTestCase {
         let values = [complex(1, 2)]
         let result = Cos().calcComplex(values, self.calculatorMode)
         XCTAssertEqual(result, complex(2.032723, -3.051897))
-        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: calculatorMode.angle),
+        XCTAssertEqual(result.stringValue(precision: 6, valueMode: calculatorMode.valueMode),
                        "2.032723 - 3.051898i")
     }
 
@@ -387,7 +387,7 @@ class TestMathOps: XCTestCase {
         let result = Cos().calcComplex(values, self.calculatorMode)
 
         XCTAssertEqual(result, ComplexValue(absolute: 6.68209689, argument: -1.49921))
-        XCTAssertEqual(result.stringValue(precision: 6, angleUnit: .Rad),
+        XCTAssertEqual(result.stringValue(precision: 6, valueMode: ValueMode(angle: .Rad)),
                        "6.682097 ∠ -1.499214")
     }
 
@@ -397,7 +397,7 @@ class TestMathOps: XCTestCase {
             try Tan().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, complex(0.033812826079897, 1.014793616146634))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: calculatorMode.angle),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: calculatorMode.valueMode),
                        "0.033813 + 1.014794i")
     }
 
@@ -408,7 +408,7 @@ class TestMathOps: XCTestCase {
         }
         // r≈1.01102525998059 (radius), θ = 1.56923 (angle)
         XCTAssertEqual(result, ComplexValue(absolute: 1.011025, argument: 1.56923))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: ValueMode(angle: .Rad)),
                        "1.011025 ∠ 1.569233")
     }
 
@@ -418,7 +418,7 @@ class TestMathOps: XCTestCase {
             try ASin().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, complex(0.427078586, 1.528570919))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: calculatorMode.angle),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: calculatorMode.valueMode),
                        "0.427079 + 1.528571i")
     }
 
@@ -428,7 +428,7 @@ class TestMathOps: XCTestCase {
             try ASin().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, ComplexValue(absolute: 1.05427, argument: 1.17299))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: ValueMode(angle: .Rad)),
                        "1.054273 ∠ 1.172989")
     }
 
@@ -438,7 +438,7 @@ class TestMathOps: XCTestCase {
             try ACos().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, complex(1.143717, -1.5285709))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: calculatorMode.angle),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: calculatorMode.valueMode),
                        "1.143718 - 1.528571i")
     }
 
@@ -448,7 +448,7 @@ class TestMathOps: XCTestCase {
             try ACos().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, ComplexValue(absolute: 1.51518, argument: -0.696414))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: ValueMode(angle: .Rad)),
                        "1.515187 ∠ -0.696413")
     }
 
@@ -458,7 +458,7 @@ class TestMathOps: XCTestCase {
             try ATan().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, complex(1.33897252, 0.40235947))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: calculatorMode.angle),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: calculatorMode.valueMode),
                        "1.338973 + 0.402359i")
     }
 
@@ -468,7 +468,7 @@ class TestMathOps: XCTestCase {
             try ATan().calcComplex(values, self.calculatorMode)
         }
         XCTAssertEqual(result, ComplexValue(absolute: 1.14996, argument: 0.581232))
-        XCTAssertEqual(result?.stringValue(precision: 6, angleUnit: .Rad),
+        XCTAssertEqual(result?.stringValue(precision: 6, valueMode: ValueMode(angle: .Rad)),
                        "1.149959 ∠ 0.581232")
     }
 
@@ -595,8 +595,7 @@ class TestMathOps: XCTestCase {
         let result = assertNoThrow {
             try ToPolar().calcComplex([complex(3, 3)], calculatorModeRad)
         }
-        XCTAssertEqual(result?.stringValue(precision: 5,
-                                           angleUnit: calculatorModeRad.angle),
+        XCTAssertEqual(result?.stringValue(precision: 5, valueMode: calculatorModeRad.valueMode),
                        "4.24264 ∠ 0.7854")
     }
 

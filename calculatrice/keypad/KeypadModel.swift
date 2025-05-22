@@ -200,7 +200,7 @@ struct Key: Identifiable {
             opMod1: .ui(
                 "Copy",
                 { stack, _, _, calculatorMode in
-                    CopyPaste.copy(stack, calculatorMode, inputOnly: false)
+                    CopyPaste.copy(stack, calculatorMode.valueMode, inputOnly: false)
                     return nil
                 },
 

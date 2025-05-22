@@ -110,7 +110,7 @@ class Stack: ObservableObject {
     }
 
     func copy(
-        _ calculatorMode: CalculatorMode,
+        _ valueMode: ValueMode,
         inputOnly: Bool
     ) -> String? {
         if inputOnly {
@@ -118,11 +118,11 @@ class Stack: ObservableObject {
         }
 
         return if selectedId != -1, let selectedValue = content.first(where: { $0.id == selectedId }) {
-            selectedValue.stringValue(calculatorMode)
+            selectedValue.stringValue(valueMode)
         } else if !input.isEmpty {
             input.stringValue
         } else if !content.isEmpty {
-            content[0].stringValue(calculatorMode)
+            content[0].stringValue(valueMode)
         } else {
             nil
         }
@@ -245,11 +245,11 @@ class Stack: ObservableObject {
 
     func printContents(_ calculatorMode: CalculatorMode) {
         print(
-            "Input Buffer: string = \(input.value.stringValue(calculatorMode))"
+            "Input Buffer: string = \(input.value.stringValue(calculatorMode.valueMode))"
         )
         print("STACK: ")
         content.enumerated().forEach { idx, value in
-            print("  \(idx): string = \(value.stringValue(calculatorMode))")
+            print("  \(idx): string = \(value.stringValue(calculatorMode.valueMode))")
         }
     }
 

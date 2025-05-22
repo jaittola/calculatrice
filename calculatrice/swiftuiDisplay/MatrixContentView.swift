@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MatrixContentView: View {
     var values: [MatrixRow]
-    var calculatorMode: CalculatorMode
+    var valueMode: ValueMode
 
     var areCellsSelectable: Bool = true
     @Binding var selectedCell: (Int, Int)
@@ -24,7 +24,7 @@ struct MatrixContentView: View {
                                                   selectedCell.0 == row.rowIndex &&
                                                   selectedCell.1 == value.columnIndex)
                                 StackNumberView(value: value.value.stringValue(precision: realDefaultPrecision,
-                                                                               calculatorMode: calculatorMode),
+                                                                                valueMode: valueMode),
                                                 isSelected: isSelected,
                                                 onClick: areCellsSelectable ? {
                                     toggleSelection(row.rowIndex, value.columnIndex)
@@ -131,7 +131,7 @@ struct MatrixContentView_Previews: PreviewProvider {
 
         var body: some View {
             MatrixContentView(values: matrix.asMatrixRows,
-                              calculatorMode: CalculatorMode(),
+                              valueMode: ValueMode(),
                               selectedCell: $selectedCell)
         }
     }

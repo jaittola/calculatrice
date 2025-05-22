@@ -371,7 +371,7 @@ class TestStack: XCTestCase {
 
         XCTAssertNotNil(numResult)
         XCTAssertEqual(numResult?.floatingPoint, 0.25)
-        XCTAssertEqual(result.stringValue(CalculatorMode()), "0.25")
+        XCTAssertEqual(result.stringValue(ValueMode()), "0.25")
     }
 
     func testCalcWithMatrixes() {
@@ -390,7 +390,7 @@ class TestStack: XCTestCase {
         XCTAssertEqual(s.content.count, 1)
 
         let result = s.content[0]
-        XCTAssertEqual(result.stringValue(CalculatorMode()), "[6  8\n10  12]")
+        XCTAssertEqual(result.stringValue(ValueMode()), "[6  8\n10  12]")
     }
 
     func testCalcScalarMatrix() {
@@ -408,7 +408,7 @@ class TestStack: XCTestCase {
         XCTAssertEqual(s.content.count, 1)
 
         let result = s.content[0]
-        XCTAssertEqual(result.stringValue(CalculatorMode()), "[2  2\n4  10]")
+        XCTAssertEqual(result.stringValue(ValueMode()), "[2  2\n4  10]")
     }
 
     func testCopyWithInputBufferContent() {
@@ -418,7 +418,7 @@ class TestStack: XCTestCase {
         s.input.addNum(2)
         s.input.addNum(4)
 
-        XCTAssertEqual(s.copy(CalculatorMode(), inputOnly: false), "24")
+        XCTAssertEqual(s.copy(ValueMode(), inputOnly: false), "24")
     }
 
     func testCopyInputBufferOnly() {
@@ -428,7 +428,7 @@ class TestStack: XCTestCase {
         s.input.addNum(2)
         s.input.addNum(4)
 
-        XCTAssertEqual(s.copy(CalculatorMode(), inputOnly: true), "24")
+        XCTAssertEqual(s.copy(ValueMode(), inputOnly: true), "24")
     }
 
     func testCopyInputBufferOnlyWhenInputEmpty() {
@@ -436,7 +436,7 @@ class TestStack: XCTestCase {
 
         s.push(v(4))
 
-        XCTAssertNil(s.copy(CalculatorMode(), inputOnly: true))
+        XCTAssertNil(s.copy(ValueMode(), inputOnly: true))
     }
 
     func testCopySelectedValue() {
@@ -446,7 +446,7 @@ class TestStack: XCTestCase {
 
         s.selectedId = 0
 
-        XCTAssertEqual(s.copy(CalculatorMode(), inputOnly: false), "3")
+        XCTAssertEqual(s.copy(ValueMode(), inputOnly: false), "3")
     }
 
     private func threeValueStack() -> Stack {

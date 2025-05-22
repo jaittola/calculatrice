@@ -72,20 +72,14 @@ class ComplexValue: NSObject, MatrixElement {
 
     var asComplex: ComplexValue { self }
 
-    func stringValue(precision: Int = realDefaultPrecision,
-                     angleUnit: CalculatorMode.Angle = .Deg) -> String {
+    func stringValue(precision: Int = realDefaultPrecision, valueMode: ValueMode = ValueMode()) -> String {
         switch presentationFormat {
         case .cartesian:
             return cartesianStringValue(precision)
         case .polar:
-            return polarStringValue(precision, angleUnit)
+            return polarStringValue(precision, valueMode.angle)
         }
     }
-
-    func stringValue(precision: Int, calculatorMode: CalculatorMode) -> String {
-        return self.stringValue(precision: precision, angleUnit: calculatorMode.angle)
-    }
-
 
     func cartesianStringValue(_ precision: Int) -> String {
         let cart = cartesian

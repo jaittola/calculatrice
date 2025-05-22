@@ -18,13 +18,13 @@ class MatrixValue: NSObject, MatrixCalcValue {
     }
 
     func stringValue(
-        precision: Int = realDefaultPrecision, calculatorMode: CalculatorMode = CalculatorMode()
+        precision: Int = realDefaultPrecision, valueMode: ValueMode = ValueMode()
     ) -> String {
         let res =
             values
             .map { row in
                 row.map { val in
-                    val.stringValue(precision: precision, calculatorMode: calculatorMode)
+                    val.stringValue(precision: precision, valueMode: valueMode)
                 }.joined(
                     separator: "  ")
             }

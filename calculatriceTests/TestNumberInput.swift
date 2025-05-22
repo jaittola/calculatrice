@@ -70,7 +70,7 @@ class TestNumberInput: XCTestCase {
         ib.backspace()
 
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, 1)
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "1")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "1")
 
         ib.addNum(2)
         ib.dot()
@@ -79,7 +79,7 @@ class TestNumberInput: XCTestCase {
         ib.backspace()
 
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, 12.3)
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "12.3")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "12.3")
     }
 
     func testBackspace2() {
@@ -97,7 +97,7 @@ class TestNumberInput: XCTestCase {
         ib.backspace()
 
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, 12.34)
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "12.34")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "12.34")
     }
 
     func testBackspaceToEmpty() {
@@ -107,7 +107,7 @@ class TestNumberInput: XCTestCase {
         ib.backspace()
         ib.backspace()
         XCTAssertEqual(ib.stringValue, "")
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "")
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, 0)
     }
 
@@ -124,7 +124,7 @@ class TestNumberInput: XCTestCase {
 
         XCTAssertEqual(ib.stringValue, "12.3E-")
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, 12.3)
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "12.3")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "12.3")
     }
 
     func testInputWithoutLeadingZero() {
@@ -133,7 +133,7 @@ class TestNumberInput: XCTestCase {
         ib.addNum(2)
         ib.addNum(3)
         XCTAssertEqual(ib.stringValue, ".23")
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "0.23")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "0.23")
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, 0.23)
     }
 
@@ -144,7 +144,7 @@ class TestNumberInput: XCTestCase {
         ib.addNum(3)
         ib.plusminus()
         XCTAssertEqual(ib.stringValue, "-.23")
-        XCTAssertEqual(ib.value.stringValue(CalculatorMode()), "-0.23")
+        XCTAssertEqual(ib.value.stringValue(ValueMode()), "-0.23")
         XCTAssertEqual(ib.value.asNumericalValue!.floatingPoint, -0.23)
     }
 

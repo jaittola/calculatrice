@@ -141,7 +141,7 @@ struct MatrixInputView: View {
             ScrollView([.horizontal, .vertical]) {
                 MatrixContentView(
                     values: matrixEditController.matrix,
-                    calculatorMode: calculatorMode,
+                    valueMode: calculatorMode.valueMode,
                     selectedCell: $matrixEditController.selectedCell
                 )
             }
