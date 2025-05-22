@@ -1,3 +1,19 @@
-- The inverse of an integer is calculated as a floating point, and no longer as a fraction. For example, calculating Inv(2) returns 0.5 and not 1/2
-- The UI logic for copying and pasting numbers has been refactored.
-- Copy and paste operations have been added to the keyboard.
+The main new feature in this version (1.1.0) is support for matrixes.
+
+Calccis can perform the following matrix calculations:
+- addition
+- subtraction
+- multiplication (also scalar * matrix)
+- inverse (1/x)
+- determinant
+- transposition
+- dot product for vectors
+
+Inputting matrixes is still somewhat limited. It is not possible to enter complex or rational values into the matrixes, yet.
+
+Other improvements include, among others:
+- Scientific formatting of numbers (-1.24E-4) works more nicely now. The number of significant digits is variable and there are no leading zeros in the exponent.
+- Multiplications and divisions of complex numbers that only have a real or imaginary part use cartesian values for calculation (as opposed to polar values) where possible. This change avoids small numerical errors caused by trigonometrical functions. For example, the result of 1.2 * i is now 1.2i, whereas it used to be 7.347881E-17 + 1.2i.
+- Changing the angle unit (Deg -> Rad or vice versa) updates the angle units of complex values in the stack.
+- There is an edit function, which copies the selected (or topmost) value of the stack to the edit buffer. This feature is currently available for matrixes and plain numerical values only, not for complex numbers or fractions.
+- Complex numbers with fractions can be converted to improper fractions (i.e., 1 1/2 + 1 2/7i -> 3/2 + 5/7i using the ->y/x function)
