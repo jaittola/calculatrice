@@ -14,10 +14,7 @@ struct InputDisplay2: View {
     var body: some View {
         let value = inputBuffer.isEmpty ? " " : inputBuffer.stringValue
 
-        Text(value)
-            .font(Styles2.stackFont)
-            .foregroundColor(Styles2.stackTextColor)
-            .multilineTextAlignment(.trailing)
+        StackNumberView(value: value)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .background(.white)
             .contextMenu {

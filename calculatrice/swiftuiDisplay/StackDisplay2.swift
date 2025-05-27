@@ -136,24 +136,15 @@ struct StackValueView: View {
 struct StackNumberView: View {
     var value: String
     var isSelected: Bool = false
-    var onClick: (() -> Void)? = nil
 
     var body: some View {
-        let isClickable = onClick != nil
-        let view = Text(value)
+        Text(value)
             .font(Styles2.stackFont)
             .foregroundColor(Styles2.stackTextColor)
             .multilineTextAlignment(.trailing)
             .background(.clear)
             .padding(4)
             .border(isSelected ? Styles2.matrixSelectedCellBorder : .clear, width: 2)
-
-
-        if isClickable {
-            view.onTapGesture { self.onClick?() }
-        } else {
-            view
-        }
     }
 }
 

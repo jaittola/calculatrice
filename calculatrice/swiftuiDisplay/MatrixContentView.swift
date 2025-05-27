@@ -23,12 +23,14 @@ struct MatrixContentView: View {
                                 let isSelected = (areCellsSelectable &&
                                                   selectedCell.0 == row.rowIndex &&
                                                   selectedCell.1 == value.columnIndex)
-                                StackNumberView(value: value.value.stringValue(precision: realDefaultPrecision,
+                                let numberView = StackNumberView(value: value.value.stringValue(precision: realDefaultPrecision,
                                                                                 valueMode: valueMode),
-                                                isSelected: isSelected,
-                                                onClick: areCellsSelectable ? {
-                                    toggleSelection(row.rowIndex, value.columnIndex)
-                                } : nil)
+                                                                 isSelected: isSelected)
+                                if areCellsSelectable {
+                                    numberView.onTapGesture { toggleSelection(row.rowIndex, value.columnIndex) }
+                                } else {
+                                    numberView
+                                }
                             }
                         }
                     }
