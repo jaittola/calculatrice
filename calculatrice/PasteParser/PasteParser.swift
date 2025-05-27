@@ -1,6 +1,7 @@
 import Foundation
 
 func handlePaste(_ text: String, _ stack: Stack) -> Bool {
+    /*
     let pasteParser = PasteParser()
 
     guard let pasted = pasteParser.parsePastedInput(text) else {
@@ -14,6 +15,9 @@ func handlePaste(_ text: String, _ stack: Stack) -> Bool {
         stack.push(Value(pasted))
         return true
     }
+     TODO Fix this later
+     */
+    return false
 }
 
 class PasteParser {
@@ -51,7 +55,7 @@ class PasteParser {
                   inputBuffer.paste(expressionText) else {
                 return nil
             }
-            return inputBuffer.value
+            return inputBuffer.asContainedValue
 
         case e_complex_cart:
             guard numSiblings.count == 2 else {

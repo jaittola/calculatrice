@@ -13,8 +13,6 @@ class Stack: ObservableObject {
         return current
     }
 
-    let input = InputBuffer()
-
     @Published
     var content: [Value] = []
 
@@ -39,17 +37,13 @@ class Stack: ObservableObject {
         }
     }
 
-    func pushInput() {
+    func pushInput(_ input: InputController) {
         if !input.isEmpty {
-            push(Value(input.value))
-            clearInput()
+            push(input.value)
+            input.clear()
         } else if !content.isEmpty {
             push(content[0].duplicateForStack())
         }
-    }
-
-    func clearInput() {
-        input.clear()
     }
 
     func pop() {
@@ -66,7 +60,6 @@ class Stack: ObservableObject {
 
     func clear() {
         manipulateStack { _ in [] }
-        clearInput()
     }
 
     func pickSelected() {
@@ -110,6 +103,7 @@ class Stack: ObservableObject {
     }
 
     func copy(
+        _ input: InputController,
         _ valueMode: ValueMode,
         inputOnly: Bool
     ) -> String? {
@@ -155,7 +149,8 @@ class Stack: ObservableObject {
         stackHistoryPointer = stackHistory.count - 1
     }
 
-    private func getForCalc(n: Int = 1) -> (calcInputs: [Value], nextStack: [Value])? {
+    private func getForCalc(inputController input: InputController,
+                            n: Int = 1) -> (calcInputs: [Value], nextStack: [Value])? {
 
         if n <= 0 ||
             (input.isEmpty && n > content.count) ||
@@ -164,7 +159,7 @@ class Stack: ObservableObject {
         }
 
         if !input.isEmpty {
-            pushInput()
+            pushInput(input)
         }
 
 
@@ -178,14 +173,16 @@ class Stack: ObservableObject {
             count -= 1
         }
 
-        clearInput()
+        input.clear()
 
         return (calcInputs: calcInputs, nextStack: nextStack)
     }
 
-    func calculate(_ calc: Calculation,
+    func calculate(_ inputController: InputController,
+                   _ calc: Calculation,
                    _ calculatorMode: CalculatorMode) throws {
-        guard let calcParams = getForCalc(n: calc.arity) else {
+        guard let calcParams = getForCalc(inputController: inputController,
+                                          n: calc.arity) else {
             return
         }
 
@@ -240,16 +237,6 @@ class Stack: ObservableObject {
             var nextStack = calcParams.nextStack
             nextStack.insert(resultValue.withId(nextId), at: 0)
             return nextStack
-        }
-    }
-
-    func printContents(_ calculatorMode: CalculatorMode) {
-        print(
-            "Input Buffer: string = \(input.value.stringValue(calculatorMode.valueMode))"
-        )
-        print("STACK: ")
-        content.enumerated().forEach { idx, value in
-            print("  \(idx): string = \(value.stringValue(calculatorMode.valueMode))")
         }
     }
 

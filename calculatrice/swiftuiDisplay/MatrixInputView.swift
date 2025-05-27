@@ -16,6 +16,7 @@ struct MatrixInputView: View {
                 MatrixContentView(
                     values: matrixEditController.matrix,
                     valueMode: calculatorMode.valueMode,
+                    inputController: matrixEditController.inputController,
                     selectedCell: $matrixEditController.selectedCell
                 )
             }

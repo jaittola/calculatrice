@@ -1,55 +1,66 @@
 import Foundation
 
+struct InputBufferValue {
+    var numericalValue: NumericalValue
+    var currentInput: String
+}
+
 class InputBuffer: ObservableObject {
-    var value: ContainedValue {
-        ContainedValue.number(
-            value:
-                NumericalValue(
-                    doubleValue,
-                    originalStringValue: cleanedStringValue))
+    enum EmptyValueMode {
+        case empty
+        case zero
+    }
+
+    let emptyValueMode: EmptyValueMode
+
+    var asContainedValue: ContainedValue {
+        ContainedValue.number(value: value.numericalValue)
     }
 
     var isEmpty: Bool {
-        stringValue.isEmpty || stringValue == "0"
+        value.currentInput.isEmpty ||
+        (value.currentInput == "0" && emptyValueMode == .zero)
     }
 
     var isFull: Bool {
-        stringValue.count >= 100
+        value.currentInput.count >= 100
     }
 
     @Published
-    private(set) var stringValue: String = ""
+    private(set) var value: InputBufferValue
 
-    @Published
-    private(set) var cleanedStringValue: String = ""
+    init(emptyValueMode: EmptyValueMode = .empty) {
+        let stringValue = Self.emptyValue(emptyValueMode)
 
-    @Published
-    private(set) var doubleValue: Double = 0
+        self.emptyValueMode = emptyValueMode
+        self.value = InputBufferValue(numericalValue: NumericalValue(0, originalStringValue: stringValue),
+                                      currentInput: stringValue)
+    }
 
     func addNum(_ number: Int) {
-        let nextInput = if stringValue == "0" {
+        let nextInput = if value.currentInput == "0" {
             String(number)
         } else {
-            stringValue + String(number)
+            value.currentInput + String(number)
         }
         parseInput(nextInput)
     }
 
     func dot() {
         if !isInputtingDecimals && !isInputtingExponent {
-            parseInput(stringValue + ".")
+            parseInput(value.currentInput + ".")
         }
     }
 
     func E() {
         if !isInputtingExponent && !isEmpty {
-            parseInput(stringValue + "E")
+            parseInput(value.currentInput + "E")
         }
     }
 
     func plusminus() {
         if isInputtingExponent {
-            let parts = stringValue.split(separator: "E")
+            let parts = value.currentInput.split(separator: "E")
             guard parts.count == 2, parts[1].count > 0 else {
                 return
             }
@@ -58,7 +69,7 @@ class InputBuffer: ObservableObject {
             let newValue = String(parts[0]) + "E" + swappedSign
             parseInput(newValue)
         } else {
-            parseInput(swapSign(stringValue))
+            parseInput(swapSign(value.currentInput))
         }
     }
 
@@ -67,10 +78,14 @@ class InputBuffer: ObservableObject {
         parseInput(text)
     }
 
-    func setValue(_ v: NumericalValue) {
-        doubleValue = v.value
-        stringValue = v.stringValue()
-        cleanedStringValue = stringValue
+    func setValue(_ v: NumericalValue,
+                  _ currentInput: String? = nil) {
+        let stringValue = if let currentInput = currentInput {
+            Self.emptyValue(emptyValueMode, currentInput)
+        } else {
+            v.stringValue()
+        }
+        value = InputBufferValue(numericalValue: v, currentInput: stringValue)
     }
 
     private func swapSign(_ input: String) -> String {
@@ -84,17 +99,15 @@ class InputBuffer: ObservableObject {
     }
 
     func backspace() {
-        if !stringValue.isEmpty {
-            var input = stringValue
+        if !value.currentInput.isEmpty {
+            var input = value.currentInput
             input.removeLast()
             parseInput(input)
         }
     }
 
     func clear() {
-        doubleValue = 0
-        stringValue = ""
-        cleanedStringValue = ""
+        setValue(NumericalValue(0), "")
     }
 
     @discardableResult
@@ -115,7 +128,7 @@ class InputBuffer: ObservableObject {
 
         if cleanedInput.isEmpty {
             clear()
-            return false
+            return true
         }
 
         let withLeadingZero =
@@ -132,18 +145,32 @@ class InputBuffer: ObservableObject {
             return false
         }
 
-        doubleValue = parsedValue
-        stringValue = input
-        cleanedStringValue = withLeadingZero
+        setValue(NumericalValue(parsedValue,
+                                originalStringValue: Self.emptyValue(emptyValueMode, withLeadingZero)),
+                 Self.emptyValue(emptyValueMode, input))
 
         return true
     }
 
     private var isInputtingDecimals: Bool {
-        stringValue.firstIndex(of: Character(".")) != nil
+        value.currentInput.firstIndex(of: Character(".")) != nil
     }
 
     private var isInputtingExponent: Bool {
-        stringValue.firstIndex(of: Character("E")) != nil
+        value.currentInput.firstIndex(of: Character("E")) != nil
+    }
+
+    private static func emptyValue(_ emptyValueMode: EmptyValueMode,
+                                   _ value: String = "") -> String {
+        if !value.isEmpty {
+            value
+        } else {
+            switch emptyValueMode {
+            case .zero:
+                "0"
+            case .empty:
+                ""
+            }
+        }
     }
 }

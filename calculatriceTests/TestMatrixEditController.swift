@@ -31,15 +31,15 @@ class TestMatrixEditController: XCTestCase {
 
     func testBasicInput() {
         let controller = MatrixEditController()
-        controller.inputBuffer.addNum(1)
+        controller.inputController.activeInputBuffer.addNum(1)
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(1), num(0)], [num(0), num(0)]]))
-        controller.inputBuffer.addNum(2)
+        controller.inputController.activeInputBuffer.addNum(2)
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(12), num(0)], [num(0), num(0)]]))
 
         controller.selectedCell = (1, 1)
-        controller.inputBuffer.addNum(3)
+        controller.inputController.activeInputBuffer.addNum(3)
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(12), num(0)], [num(0), num(3)]]))
     }
@@ -47,11 +47,11 @@ class TestMatrixEditController: XCTestCase {
     func testInputOutsideBounds() {
         let controller = MatrixEditController()
         controller.selectedCell = (3, 3)
-        controller.inputBuffer.addNum(1)
+        controller.inputController.activeInputBuffer.addNum(1)
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(0), num(0)], [num(0), num(0)]]))
         controller.selectedCell = (1, 1)
-        controller.inputBuffer.addNum(3)
+        controller.inputController.activeInputBuffer.addNum(3)
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(0), num(0)], [num(0), num(3)]]))
     }

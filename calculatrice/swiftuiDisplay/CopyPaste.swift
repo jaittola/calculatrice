@@ -2,13 +2,17 @@ import SwiftUI
 
 class CopyPaste {
     static func copy(
+        _ inputController: InputController,
         _ stack: Stack,
         _ valueMode: ValueMode,
         inputOnly: Bool
     ) {
+        /*
         if let copiedString = stack.copy(valueMode, inputOnly: inputOnly) {
             UIPasteboard.general.string = copiedString
         }
+         */
+        // TODO, fix this later
     }
 
     static func copy(_ stackVal: StackValueWithPosition,

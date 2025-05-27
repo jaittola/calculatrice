@@ -4,6 +4,8 @@ struct MatrixContentView: View {
     var values: [MatrixRow]
     var valueMode: ValueMode
 
+    var inputController: InputController?
+
     var areCellsSelectable: Bool = true
     @Binding var selectedCell: (Int, Int)
 
@@ -23,8 +25,12 @@ struct MatrixContentView: View {
                                 let isSelected = (areCellsSelectable &&
                                                   selectedCell.0 == row.rowIndex &&
                                                   selectedCell.1 == value.columnIndex)
-                                let numberView = StackNumberView(value: value.value.stringValue(precision: realDefaultPrecision,
-                                                                                valueMode: valueMode),
+                                let elementValue = if isSelected, let inputController = inputController {
+                                    inputController.stringValue
+                                } else {
+                                    value.value.stringValue(precision: realDefaultPrecision, valueMode: valueMode)
+                                }
+                                let numberView = StackNumberView(value: elementValue,
                                                                  isSelected: isSelected)
                                 if areCellsSelectable {
                                     numberView.onTapGesture { toggleSelection(row.rowIndex, value.columnIndex) }

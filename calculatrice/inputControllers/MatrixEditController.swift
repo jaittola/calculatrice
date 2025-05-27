@@ -8,7 +8,7 @@ class MatrixEditController: ObservableObject {
     @Published
     var selectedCell: (Int, Int) = (0, 0) {
         didSet {
-            setupInputBufferFor(rowIndex: selectedCell.0, columnIndex: selectedCell.1)
+            setupInputControllerFor(rowIndex: selectedCell.0, columnIndex: selectedCell.1)
         }
     }
 
@@ -21,12 +21,12 @@ class MatrixEditController: ObservableObject {
         return try! MatrixValue(values)
     }
 
-    let inputBuffer = InputBuffer()
+    let inputController = InputController(emptyValueMode: .zero)
 
     private var inputBufferCancellable: AnyCancellable?
 
     init() {
-        inputBufferCancellable = inputBuffer.$stringValue.sink { [weak self] newStringValue in
+        inputBufferCancellable = inputController.$value.sink { [weak self] newValue in
             guard let self = self else {
                 return
             }
@@ -34,9 +34,7 @@ class MatrixEditController: ObservableObject {
                 matrix = matrix.map { row in
                     let newRow = row.values.map { column in
                         if column.columnIndex == selectedColumn && row.rowIndex == selectedRow {
-                            NumericalValue(
-                                self.inputBuffer.doubleValue,
-                                originalStringValue: newStringValue.isEmpty ? nil : newStringValue)
+                            newValue.asNum ?? Self.zero
                         } else {
                             column.value
                         }
@@ -75,7 +73,7 @@ class MatrixEditController: ObservableObject {
                 if columnIndex < columnCount {
                     row.values[columnIndex].value
                 } else {
-                    NumericalValue(0)
+                    Self.zero
                 }
             }
             return MatrixRow(row.rowIndex, columns)
@@ -101,7 +99,7 @@ class MatrixEditController: ObservableObject {
                 return matrix[rowIndex]
             } else {
                 let columns = (0..<columnCount).map { columnIndex in
-                    NumericalValue(0)
+                    Self.zero
                 }
                 return MatrixRow(rowIndex, columns)
             }
@@ -117,9 +115,9 @@ class MatrixEditController: ObservableObject {
         return selectedCell
     }
 
-    private func setupInputBufferFor(rowIndex: Int, columnIndex: Int) {
+    private func setupInputControllerFor(rowIndex: Int, columnIndex: Int) {
         guard areIndexesValid(rowIndex, columnIndex) else {
-            inputBuffer.clear()
+            inputController.clear()
             return
         }
 
@@ -127,7 +125,7 @@ class MatrixEditController: ObservableObject {
             return
         }
 
-        inputBuffer.paste(val.stringValue())
+        inputController.activeInputBuffer.paste(val.stringValue())
     }
 
     private func areIndexesValid(_ rowIndex: Int, _ columnIndex: Int) -> Bool {
@@ -140,9 +138,10 @@ class MatrixEditController: ObservableObject {
     }
 
     static func defaultMatrix() -> [MatrixRow] {
-        let zero = NumericalValue(0)
         return try! MatrixValue([
             [zero, zero], [zero, zero],
         ]).asMatrixRows
     }
+
+    static let zero = NumericalValue(0, originalStringValue: "0")
 }
