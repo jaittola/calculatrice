@@ -190,6 +190,7 @@
 		4F064C6D27F0314200F33E75 /* calculatrice */ = {
 			isa = PBXGroup;
 			children = (
+				4F71487D2DE5B331004E70D2 /* inputControllers */,
 				4F49B2442DBF57D70004ADD3 /* PasteParser */,
 				4F337DC62A4188AF0021CAE0 /* swiftuiDisplay */,
 				4FC1C0AF27F1D52B00794D9E /* math */,
@@ -229,7 +230,6 @@
 			isa = PBXGroup;
 			children = (
 				4F71487A2DE58127004E70D2 /* MatrixInputView.swift */,
-				4F4513AF2DD490CB007CDCDA /* MatrixEditController.swift */,
 				4F4513AC2DD4722E007CDCDA /* MatrixContentView.swift */,
 				4F7100452DC8995200F2611F /* CopyPaste.swift */,
 				4F337DC72A4188EC0021CAE0 /* CalculatorMain.swift */,
@@ -272,6 +272,14 @@
 				4F7100492DC8BD6000F2611F /* WhatToTest.en-US.txt */,
 			);
 			path = TestFlight;
+			sourceTree = "<group>";
+		};
+		4F71487D2DE5B331004E70D2 /* inputControllers */ = {
+			isa = PBXGroup;
+			children = (
+				4F4513AF2DD490CB007CDCDA /* MatrixEditController.swift */,
+			);
+			path = inputControllers;
 			sourceTree = "<group>";
 		};
 		4FC1C0AF27F1D52B00794D9E /* math */ = {
