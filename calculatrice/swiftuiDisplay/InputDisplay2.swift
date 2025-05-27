@@ -2,7 +2,7 @@ import SwiftUI
 
 struct InputDisplay2: View {
     @ObservedObject
-    var inputBuffer: InputBuffer
+    var inputController: InputController
 
     var calculatorMode: CalculatorMode
 
@@ -12,14 +12,14 @@ struct InputDisplay2: View {
     @Binding var calcError: Error?
 
     var body: some View {
-        let value = inputBuffer.isEmpty ? " " : inputBuffer.stringValue
+        let value = inputController.stringValue
 
         StackNumberView(value: value)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .background(.white)
             .contextMenu {
                 Button {
-                    CopyPaste.copy(stack, calculatorMode.valueMode, inputOnly: true)
+                    CopyPaste.copy(inputController, stack, calculatorMode.valueMode, inputOnly: true)
                 } label: {
                     Text("Copy")
                 }
@@ -40,10 +40,12 @@ struct InputDisplay2: View {
         @State private var calcError: Error?
 
         var body: some View {
-            let ib = makeInput()
+            let calculatorMode = CalculatorMode()
+            let ic = makeInput(calculatorMode)
+
             HStack {
                 InputDisplay2(
-                    inputBuffer: ib,
+                    inputController: ic,
                     calculatorMode: CalculatorMode(),
                     stack: Stack(),
                     calcErrorOccurred: $calcErrorOccurred,
@@ -52,22 +54,22 @@ struct InputDisplay2: View {
             }.padding(.vertical, 10).background(.red)
             HStack {
                 InputDisplay2(
-                    inputBuffer: InputBuffer(),
-                    calculatorMode: CalculatorMode(),
+                    inputController: InputController(calculatorMode),
+                    calculatorMode: calculatorMode,
                     stack: Stack(),
                     calcErrorOccurred: $calcErrorOccurred,
                     calcError: $calcError)
             }.padding(.vertical, 10).background(.green)
         }
 
-        func makeInput() -> InputBuffer {
-            let ib = InputBuffer()
-            ib.addNum(3)
-            ib.dot()
-            ib.addNum(1)
-            ib.addNum(4)
+        func makeInput(_ calculatorMode: CalculatorMode) -> InputController {
+            let ic = InputController(calculatorMode)
+            ic.activeInputBuffer.addNum(3)
+            ic.activeInputBuffer.dot()
+            ic.activeInputBuffer.addNum(1)
+            ic.activeInputBuffer.addNum(4)
 
-            return ib
+            return ic
         }
     }
 

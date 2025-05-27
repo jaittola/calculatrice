@@ -103,24 +103,28 @@ class TestStack: XCTestCase {
 
     func testPushInputIfEmptyInput() {
         let s = threeValueStack()
+        let ic = InputController()
 
-        s.pushInput()
+        s.pushInput(ic)
         XCTAssertEqual(stackToDoubles(s.content), [5, 5, 2, 3])
         XCTAssertEqual(stackToIds(s.content), [3, 2, 1, 0])
     }
 
     func testPushInputIfEmptyInputAndEmptyStack() {
         let s = Stack()
+        let ic = InputController()
 
-        s.pushInput()
+        s.pushInput(ic)
         XCTAssertEqual(s.testValues.stackHistory, [[]])
         XCTAssertEqual(stackToDoubles(s.content), [])
     }
 
     func testPushInputWithInput() {
         let s = Stack()
-        s.input.addNum(3)
-        s.pushInput()
+        let ic = InputController()
+
+        ic.activeInputBuffer.addNum(3)
+        s.pushInput(ic)
 
         XCTAssertEqual(s.testValues.stackHistory.count, 2)
         XCTAssertEqual(stackToDoubles(s.testValues.stackHistory[1]), [3])
@@ -129,9 +133,11 @@ class TestStack: XCTestCase {
 
     func testCalcWhenInputNotPushed() {
         let s = threeValueStack()
-        s.input.addNum(9)
+        let ic = InputController()
+
+        ic.activeInputBuffer.addNum(9)
         assertNoThrow {
-            try s.calculate(Plus(), CalculatorMode())
+            try s.calculate(ic, Plus(), CalculatorMode())
         }
         XCTAssertEqual(stackToDoubles(s.content), [14, 2, 3])
         XCTAssertEqual(stackToIds(s.content), [4, 1, 0])
@@ -151,13 +157,14 @@ class TestStack: XCTestCase {
 
     func testCalcIds() {
         let s = threeValueStack()
+        let ic = InputController()
 
         assertNoThrow {
-            try s.calculate(Plus(), CalculatorMode())
+            try s.calculate(ic, Plus(), CalculatorMode())
         }
 
-        s.input.addNum(9)
-        s.pushInput()
+        ic.activeInputBuffer.addNum(9)
+        s.pushInput(ic)
 
         XCTAssertEqual(stackToIds(s.content),
                        [4, 3, 0])
@@ -167,9 +174,10 @@ class TestStack: XCTestCase {
 
     func testStackCalcHistory() {
         let s = threeValueStack()
+        let ic = InputController()
 
         assertNoThrow {
-            try s.calculate(Plus(), CalculatorMode())
+            try s.calculate(ic, Plus(), CalculatorMode())
         }
 
         XCTAssertEqual(stackToDoubles(s.content), [7, 3])
@@ -179,8 +187,10 @@ class TestStack: XCTestCase {
 
     func testStackCalcAndUndoHistory() {
         let s = threeValueStack()
+        let ic = InputController()
+
         assertNoThrow {
-            try s.calculate(Plus(), CalculatorMode())
+            try s.calculate(ic, Plus(), CalculatorMode())
         }
 
         XCTAssertEqual(stackToDoubles(s.content), [7, 3])
@@ -194,6 +204,8 @@ class TestStack: XCTestCase {
 
     func testStackCalcWithThrowingCalculation() {
         let s = Stack()
+        let ic = InputController()
+
         s.push(v(3))
         s.push(Value(ComplexValue(2.0, 3.0)))
 
@@ -201,7 +213,7 @@ class TestStack: XCTestCase {
         XCTAssertEqual(s.testValues.stackHistoryPointer, 2)
 
         do {
-            try s.calculate(ImaginaryNumber(), CalculatorMode())
+            try s.calculate(ic, ImaginaryNumber(), CalculatorMode())
             XCTFail("Calculation did not throw an exception even though it should have")
         } catch {
             if case CalcError.unsupportedValueType = error {} else {
@@ -219,6 +231,7 @@ class TestStack: XCTestCase {
 
     func testInputAfterUndo() {
         let s = threeValueStack()
+        let ic = InputController()
 
         XCTAssertEqual(s.testValues.stackHistory.count, 4)
         XCTAssertEqual(s.testValues.stackHistoryPointer, 3)
@@ -232,8 +245,8 @@ class TestStack: XCTestCase {
                        [[], [3], [2, 3], [5, 2, 3]])
         XCTAssertEqual(s.testValues.stackHistoryPointer, 2)
 
-        s.input.addNum(9)
-        s.pushInput()
+        ic.activeInputBuffer.addNum(9)
+        s.pushInput(ic)
 
         XCTAssertEqual(s.testValues.stackHistory.count, 4)
         XCTAssertEqual(s.testValues.stackHistory.map { stack in stackToDoubles(stack) },
@@ -248,9 +261,11 @@ class TestStack: XCTestCase {
 
     func testMoreThan100StackHistory() {
         let s = Stack()
+        let ic = InputController()
+
         for n in 0...105 {
-            s.input.addNum(n + 1)
-            s.pushInput()
+            ic.activeInputBuffer.addNum(n + 1)
+            s.pushInput(ic)
         }
 
         XCTAssertEqual(s.testValues.stackHistory.count, 100)
@@ -277,12 +292,13 @@ class TestStack: XCTestCase {
 
     func testCalcRational() {
         let s = Stack()
+        let ic = InputController()
 
         assertNoThrow {
             s.push(Value(try RationalValue(1, 2)))
             s.push(Value(try RationalValue(1, 4)))
 
-            try s.calculate(Plus(), CalculatorMode())
+            try s.calculate(ic, Plus(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content.count, 1)
@@ -296,12 +312,13 @@ class TestStack: XCTestCase {
 
     func testCalcIntegerWithRational() {
         let s = Stack()
+        let ic = InputController()
 
         assertNoThrow {
             s.push(Value(NumericalValue(2)))
             s.push(Value(try RationalValue(1, 3)))
 
-            try s.calculate(Minus(), CalculatorMode())
+            try s.calculate(ic, Minus(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content.count, 1)
@@ -315,12 +332,13 @@ class TestStack: XCTestCase {
 
     func testCalcRealWithRational() {
         let s = Stack()
+        let ic = InputController()
 
         assertNoThrow {
             s.push(Value(NumericalValue(2.21)))
             s.push(Value(try RationalValue(2, 3)))
 
-            try s.calculate(Minus(), CalculatorMode())
+            try s.calculate(ic, Minus(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content.count, 1)
@@ -337,16 +355,16 @@ class TestStack: XCTestCase {
         // This is a regression test case for a bug.
 
         let s = Stack()
-        let ib = s.input
+        let ic = InputController()
 
-        ib.addNum(2)
-        s.pushInput()
-        ib.addNum(3)
-        ib.plusminus()
-        s.pushInput()
+        ic.activeInputBuffer.addNum(2)
+        s.pushInput(ic)
+        ic.activeInputBuffer.addNum(3)
+        ic.activeInputBuffer.plusminus()
+        s.pushInput(ic)
 
         assertNoThrow {
-            try s.calculate(Complex(), CalculatorMode())
+            try s.calculate(ic, Complex(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content[0].asComplex?.stringValue(), "2 - 3i")
@@ -358,10 +376,11 @@ class TestStack: XCTestCase {
         // Special case to make sure that preferComplexCalculationWith is used correctly
         // with Inv.
         let s = Stack()
+        let ic = InputController()
 
         assertNoThrow {
             s.push(Value(NumericalValue(4)))
-            try s.calculate(Inv(), CalculatorMode())
+            try s.calculate(ic, Inv(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content.count, 1)
@@ -376,6 +395,7 @@ class TestStack: XCTestCase {
 
     func testCalcWithMatrixes() {
         let s = Stack()
+        let ic = InputController()
 
         assertNoThrow {
             let m1 = try MatrixValue([[num(1), num(2)], [num(3), num(4)]])
@@ -384,7 +404,7 @@ class TestStack: XCTestCase {
             s.push(Value(m1))
             s.push(Value(m2))
 
-            try s.calculate(Plus(), CalculatorMode())
+            try s.calculate(ic, Plus(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content.count, 1)
@@ -395,6 +415,7 @@ class TestStack: XCTestCase {
 
     func testCalcScalarMatrix() {
         let s = Stack()
+        let ic = InputController()
 
         assertNoThrow {
             let m = try MatrixValue([[num(1), num(1)], [num(2), num(5)]])
@@ -402,7 +423,7 @@ class TestStack: XCTestCase {
             s.push(Value(num(2)))
             s.push(Value(m))
 
-            try s.calculate(Mult(), CalculatorMode())
+            try s.calculate(ic, Mult(), CalculatorMode())
         }
 
         XCTAssertEqual(s.content.count, 1)
@@ -413,40 +434,45 @@ class TestStack: XCTestCase {
 
     func testCopyWithInputBufferContent() {
         let s = Stack()
+        let ic = InputController()
 
         s.push(v(3))
-        s.input.addNum(2)
-        s.input.addNum(4)
+        ic.activeInputBuffer.addNum(2)
+        ic.activeInputBuffer.addNum(4)
 
-        XCTAssertEqual(s.copy(ValueMode(), inputOnly: false), "24")
+        XCTAssertEqual(s.copy(ic, ValueMode(), inputOnly: false), "24")
     }
 
     func testCopyInputBufferOnly() {
         let s = Stack()
+        let ic = InputController()
 
         s.push(v(3))
-        s.input.addNum(2)
-        s.input.addNum(4)
+        ic.activeInputBuffer.addNum(2)
+        ic.activeInputBuffer.addNum(4)
 
-        XCTAssertEqual(s.copy(ValueMode(), inputOnly: true), "24")
+        XCTAssertEqual(s.copy(ic, ValueMode(), inputOnly: true), "24")
     }
 
     func testCopyInputBufferOnlyWhenInputEmpty() {
         let s = Stack()
+        let ic = InputController()
 
         s.push(v(4))
 
-        XCTAssertNil(s.copy(ValueMode(), inputOnly: true))
+        XCTAssertNil(s.copy(ic, ValueMode(), inputOnly: true))
     }
 
     func testCopySelectedValue() {
         let s = threeValueStack()
-        s.input.addNum(1)
-        s.input.addNum(2)
+        let ic = InputController()
+
+        ic.activeInputBuffer.addNum(1)
+        ic.activeInputBuffer.addNum(2)
 
         s.selectedId = 0
 
-        XCTAssertEqual(s.copy(ValueMode(), inputOnly: false), "3")
+        XCTAssertEqual(s.copy(ic, ValueMode(), inputOnly: false), "3")
     }
 
     private func threeValueStack() -> Stack {

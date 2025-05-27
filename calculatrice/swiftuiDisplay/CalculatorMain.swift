@@ -4,10 +4,13 @@ struct CalculatorMain: View {
     private let stack = Stack()
 
     @ObservedObject
-    private var calculatorMode = CalculatorMode()
+    private var calculatorMode: CalculatorMode
 
     @ObservedObject
     private var matrixEditController = MatrixEditController()
+
+    @ObservedObject
+    private var inputController: InputController
 
     @State private var calcErrorOccurred = false
     @State private var calcError: Error?
@@ -15,6 +18,12 @@ struct CalculatorMain: View {
     @State private var selection: StackDisplayValueId?
 
     @State private var showingHelp = false
+
+    init() {
+        let calculatorMode = CalculatorMode()
+        self.calculatorMode = calculatorMode
+        self.inputController = InputController(calculatorMode)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,7 +36,7 @@ struct CalculatorMain: View {
             case .Matrix:
                 MatrixInputView(matrixEditController: matrixEditController, calculatorMode: calculatorMode)
             case .Normal:
-                InputDisplay2(inputBuffer: stack.input,
+                InputDisplay2(inputController: inputController,
                               calculatorMode: calculatorMode,
                               stack: stack,
                               calcErrorOccurred: $calcErrorOccurred,
@@ -62,13 +71,13 @@ struct CalculatorMain: View {
             case .Matrix:
                 try key.activeOp(calculatorMode,
                                  stack,
-                                 matrixEditController.inputBuffer,
+                                 matrixEditController.inputController,
                                  matrixEditController,
                                  { op in self.handleUIKeyboardOp(op) })
             case .Normal:
                 try key.activeOp(calculatorMode,
                                  stack,
-                                 stack.input,
+                                 inputController,
                                  nil,
                                  { op in self.handleUIKeyboardOp(op) })
             }
@@ -115,7 +124,7 @@ struct CalculatorMain: View {
                 matrixEditController.setInputMatrix(matrix)
                 calculatorMode.mainViewMode = .Matrix
             } else if case .number(let num) = value.containedValue {
-                stack.input.setValue(num)
+                inputController.activeInputBuffer.setValue(num)
                 calculatorMode.mainViewMode = .Normal
             }
             break

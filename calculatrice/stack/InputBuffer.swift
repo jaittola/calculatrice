@@ -1,6 +1,13 @@
 import Foundation
 
 class InputBuffer: ObservableObject {
+    enum EmptyValueMode {
+        case empty
+        case zero
+    }
+
+    let emptyValueMode: EmptyValueMode
+
     var value: ContainedValue {
         ContainedValue.number(
             value:
@@ -18,13 +25,19 @@ class InputBuffer: ObservableObject {
     }
 
     @Published
-    private(set) var stringValue: String = ""
+    private(set) var stringValue: String
 
     @Published
-    private(set) var cleanedStringValue: String = ""
+    private(set) var cleanedStringValue: String
 
     @Published
     private(set) var doubleValue: Double = 0
+
+    init(emptyValueMode: EmptyValueMode = .empty) {
+        self.emptyValueMode = emptyValueMode
+        self.stringValue = Self.emptyValue(emptyValueMode)
+        self.cleanedStringValue = Self.emptyValue(emptyValueMode)
+    }
 
     func addNum(_ number: Int) {
         let nextInput = if stringValue == "0" {
@@ -69,7 +82,7 @@ class InputBuffer: ObservableObject {
 
     func setValue(_ v: NumericalValue) {
         doubleValue = v.value
-        stringValue = v.stringValue()
+        stringValue = Self.emptyValue(emptyValueMode, v.stringValue())
         cleanedStringValue = stringValue
     }
 
@@ -93,8 +106,8 @@ class InputBuffer: ObservableObject {
 
     func clear() {
         doubleValue = 0
-        stringValue = ""
-        cleanedStringValue = ""
+        stringValue = Self.emptyValue(emptyValueMode)
+        cleanedStringValue = stringValue
     }
 
     @discardableResult
@@ -133,8 +146,8 @@ class InputBuffer: ObservableObject {
         }
 
         doubleValue = parsedValue
-        stringValue = input
-        cleanedStringValue = withLeadingZero
+        stringValue = Self.emptyValue(emptyValueMode, input)
+        cleanedStringValue = Self.emptyValue(emptyValueMode, withLeadingZero)
 
         return true
     }
@@ -145,5 +158,19 @@ class InputBuffer: ObservableObject {
 
     private var isInputtingExponent: Bool {
         stringValue.firstIndex(of: Character("E")) != nil
+    }
+
+    private static func emptyValue(_ emptyValueMode: EmptyValueMode,
+                                   _ value: String = "") -> String {
+        if !value.isEmpty {
+            value
+        } else {
+            switch emptyValueMode {
+            case .zero:
+                "0"
+            case .empty:
+                ""
+            }
+        }
     }
 }

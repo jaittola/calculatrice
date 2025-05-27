@@ -19,8 +19,10 @@ struct Key: Identifiable {
             _ symbol: String,
             _ calcOp: (
                 (
-                    _ stack: Stack, _ input: InputBuffer,
-                    _ matrixEditController: MatrixEditController?, _ calculatorMode: CalculatorMode
+                    _ stack: Stack,
+                    _ inputController: InputController,
+                    _ matrixEditController: MatrixEditController?,
+                    _ calculatorMode: CalculatorMode
                 ) throws ->
                     UICallbackOp?
             )? = nil,
@@ -82,7 +84,7 @@ struct Key: Identifiable {
     func activeOp(
         _ calculatorMode: CalculatorMode,
         _ stack: Stack,
-        _ input: InputBuffer,
+        _ inputController: InputController,
         _ matrixEditController: MatrixEditController?,
         _ handleUICallbackOp: (_ cb: UICallbackOp) -> Void
     ) throws {
@@ -98,9 +100,11 @@ struct Key: Identifiable {
 
         switch op {
         case .calc(_, let calc, _):
-            try stack.calculate(calc, calculatorMode)
+            try stack.calculate(inputController, calc, calculatorMode)
         case .ui(_, let calcOp, _):
-            if let uiCallback = try calcOp?(stack, input, matrixEditController, calculatorMode) {
+            if let uiCallback = try calcOp?(
+                stack, inputController, matrixEditController, calculatorMode)
+            {
                 handleUICallbackOp(uiCallback)
             }
         case nil:
@@ -114,8 +118,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Enter",
-                { stack, _, _, _ in
-                    stack.pushInput()
+                { stack, inputController, _, _ in
+                    stack.pushInput(inputController)
                     return nil
                 },
                 "StackEnter"),
@@ -136,8 +140,9 @@ struct Key: Identifiable {
                 "PopStack"),
             opMod1: .ui(
                 "Clear",
-                { stack, _, _, _ in
+                { stack, inputController, _, _ in
                     stack.clear()
+                    inputController.clear()
                     return nil
                 },
                 "ClearStack"))
@@ -147,8 +152,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "←",
-                { _, input, _, _ in
-                    input.backspace()
+                { _, inputController, _, _ in
+                    inputController.activeInputBuffer.backspace()
                     return nil
                 },
                 "Backspace"),
@@ -199,15 +204,15 @@ struct Key: Identifiable {
                 "SwapTop2"),
             opMod1: .ui(
                 "Copy",
-                { stack, _, _, calculatorMode in
-                    CopyPaste.copy(stack, calculatorMode.valueMode, inputOnly: false)
+                { stack, inputController, _, calculatorMode in
+                    // TODO, probably should be inputBuffer here.
+                    CopyPaste.copy(inputController, stack, calculatorMode.valueMode, inputOnly: false)
                     return nil
                 },
-
                 "CopyValue"))
     }
 
-    static func zero() -> Key {numkey(0) }
+    static func zero() -> Key { numkey(0) }
     static func one() -> Key { numkey(1) }
     static func two() -> Key { numkey(2) }
     static func three() -> Key { numkey(3) }
@@ -222,14 +227,14 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 ".",
-                { _, input, _, _ in
-                    input.dot()
+                { _, inputController, _, _ in
+                    inputController.activeInputBuffer.dot()
                     return nil
                 }),
             opMod1: .ui(
                 "π",
-                { stack, input, _, _ in
-                    if input.isEmpty {
+                { stack, inputController, _, _ in
+                    if inputController.activeInputBuffer.isEmpty {
                         stack.push(Value(NumericalValue.pi))
                     }
                     return nil
@@ -240,11 +245,12 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "±",
-                { stack, input, _, calculatorMode in
+                { stack, inputController, _, calculatorMode in
+                    let input = inputController.activeInputBuffer
                     if !input.isEmpty {
                         input.plusminus()
                     } else {
-                        _ = try? stack.calculate(Neg(), calculatorMode)
+                        _ = try? stack.calculate(inputController, Neg(), calculatorMode)
                     }
                     return nil
                 }),
@@ -256,8 +262,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "E",
-                { _, input, _, _ in
-                    input.E()
+                { _, inputController,_, _ in
+                    inputController.activeInputBuffer.E()
                     return nil
                 },
                 "InputExponent"),
@@ -370,8 +376,8 @@ struct Key: Identifiable {
         return Key(
             op: .ui(
                 String(num),
-                { _, input, _, _ in
-                    input.addNum(num)
+                { _, inputController, _, _ in
+                    inputController.activeInputBuffer.addNum(num)
                     return nil
                 }),
             opMod1: opMod1)
@@ -381,7 +387,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "π",
-                { _, input, _, _ in
+                { _, inputController, _, _ in
+                    let input = inputController.activeInputBuffer
                     if input.isEmpty {
                         input.paste(NumericalValue.pi.stringValue())
                     }
@@ -393,8 +400,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 ".",
-                { _, input, _, _ in
-                    input.dot()
+                { _, inputController, _, _ in
+                    inputController.activeInputBuffer.dot()
                     return nil
                 }))
     }
@@ -420,8 +427,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "E",
-                { _, input, _, _ in
-                    input.E()
+                { _, inputController, _, _ in
+                    inputController.activeInputBuffer.E()
                     return nil
                 }, "InputExponent"))
     }
@@ -432,7 +439,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "±",
-                { _, input, _, calculatorMode in
+                { _, inputController, _, calculatorMode in
+                    let input = inputController.activeInputBuffer
                     if !input.isEmpty {
                         input.plusminus()
                     }
@@ -444,8 +452,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "←",
-                { _, input, _, _ in
-                    input.backspace()
+                { _, inputController, _, _ in
+                    inputController.activeInputBuffer.backspace()
                     return nil
                 },
                 "Backspace"))
@@ -515,7 +523,7 @@ struct Key: Identifiable {
             (
                 (
                     _ stack: Stack,
-                    _ input: InputBuffer,
+                    _ inputController: InputController,
                     _ matrixEditController: MatrixEditController?,
                     _ calculatorMode: CalculatorMode
                 ) ->
@@ -538,7 +546,7 @@ struct Key: Identifiable {
             (
                 (
                     _ stack: Stack,
-                    _ input: InputBuffer,
+                    _ inputController: InputController,
                     _ matrixEditController: MatrixEditController?,
                     _ calculatorMode: CalculatorMode
                 ) ->
