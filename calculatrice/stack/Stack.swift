@@ -102,21 +102,9 @@ class Stack: ObservableObject {
         content = stackHistory[stackHistoryPointer]
     }
 
-    func copy(
-        _ input: InputController,
-        _ valueMode: ValueMode,
-        inputOnly: Bool
-    ) -> String? {
-        if inputOnly {
-            return !input.isEmpty ? input.stringValue : nil
-        }
-
-        return if selectedId != -1, let selectedValue = content.first(where: { $0.id == selectedId }) {
-            selectedValue.stringValue(valueMode)
-        } else if !input.isEmpty {
-            input.stringValue
-        } else if !content.isEmpty {
-            content[0].stringValue(valueMode)
+    func selectedValue() -> Value? {
+        if selectedId != -1, let selectedValue = content.first(where: { $0.id == selectedId }) {
+            selectedValue
         } else {
             nil
         }
