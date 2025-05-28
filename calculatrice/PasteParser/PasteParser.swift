@@ -1,25 +1,5 @@
 import Foundation
 
-func handlePaste(_ text: String, _ stack: Stack) -> Bool {
-    /*
-    let pasteParser = PasteParser()
-
-    guard let pasted = pasteParser.parsePastedInput(text) else {
-        return false
-    }
-
-    if case .number = pasted {
-        stack.input.paste(text)
-        return true
-    } else {
-        stack.push(Value(pasted))
-        return true
-    }
-     TODO Fix this later
-     */
-    return false
-}
-
 class PasteParser {
 
     func parsePastedInput(_ text: String) -> ContainedValue? {

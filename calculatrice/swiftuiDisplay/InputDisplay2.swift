@@ -24,7 +24,7 @@ struct InputDisplay2: View {
                     Text("Copy")
                 }
                 PasteButton(payloadType: String.self) { _ in
-                    if !CopyPaste.paste(stack) {
+                    if !CopyPaste.paste(stack, inputController) {
                         calcError = CalcError.pasteFailed()
                         calcErrorOccurred = true
                     }

@@ -159,8 +159,8 @@ struct Key: Identifiable {
                 "Backspace"),
             opMod1: .ui(
                 "Paste",
-                { stack, _, _, _ throws in
-                    if !CopyPaste.paste(stack) {
+                { stack, inputController, _, _ throws in
+                    if !CopyPaste.paste(stack, inputController) {
                         throw CalcError.pasteFailed()
                     }
                     return nil

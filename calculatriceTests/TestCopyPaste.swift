@@ -34,7 +34,7 @@ class TestCopyPaste: XCTestCase {
     }
 
     func testCopySelectedValue() {
-        let s = threeValueStack()
+        let s = nonEmptyStack()
         let ic = InputController()
 
         ic.activeInputBuffer.addNum(1)
@@ -45,17 +45,43 @@ class TestCopyPaste: XCTestCase {
         XCTAssertEqual(CopyPaste.handleCopy(ic, s, ValueMode(), inputOnly: false), "3")
     }
 
-    private func threeValueStack() -> Stack {
+    func testPasteNumber() {
+        let s = nonEmptyStack()
+        let ic = InputController()
+
+        XCTAssertTrue(CopyPaste.handlePaste("16", s, ic))
+        XCTAssertEqual(s.content.count, 3)
+        XCTAssertEqual(s.content.map { $0.asNumericalValue?.floatingPoint}, stackValues)
+        XCTAssertEqual(ic.value.asNumericalValue?.floatingPoint, 16)
+        XCTAssertEqual(ic.stringValue, "16")
+    }
+
+    func testPasteMatrix() {
+        let s = nonEmptyStack()
+        let ic = InputController()
+
+        let matrixString = "[1  2\n3  2.4E-2]"
+        let matrix = try! MatrixValue([[num(1), num(2)], [num(3), num(0.024)]])
+
+        XCTAssertTrue(CopyPaste.handlePaste(matrixString, s, ic))
+        XCTAssertEqual(s.content.count, 4)
+        XCTAssertEqual(s.content[0].asMatrix, matrix)
+    }
+
+    private let stackValues: [Double] = [5, 2, 3]
+
+    private func nonEmptyStack() -> Stack {
         let s = Stack()
 
         XCTAssertEqual(s.testValues.stackHistory.count, 1)
         XCTAssertEqual(s.testValues.stackHistoryPointer, 0)
 
-        s.push(v(3))
-        s.push(v(2))
-        s.push(v(5))
+        stackValues.reversed().forEach {
+            s.push(v($0))
+        }
 
-        XCTAssertEqual(s.testValues.stackHistory.count, 4)
+        XCTAssertEqual(s.content.count, stackValues.count)
+        XCTAssertEqual(s.testValues.stackHistory.count, stackValues.count + 1)
 
         return s
     }
