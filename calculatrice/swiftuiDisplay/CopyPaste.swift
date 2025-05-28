@@ -38,11 +38,27 @@ class CopyPaste {
         }
    }
 
-    static func paste(_ stack: Stack) -> Bool {
+    static func paste(_ stack: Stack, _ inputController: InputController) -> Bool {
         guard UIPasteboard.general.hasStrings,
               let val = UIPasteboard.general.string else {
             return false
         }
-        return handlePaste(val, stack)
+        return handlePaste(val, stack, inputController)
+    }
+
+    static func handlePaste(_ text: String, _ stack: Stack, _ inputController: InputController) -> Bool {
+        let pasteParser = PasteParser()
+
+        guard let pasted = pasteParser.parsePastedInput(text) else {
+            return false
+        }
+
+        if case .number = pasted {
+            inputController.activeInputBuffer.paste(text)
+            return true
+        } else {
+            stack.push(Value(pasted))
+            return true
+        }
     }
 }
