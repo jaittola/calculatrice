@@ -1,9 +1,9 @@
 import Combine
 import Foundation
 
-class MatrixEditController: ObservableObject {
+class MatrixInputController: ObservableObject {
     @Published
-    private(set) var matrix: [MatrixRow] = MatrixEditController.defaultMatrix()
+    private(set) var matrix: [MatrixRow] = MatrixInputController.defaultMatrix()
 
     @Published
     var selectedCell: (Int, Int) = (0, 0) {
@@ -49,7 +49,7 @@ class MatrixEditController: ObservableObject {
         if let inputMatrix = inputMatrix {
             self.matrix = inputMatrix.asMatrixRows
         } else {
-            self.matrix = MatrixEditController.defaultMatrix()
+            self.matrix = MatrixInputController.defaultMatrix()
         }
         selectedCell = (0, 0)
     }

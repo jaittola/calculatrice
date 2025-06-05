@@ -3,26 +3,26 @@ import XCTest
 
 @testable import calculatrice
 
-class TestMatrixEditController: XCTestCase {
+class TestMatrixInputController: XCTestCase {
 
     let sampleMatrix = try! MatrixValue([
         [ComplexValue(1, -3), NumericalValue(2)], [NumericalValue(3), NumericalValue(4)],
     ])
 
     func testDefaultMatrix() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(0), num(0)], [num(0), num(0)]]))
     }
 
     func testSetInputMatrix() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         XCTAssertEqual(controller.matrixValue, sampleMatrix)
     }
 
     func testSetInputMatrixNil() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.setInputMatrix(nil)
         XCTAssertEqual(
@@ -30,7 +30,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testBasicInput() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.inputController.activeInputBuffer.addNum(1)
         XCTAssertEqual(
             controller.matrixValue, try! MatrixValue([[num(1), num(0)], [num(0), num(0)]]))
@@ -45,7 +45,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testInputOutsideBounds() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.selectedCell = (3, 3)
         controller.inputController.activeInputBuffer.addNum(1)
         XCTAssertEqual(
@@ -57,7 +57,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testAddColumn() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustColumns(1)
         let expectedMatrix = try! MatrixValue([
@@ -70,7 +70,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testRemoveColumn() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustColumns(-1)
         let expectedMatrix = try! MatrixValue([
@@ -83,7 +83,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testRemoveColumnUntilZero() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustColumns(-1)
         controller.adjustColumns(-1)
@@ -97,7 +97,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testRemoveSeveralColumnsAtTimeFails() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustColumns(-2)
         XCTAssertEqual(
@@ -106,7 +106,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testAddRow() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustRows(1)
         let expectedMatrix = try! MatrixValue([
@@ -120,7 +120,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testRemoveRow() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustRows(-1)
         let expectedMatrix = try! MatrixValue([
@@ -132,7 +132,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testRemoveRowUntilZero() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustRows(-1)
         controller.adjustRows(-1)
@@ -145,7 +145,7 @@ class TestMatrixEditController: XCTestCase {
     }
 
     func testRemoveSeveralRowsFails() {
-        let controller = MatrixEditController()
+        let controller = MatrixInputController()
         controller.setInputMatrix(sampleMatrix)
         controller.adjustRows(-2)
         XCTAssertEqual(

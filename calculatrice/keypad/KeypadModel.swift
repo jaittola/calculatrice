@@ -21,7 +21,7 @@ struct Key: Identifiable {
                 (
                     _ stack: Stack,
                     _ inputController: InputController,
-                    _ matrixEditController: MatrixEditController?,
+                    _ matrixInputController: MatrixInputController?,
                     _ calculatorMode: CalculatorMode
                 ) throws ->
                     UICallbackOp?
@@ -85,7 +85,7 @@ struct Key: Identifiable {
         _ calculatorMode: CalculatorMode,
         _ stack: Stack,
         _ inputController: InputController,
-        _ matrixEditController: MatrixEditController?,
+        _ matrixInputController: MatrixInputController?,
         _ handleUICallbackOp: (_ cb: UICallbackOp) -> Void
     ) throws {
         let op =
@@ -103,7 +103,7 @@ struct Key: Identifiable {
             try stack.calculate(inputController, calc, calculatorMode)
         case .ui(_, let calcOp, _):
             if let uiCallback = try calcOp?(
-                stack, inputController, matrixEditController, calculatorMode)
+                stack, inputController, matrixInputController, calculatorMode)
             {
                 handleUICallbackOp(uiCallback)
             }
@@ -410,16 +410,16 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Enter",
-                { stack, _, matrixEditController, _ in
-                    Self.addMatrixToStack(stack, matrixEditController)
+                { stack, _, matrixInputController, _ in
+                    Self.addMatrixToStack(stack, matrixInputController)
                 },
                 "MatrixEnter"),
             opMod1: .ui("Help", { _, _, _, _ in .showHelp }, "Help"))
     }
 
     static func matrixCancel() -> Key {
-        Key(op: .ui("Back", { _, _, matrixEditController, _ in
-            Self.dismissMatrix(matrixEditController)
+        Key(op: .ui("Back", { _, _, matrixInputController, _ in
+            Self.dismissMatrix(matrixInputController)
         }, "MatrixCancel"))
     }
 
@@ -463,8 +463,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Row -",
-                { _, _, matrixEditController, _ in
-                    matrixEditController?.adjustRows(-1)
+                { _, _, matrixInputController, _ in
+                    matrixInputController?.adjustRows(-1)
                     return nil
                 },
                 "MatrixRowMinus"))
@@ -474,8 +474,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Row +",
-                { _, _, matrixEditController, _ in
-                    matrixEditController?.adjustRows(1)
+                { _, _, matrixInputController, _ in
+                    matrixInputController?.adjustRows(1)
                     return nil
                 },
                 "MatrixRowPlus"))
@@ -485,8 +485,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Col -",
-                { _, _, matrixEditController, _ in
-                    matrixEditController?.adjustColumns(-1)
+                { _, _, matrixInputController, _ in
+                    matrixInputController?.adjustColumns(-1)
                     return nil
                 },
                 "MatrixColMinus"))
@@ -496,8 +496,8 @@ struct Key: Identifiable {
         Key(
             op: .ui(
                 "Col +",
-                { _, _, matrixEditController, _ in
-                    matrixEditController?.adjustColumns(1)
+                { _, _, matrixInputController, _ in
+                    matrixInputController?.adjustColumns(1)
                     return nil
                 },
                 "MatrixColPlus"))
@@ -524,7 +524,7 @@ struct Key: Identifiable {
                 (
                     _ stack: Stack,
                     _ inputController: InputController,
-                    _ matrixEditController: MatrixEditController?,
+                    _ matrixInputController: MatrixInputController?,
                     _ calculatorMode: CalculatorMode
                 ) ->
                     UICallbackOp?
@@ -547,7 +547,7 @@ struct Key: Identifiable {
                 (
                     _ stack: Stack,
                     _ inputController: InputController,
-                    _ matrixEditController: MatrixEditController?,
+                    _ matrixInputController: MatrixInputController?,
                     _ calculatorMode: CalculatorMode
                 ) ->
                     UICallbackOp?
@@ -572,20 +572,20 @@ struct Key: Identifiable {
     }
 
     static private func addMatrixToStack(
-        _ stack: Stack, _ matrixEditController: MatrixEditController?
+        _ stack: Stack, _ matrixInputController: MatrixInputController?
     ) -> UICallbackOp? {
-        guard let matrixEditController = matrixEditController else {
+        guard let matrixInputController = matrixInputController else {
             return dismissMatrix(nil)
         }
 
-        stack.push(Value(matrixEditController.matrixValue))
+        stack.push(Value(matrixInputController.matrixValue))
 
-        return dismissMatrix(matrixEditController)
+        return dismissMatrix(matrixInputController)
     }
 
-    static private func dismissMatrix(_ matrixEditController: MatrixEditController?) -> UICallbackOp {
-        if let matrixEditController = matrixEditController {
-            matrixEditController.setInputMatrix(nil)
+    static private func dismissMatrix(_ matrixInputController: MatrixInputController?) -> UICallbackOp {
+        if let matrixInputController = matrixInputController {
+            matrixInputController.setInputMatrix(nil)
         }
 
         return .dismissMatrix

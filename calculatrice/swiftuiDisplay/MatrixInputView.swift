@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MatrixInputView: View {
     @ObservedObject
-    var matrixEditController: MatrixEditController
+    var matrixInputController: MatrixInputController
 
     @ObservedObject
     var calculatorMode: CalculatorMode
@@ -14,10 +14,10 @@ struct MatrixInputView: View {
                 .frame(height: 1)
             ScrollView([.horizontal, .vertical]) {
                 MatrixContentView(
-                    values: matrixEditController.matrix,
+                    values: matrixInputController.matrix,
                     valueMode: calculatorMode.valueMode,
-                    inputController: matrixEditController.inputController,
-                    selectedCell: $matrixEditController.selectedCell
+                    inputController: matrixInputController.inputController,
+                    selectedCell: $matrixInputController.selectedCell
                 )
             }
             .background(.white)

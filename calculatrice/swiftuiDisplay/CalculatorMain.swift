@@ -7,7 +7,7 @@ struct CalculatorMain: View {
     private var calculatorMode: CalculatorMode
 
     @ObservedObject
-    private var matrixEditController = MatrixEditController()
+    private var matrixInputController = MatrixInputController()
 
     @ObservedObject
     private var inputController: InputController
@@ -34,7 +34,7 @@ struct CalculatorMain: View {
                           selection: $selection)
             switch calculatorMode.mainViewMode {
             case .Matrix:
-                MatrixInputView(matrixEditController: matrixEditController, calculatorMode: calculatorMode)
+                MatrixInputView(matrixInputController: matrixInputController, calculatorMode: calculatorMode)
             case .Normal:
                 InputDisplay2(inputController: inputController,
                               calculatorMode: calculatorMode,
@@ -71,8 +71,8 @@ struct CalculatorMain: View {
             case .Matrix:
                 try key.activeOp(calculatorMode,
                                  stack,
-                                 matrixEditController.inputController,
-                                 matrixEditController,
+                                 matrixInputController.inputController,
+                                 matrixInputController,
                                  { op in self.handleUIKeyboardOp(op) })
             case .Normal:
                 try key.activeOp(calculatorMode,
@@ -121,7 +121,7 @@ struct CalculatorMain: View {
 
         case .edit(let value):
             if let matrix = value.asMatrix {
-                matrixEditController.setInputMatrix(matrix)
+                matrixInputController.setInputMatrix(matrix)
                 calculatorMode.mainViewMode = .Matrix
             } else if case .number(let num) = value.containedValue {
                 inputController.activeInputBuffer.setValue(num)
