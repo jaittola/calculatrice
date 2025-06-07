@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct StatusRow2: View {
+struct StatusRow: View {
     @ObservedObject
     var calculatorMode: CalculatorMode
 
@@ -11,10 +11,10 @@ struct StatusRow2: View {
             StatusRowItem(title: "RAD", isActive: calculatorMode.angle == .Rad)
             StatusRowItem(title: "Alt 1",
                           isActive: calculatorMode.keypadMode == .Mod1,
-                          activeLabelColor: Styles2.mod1TextColor)
+                          activeLabelColor: Styles.mod1TextColor)
             StatusRowItem(title: "Alt 2",
                           isActive: calculatorMode.keypadMode == .Mod2,
-                          activeLabelColor: Styles2.mod2TextColor)
+                          activeLabelColor: Styles.mod2TextColor)
             Spacer()
         }
         .background(.white)
@@ -24,20 +24,20 @@ struct StatusRow2: View {
 
 struct StatusRow2_Previews: PreviewProvider {
     static var previews: some View {
-        StatusRow2(calculatorMode: CalculatorMode())
+        StatusRow(calculatorMode: CalculatorMode())
     }
 }
 
 struct StatusRowItem: View {
     var title: String
     var isActive: Bool
-    var activeLabelColor: Color = Styles2.activeLabelColor
+    var activeLabelColor: Color = Styles.activeLabelColor
 
     var body: some View {
         Text(title)
-            .font(Styles2.inputDisplayLabelFont)
-            .foregroundColor(isActive ? activeLabelColor : Styles2.inactiveLabelColor)
-            .background(isActive ? Styles2.windowBackgroundColor : Styles2.displayBackgroundColor)
+            .font(Styles.inputDisplayLabelFont)
+            .foregroundColor(isActive ? activeLabelColor : Styles.inactiveLabelColor)
+            .background(isActive ? Styles.windowBackgroundColor : Styles.displayBackgroundColor)
     }
 }
 
@@ -48,7 +48,7 @@ struct StatusRowItem_Previews: PreviewProvider {
             StatusRowItem(title: "Rad", isActive: true)
             StatusRowItem(title: "Alt 1",
                           isActive: true,
-                          activeLabelColor: Styles2.mod2TextColor)
+                          activeLabelColor: Styles.mod2TextColor)
         }
     }
 }

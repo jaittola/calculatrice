@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct KeypadView2: View {
+struct KeypadView: View {
     @ObservedObject
     var calculatorMode: CalculatorMode
 
@@ -13,7 +13,7 @@ struct KeypadView2: View {
             ForEach(keypadModel.keyRows) { keyRow in
                 GridRow {
                     ForEach(keyRow.keys) { key in
-                        KeyView2(key: key,
+                        KeyView(key: key,
                                  onPressed: onKeyPressed)
                     }
                 }
@@ -22,14 +22,14 @@ struct KeypadView2: View {
     }
 }
 
-struct KeypadView2_Previews: PreviewProvider {
+struct KeypadView_Previews: PreviewProvider {
     static var previews: some View {
-        KeypadView2(calculatorMode: CalculatorMode(),
+        KeypadView(calculatorMode: CalculatorMode(),
                     onKeyPressed: { key in print("Pressed key \(key.id)")})
     }
 }
 
-struct KeyView2: View {
+struct KeyView: View {
     var key: Key?
     var onPressed: (_ key: Key) -> Void
 
@@ -37,7 +37,7 @@ struct KeyView2: View {
         let hPadding: CGFloat = (key?.isTightLayout ?? false) ? 2 : 6
 
         ZStack {
-            Styles2.keypadBackgroundColor
+            Styles.keypadBackgroundColor
             Button(action: {
                 guard let key = key else { return }
                 onPressed(key)
@@ -56,24 +56,24 @@ struct KeyView2: View {
                 }
                 .padding([.vertical], 4)
             }
-            .buttonStyle(KeyView2Style())
+            .buttonStyle(KeyViewStyle())
         }
     }
 }
 
-struct KeyView2_Previews: PreviewProvider {
+struct KeyView_Previews: PreviewProvider {
     static var previews: some View {
-        KeyView2(key: Key.pow(),
+        KeyView(key: Key.pow(),
                  onPressed: { _ in })
         .frame(maxWidth: 50, maxHeight: 50)
     }
 }
 
-struct KeyView2Style: ButtonStyle {
+struct KeyViewStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(configuration.isPressed ?
-                        Styles2.keyPressedBackgroundColor : Styles2.keyBackgroundColor)
+                        Styles.keyPressedBackgroundColor : Styles.keyBackgroundColor)
             .scaleEffect(configuration.isPressed ? 0.85 : 1,
                          anchor: .center)
             .animation(.interactiveSpring(response: 0.1, blendDuration: 0.1),
@@ -84,12 +84,12 @@ struct KeyView2Style: ButtonStyle {
 
 struct MainLabel: View {
     var label: String?
-    var labelColor: UIColor?
+    var labelColor: Color?
 
     var body: some View {
         KeyLabel(label: label,
-                 font: Styles2.keypadMainFont,
-                 color: labelColor != nil ? labelColor!.asColor() : Styles2.keypadMainTextColor)
+                 font: Styles.keypadMainFont,
+                 color: labelColor ?? Styles.keypadMainTextColor)
     }
 }
 
@@ -98,8 +98,8 @@ struct Mod1Label: View {
 
     var body: some View {
         KeyLabel(label: label,
-                 font: Styles2.keypadModFont,
-                 color: Styles2.mod1TextColor)
+                 font: Styles.keypadModFont,
+                 color: Styles.mod1TextColor)
     }
 }
 
@@ -108,8 +108,8 @@ struct Mod2Label: View {
 
     var body: some View {
         KeyLabel(label: label,
-                 font: Styles2.keypadModFont,
-                 color: Styles2.mod2TextColor)
+                 font: Styles.keypadModFont,
+                 color: Styles.mod2TextColor)
     }
 }
 

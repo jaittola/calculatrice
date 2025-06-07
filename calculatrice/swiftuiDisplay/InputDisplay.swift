@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct InputDisplay2: View {
+struct InputDisplay: View {
     @ObservedObject
     var inputController: InputController
 
@@ -44,7 +44,7 @@ struct InputDisplay2: View {
             let ic = makeInput(calculatorMode)
 
             HStack {
-                InputDisplay2(
+                InputDisplay(
                     inputController: ic,
                     calculatorMode: CalculatorMode(),
                     stack: Stack(),
@@ -53,7 +53,7 @@ struct InputDisplay2: View {
                 )
             }.padding(.vertical, 10).background(.red)
             HStack {
-                InputDisplay2(
+                InputDisplay(
                     inputController: InputController(calculatorMode),
                     calculatorMode: calculatorMode,
                     stack: Stack(),

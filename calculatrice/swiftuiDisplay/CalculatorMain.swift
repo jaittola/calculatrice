@@ -28,26 +28,26 @@ struct CalculatorMain: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack { }.frame(minHeight: 1) // Prevent stretching the status row to the safe area
-            StatusRow2(calculatorMode: calculatorMode)
-            StackDisplay2(stack: stack,
+            StatusRow(calculatorMode: calculatorMode)
+            StackDisplay(stack: stack,
                           calculatorMode: calculatorMode,
                           selection: $selection)
             switch calculatorMode.mainViewMode {
             case .Matrix:
                 MatrixInputView(matrixInputController: matrixInputController, calculatorMode: calculatorMode)
             case .Normal:
-                InputDisplay2(inputController: inputController,
+                InputDisplay(inputController: inputController,
                               calculatorMode: calculatorMode,
                               stack: stack,
                               calcErrorOccurred: $calcErrorOccurred,
                               calcError: $calcError)
             }
-            KeypadView2(calculatorMode: calculatorMode,
+            KeypadView(calculatorMode: calculatorMode,
                         onKeyPressed: { key in onKeyPressed(key) })
             ZStack { }.frame(minHeight: 1) // Prevent stretching the keyboard to the safe area
         }
         .preferredColorScheme(.light)
-        .background(Styles2.windowBackgroundColor)
+        .background(Styles.windowBackgroundColor)
         .alert(LocalizedStringKey("Error"),
                isPresented: $calcErrorOccurred,
                presenting: calcError) {

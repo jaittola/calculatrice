@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct StackDisplay2: View {
+struct StackDisplay: View {
     @ObservedObject
     var stack: Stack
 
@@ -67,13 +67,13 @@ struct StackValueWithPosition: Identifiable, Equatable {
     }
 }
 
-struct StackDisplay2_Previews: PreviewProvider {
+struct StackDisplay_Previews: PreviewProvider {
     static var previews: some View {
         let stack = createPreviewStack()
         let calculatorMode = CalculatorMode()
         @State var selection: StackDisplayValueId?
 
-        StackDisplay2(stack: stack,
+        StackDisplay(stack: stack,
                       calculatorMode: calculatorMode,
                       selection: $selection)
     }
@@ -94,14 +94,14 @@ struct StackRow: View {
     var body: some View {
         HStack {
             Text("\(stackVal.index):")
-                .font(Styles2.stackFont)
-                .foregroundColor(Styles2.stackTextColor)
+                .font(Styles.stackFont)
+                .foregroundColor(Styles.stackTextColor)
                 .multilineTextAlignment(.trailing)
                 .background(.clear)
             Spacer()
             StackValueView(value: stackVal.value, valueMode: valueMode)
         }
-        .listRowBackground(isSelected ? Styles2.selectedRowBackgroundColor : Color.white)
+        .listRowBackground(isSelected ? Styles.selectedRowBackgroundColor : Color.white)
         .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
         .contextMenu {
             Button {
@@ -139,12 +139,12 @@ struct StackNumberView: View {
 
     var body: some View {
         Text(value)
-            .font(Styles2.stackFont)
-            .foregroundColor(Styles2.stackTextColor)
+            .font(Styles.stackFont)
+            .foregroundColor(Styles.stackTextColor)
             .multilineTextAlignment(.trailing)
             .background(.clear)
             .padding(4)
-            .border(isSelected ? Styles2.matrixSelectedCellBorder : .clear, width: 2)
+            .border(isSelected ? Styles.matrixSelectedCellBorder : .clear, width: 2)
     }
 }
 

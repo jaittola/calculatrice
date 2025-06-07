@@ -1,7 +1,7 @@
 import UIKit
 import SwiftUI
 
-class Styles {
+class StylesUIKit {
     static let margin: CGFloat = 8.0
     static let keypadMargin: CGFloat = 2.0
 
@@ -50,27 +50,27 @@ extension UIColor {
     }
 }
 
-struct Styles2 {
-    static let stackFont = Styles.stackFont.asFont()
-    static let inputDisplayLabelFont = Styles.inputDisplayLabelFont.asFont()
-    static let keypadMainFont = Styles.keypadMainFont.asFont()
-    static let keypadModFont = Styles.keypadModFont.asFont()
+struct Styles {
+    static let stackFont = StylesUIKit.stackFont.asFont()
+    static let inputDisplayLabelFont = StylesUIKit.inputDisplayLabelFont.asFont()
+    static let keypadMainFont = StylesUIKit.keypadMainFont.asFont()
+    static let keypadModFont = StylesUIKit.keypadModFont.asFont()
 
-    static let mod1TextColor = Styles.mod1TextColor.asColor()
-    static let mod2TextColor = Styles.mod2TextColor.asColor()
-    static let keypadMainTextColor = Styles.keypadMainTextColor.asColor()
-    static let keyBackgroundColor = Styles.keyBackgroundColor.asColor()
-    static let keyPressedBackgroundColor = Styles.keyPressedBackgroundColor.asColor()
-    static let keypadBackgroundColor = Styles.keypadBackgroundColor.asColor()
+    static let mod1TextColor = StylesUIKit.mod1TextColor.asColor()
+    static let mod2TextColor = StylesUIKit.mod2TextColor.asColor()
+    static let keypadMainTextColor = StylesUIKit.keypadMainTextColor.asColor()
+    static let keyBackgroundColor = StylesUIKit.keyBackgroundColor.asColor()
+    static let keyPressedBackgroundColor = StylesUIKit.keyPressedBackgroundColor.asColor()
+    static let keypadBackgroundColor = StylesUIKit.keypadBackgroundColor.asColor()
 
-    static let activeLabelColor = Styles.activeLabelColor.asColor()
-    static let inactiveLabelColor = Styles.inactiveLabelColor.asColor()
+    static let activeLabelColor = StylesUIKit.activeLabelColor.asColor()
+    static let inactiveLabelColor = StylesUIKit.inactiveLabelColor.asColor()
 
-    static let windowBackgroundColor = Styles.windowBackgroundColor.asColor()
+    static let windowBackgroundColor = StylesUIKit.windowBackgroundColor.asColor()
 
-    static let displayBackgroundColor = Styles.displayBackgroundColor.asColor()
-    static let selectedRowBackgroundColor = Styles.selectedRowBackgroundColor.asColor()
-    static let stackTextColor = Styles.stackTextColor.asColor()
-    static let stackSeparatorColor = Styles.stackSeparatorColor.asColor()
-    static let matrixSelectedCellBorder = Styles.matrixSelectedCellBorder.asColor()
+    static let displayBackgroundColor = StylesUIKit.displayBackgroundColor.asColor()
+    static let selectedRowBackgroundColor = StylesUIKit.selectedRowBackgroundColor.asColor()
+    static let stackTextColor = StylesUIKit.stackTextColor.asColor()
+    static let stackSeparatorColor = StylesUIKit.stackSeparatorColor.asColor()
+    static let matrixSelectedCellBorder = StylesUIKit.matrixSelectedCellBorder.asColor()
 }

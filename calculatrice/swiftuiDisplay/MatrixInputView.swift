@@ -10,7 +10,7 @@ struct MatrixInputView: View {
     var body: some View {
         VStack(spacing: 0) {
             Rectangle()
-                .fill(Styles2.stackSeparatorColor)
+                .fill(Styles.stackSeparatorColor)
                 .frame(height: 1)
             ScrollView([.horizontal, .vertical]) {
                 MatrixContentView(

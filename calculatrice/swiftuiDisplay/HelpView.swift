@@ -76,7 +76,7 @@ struct HelpItemView: View {
             Text(item.calcFunc)
                 .padding([.all], 10)
                 .frame(minWidth: 80)
-                .background(Styles2.keyBackgroundColor)
+                .background(Styles.keyBackgroundColor)
                 .foregroundColor(item.funcColor)
             VStack(alignment: .leading) {
                 Text(LocalizedStringKey(item.helpTextKey))
@@ -109,10 +109,10 @@ private func createHelpItems(_ keypad: KeypadModel) -> [HelpItem] {
         row.keys
             .flatMap { key in
                 [keyFuncToHelpItem(key.op?.symbol,
-                                   key.mainTextColor?.asColor() ?? Styles2.keypadMainTextColor,
+                                   key.mainTextColor ?? Styles.keypadMainTextColor,
                                    key.op?.helpTextKey),
-                 keyFuncToHelpItem(key.opMod1?.symbol, Styles2.mod1TextColor, key.opMod1?.helpTextKey),
-                 keyFuncToHelpItem(key.opMod2?.symbol, Styles2.mod2TextColor, key.opMod2?.helpTextKey)]
+                 keyFuncToHelpItem(key.opMod1?.symbol, Styles.mod1TextColor, key.opMod1?.helpTextKey),
+                 keyFuncToHelpItem(key.opMod2?.symbol, Styles.mod2TextColor, key.opMod2?.helpTextKey)]
             }
             .compactMap { hi in hi }
     }

@@ -1,5 +1,5 @@
 import Foundation
-import UIKit
+import SwiftUI
 
 struct Key: Identifiable {
     enum UICallbackOp {
@@ -53,7 +53,7 @@ struct Key: Identifiable {
 
     let resetModAfterClick: ResetModAfterClick
 
-    let mainTextColor: UIColor?
+    let mainTextColor: Color?
 
     let isTightLayout: Bool
 
@@ -68,7 +68,7 @@ struct Key: Identifiable {
         opMod1: CalcOp? = nil,
         opMod2: CalcOp? = nil,
         resetModAfterClick: ResetModAfterClick = .reset,
-        mainTextColor: UIColor? = nil,
+        mainTextColor: Color? = nil,
         isTightLayout: Bool = false,
         overriddenId: String? = nil
     ) {
