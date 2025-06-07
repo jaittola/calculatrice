@@ -28,6 +28,7 @@ class StylesUIKit {
     static let selectedRowBackgroundColor = UIColor(hex: "f6ff00")
     static let stackTextColor = UIColor.black
     static let stackSeparatorColor = UIColor(hex: "dedede")
+    static let inputBackgroundColor = UIColor(hex: "f0f0f0")
     static let matrixSelectedCellBorder = UIColor.blue
 
     private static func font(_ style: UIFont.TextStyle,
@@ -72,5 +73,6 @@ struct Styles {
     static let selectedRowBackgroundColor = StylesUIKit.selectedRowBackgroundColor.asColor()
     static let stackTextColor = StylesUIKit.stackTextColor.asColor()
     static let stackSeparatorColor = StylesUIKit.stackSeparatorColor.asColor()
+    static let inputBackgroundColor = StylesUIKit.inputBackgroundColor.asColor()
     static let matrixSelectedCellBorder = StylesUIKit.matrixSelectedCellBorder.asColor()
 }

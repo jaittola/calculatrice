@@ -14,22 +14,28 @@ struct InputDisplay: View {
     var body: some View {
         let value = inputController.stringValue
 
-        StackNumberView(value: value)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .background(.white)
-            .contextMenu {
-                Button {
-                    CopyPaste.copy(inputController, stack, calculatorMode.valueMode, inputOnly: true)
-                } label: {
-                    Text("Copy")
-                }
-                PasteButton(payloadType: String.self) { _ in
-                    if !CopyPaste.paste(stack, inputController) {
-                        calcError = CalcError.pasteFailed()
-                        calcErrorOccurred = true
+        HStack(spacing: 0) {
+            Spacer()
+            StackNumberView(value: value)
+                .frame(alignment: .trailing)
+                .background(Styles.inputBackgroundColor)
+                .contextMenu {
+                    Button {
+                        CopyPaste.copy(inputController, stack, calculatorMode.valueMode, inputOnly: true)
+                    } label: {
+                        Text("Copy")
+                    }
+                    PasteButton(payloadType: String.self) { _ in
+                        if !CopyPaste.paste(stack, inputController) {
+                            calcError = CalcError.pasteFailed()
+                            calcErrorOccurred = true
+                        }
                     }
                 }
-            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(2)
+        .background(.white)
     }
 }
 

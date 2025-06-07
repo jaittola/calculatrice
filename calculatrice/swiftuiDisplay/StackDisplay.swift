@@ -139,10 +139,10 @@ struct StackNumberView: View {
 
     var body: some View {
         Text(value)
+            .frame(minWidth: 20, minHeight: 28)
             .font(Styles.stackFont)
             .foregroundColor(Styles.stackTextColor)
             .multilineTextAlignment(.trailing)
-            .background(.clear)
             .padding(4)
             .border(isSelected ? Styles.matrixSelectedCellBorder : .clear, width: 2)
     }
